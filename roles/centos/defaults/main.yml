@@ -26,6 +26,7 @@ centos_yum_core_packages:
  - libblkid
  - libmount # dependencies: libblkid
  - libuuid # dependencies: libblkid
+ - libssh2
  - libxml2
  - nspr
  - nss
