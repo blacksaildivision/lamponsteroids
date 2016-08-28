@@ -105,3 +105,17 @@
   tags: [centos, yum]
 
 
+# Check if there are any packages not covered by this playbook.
+# Sometimes there is the package that you have installed and it's marked for update.
+# You can login to server and check if this package is really necessary there?
+- name: Are there any packages left for update?
+  shell: yum list updates warn=no
+  register: centos_yum_more_packages_to_update
+  changed_when: false
+  tags: [centos7, yum]
+
+- debug:
+    msg: "There are packges that were not updated! Please login to server and check them manually"
+  when: "'Updated Packages' in centos_yum_more_packages_to_update.stdout"
+  tags: [centos7, yum]
+
