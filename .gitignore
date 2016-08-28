@@ -1,0 +1,5 @@
+Vagrantfile
+.vagrant
+hosts
+playbooks/*.yml
+!playbooks/example-playbook.yml

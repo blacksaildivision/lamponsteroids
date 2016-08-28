@@ -1,0 +1,5 @@
+- hosts: lamponsteroids
+  become: yes
+  become_user: root
+  roles:
+    - ../roles/centos
