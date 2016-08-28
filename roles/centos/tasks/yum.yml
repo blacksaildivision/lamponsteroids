@@ -8,3 +8,13 @@
   args:
     creates: "{{ centos_yum_initial_package_list_path }}"
 
+
+
+# Make sure that gpgcheck is enabled in Yum configuration.
+# You should always check package signature before it's installation.
+#
+- name: Make sure that GPG check is enabled
+  lineinfile:
+    dest: /etc/yum.conf
+    line: "gpgcheck=1"
+    state: present
