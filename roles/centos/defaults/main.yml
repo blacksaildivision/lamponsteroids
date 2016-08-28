@@ -42,3 +42,7 @@ centos_yum_other_packages:
  - microcode_ctl
  - python-perf
  - tuned # dependency of python-perf
+
+# List of additional tools that are missing from CentOS minimal installation but are super useful
+centos_yum_additional_tools:
+ - net-tools # add netstat tool

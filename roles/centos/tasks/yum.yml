@@ -67,7 +67,7 @@
 # Update core packages.
 # CentOS has some packages that can't be removed and they are required for proper server functioning.
 # Let's update them in first place
-- name: Update core packages
+- name: Update CentOS core packages
   yum:
     name: "{{ item }}"
     state: latest
@@ -78,9 +78,30 @@
 
 # There are also some packages that you want to keep in the latest versions as well.
 # Update them to new versions
-- name: Update other packages
+- name: Update CentOS remaining packages
   yum:
     name: "{{ item }}"
     state: latest
   with_items: "{{ centos_yum_other_packages }}"
   tags: [centos, yum]
+
+
+
+# CentOS minimal installation sometimes is missing nice tools. We should install them here
+- name: Install additional packages
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ centos_yum_additional_tools }}"
+  tags: [centos, yum]
+
+
+
+# Remove unused packages with autoremove
+- name: Remove unused packages
+  shell: yum autoremove -y warn=no
+  register: centos_yum_autoremove
+  changed_when: "'Removing' in centos_yum_autoremove.stdout"
+  tags: [centos, yum]
+
+
