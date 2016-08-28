@@ -1,4 +1,4 @@
-# Path to file where Ansible should storage information about inital list of installed packages
+# Path to file where Ansible should storage information about list of installed packages.
 centos_yum_initial_package_list_path: /etc/yum/initial-packages-list
 
 # List of packages that should be removed from the server
@@ -46,7 +46,6 @@ centos_yum_core_packages:
  - util-linux # dependencies: libblkid
  - tzdata
 
-
 # List of other packages that should be updated to latest versions
 centos_yum_other_packages:
  - authconfig # dependencies: openssl
@@ -78,9 +77,6 @@ centos_yum_other_packages:
  - selinux-policy-targeted # depenency of selinux-policy
  - sudo
  - tuned # dependencies: python-perf
-
-
-
 
 # List of additional tools that are missing from CentOS minimal installation but are super useful
 centos_yum_additional_tools:

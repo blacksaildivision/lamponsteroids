@@ -1,6 +1,6 @@
 # Create a dump with list of all installed packages
 # This task will execute only once
-# Sometimes it's really useful to have an overview of fresh system packages
+# Sometimes it's really useful to have an overview of installed packages on fresh system
 # warn=no is for suppresing Ansible warning about not using yum module
 #
 - name: Dump installed packages
@@ -12,7 +12,7 @@
 
 
 # Make sure that gpgcheck is enabled in Yum configuration.
-# You should always check package signature before it's installation.
+# We should always check package signature before it's installation.
 #
 - name: Make sure that GPG check is enabled
   lineinfile:
@@ -23,7 +23,7 @@
 
 
 
-# Make sure that gpgcheck is enabled in all repositories
+# Make sure that gpgcheck is enabled for all repositories
 # This is the same check as above, but for all repo files in /etc/yum.repos.d directory
 #
 - name: Get all repositories
@@ -43,6 +43,7 @@
 
 
 # Install delta RPM feature for more optimized and faster downloads of packages
+#
 - name: Install delta RPM
   yum:
     name: deltarpm
@@ -52,8 +53,8 @@
 
 
 # Remove packages that are not necessary on the server
-# Proceed with caution and make sure that you really don't need these packages.
-# You can always get info about particular package with command: yum info PACKAGE_NAME_HERE
+# Proceed with caution and make sure that we really don't need these packages.
+# We can always get info about particular package with command: yum info PACKAGE_NAME_HERE
 #
 - name: Remove packages
   yum:
@@ -76,8 +77,9 @@
 
 
 
-# There are also some packages that you want to keep in the latest versions as well.
-# Update them to new versions
+# There are also some packages that we want to keep in the latest versions as well.
+# Update them to latest versions
+#
 - name: Update CentOS remaining packages
   yum:
     name: "{{ item }}"
@@ -87,7 +89,8 @@
 
 
 
-# CentOS minimal installation sometimes is missing nice tools. We should install them here
+# CentOS minimal installation sometimes is missing nice tools. We should install them on the server
+#
 - name: Install additional packages
   yum:
     name: "{{ item }}"
@@ -98,6 +101,7 @@
 
 
 # Remove unused packages with autoremove
+#
 - name: Remove unused packages
   shell: yum autoremove -y warn=no
   register: centos_yum_autoremove
@@ -105,29 +109,40 @@
   tags: [centos, yum]
 
 
-# Check if there are any packages not covered by this playbook.
-# Sometimes there is the package that you have installed and it's marked for update.
-# You can login to server and check if this package is really necessary there?
+
+# Check if there are packages not covered by this playbook.
+# Sometimes there is the package that we have installed and it's marked for update.
+# We can login to server and check if this package is really necessary there?
+#
 - name: Are there any packages left for update?
   shell: yum list updates warn=no
   register: centos_yum_more_packages_to_update
   changed_when: false
-  tags: [centos7, yum]
+  tags: [centos, yum, healthcheck]
 
 - debug:
     msg: "There are packges that were not updated! Please login to server and check them manually. {{ centos_yum_more_packages_to_update.stdout }}"
   when: "'Updated Packages' in centos_yum_more_packages_to_update.stdout"
-  tags: [centos7, yum]
+  tags: [centos, yum, healthcheck]
 
 
-# Install Yum cron task
+
+# Install cron for yum.
+# It will check periodicaly for new versions of packages and it will donwload it on the server.
+# Next time we will try to updated them, it will be quicker because they will be installed from disk
+#
 - name: Install cron for Yum
   yum:
     name: yum-cron
     state: latest
-  tags: [centos7, yum]
+  tags: [centos, yum]
 
-- name: Dont install by default
+
+
+# yum-cron is awesome tool, but we shouldn't install them automatically.
+# Auto updates can really mess up your system
+#
+- name: Disable automatic installation for yum-cron
   lineinfile:
     dest: /etc/yum/yum-cron.conf
     line: "apply_updates = no"
@@ -135,7 +150,12 @@
   notify: restart yum-cron
   tags: [centos, yum]
 
+
+
+# Make sure that yum-cron service is up and running
+#
 - name: start yum cron service
   service:
     name: yum-cron
     state: started
+  tags: [centos, yum, healthcheck]

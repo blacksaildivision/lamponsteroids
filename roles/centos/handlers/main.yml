@@ -1,3 +1,6 @@
+# Restart yum-cron task
+# This is usually executed on changes in yum-cron main configuration file
+#
 - name: restart yum-cron
   service:
     name: yum-cron
