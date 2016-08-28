@@ -1,0 +1,10 @@
+# Create a dump with list of all installed packages
+# This task will execute only once
+# Sometimes it's really useful to have an overview of fresh system packages
+# warn=no is for suppresing Ansible warning about not using yum module
+#
+- name: Dump installed packages
+  shell: "yum list installed > {{ centos_yum_initial_package_list_path }} warn=no"
+  args:
+    creates: "{{ centos_yum_initial_package_list_path }}"
+

@@ -1,0 +1,2 @@
+# Path to file where Ansible should storage information about inital list of installed packages
+centos_yum_initial_package_list_path: /etc/yum/initial-packages-list

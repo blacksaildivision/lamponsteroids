@@ -1,0 +1,2 @@
+# Yum and packages related tasks
+- include: yum.yml

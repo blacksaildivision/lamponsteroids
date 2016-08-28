@@ -2,4 +2,5 @@ Vagrantfile
 .vagrant
 hosts
 playbooks/*.yml
+playbooks/*.retry
 !playbooks/example-playbook.yml
