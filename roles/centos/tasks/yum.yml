@@ -115,7 +115,7 @@
   tags: [centos7, yum]
 
 - debug:
-    msg: "There are packges that were not updated! Please login to server and check them manually"
+    msg: "There are packges that were not updated! Please login to server and check them manually. {{ centos_yum_more_packages_to_update.stdout }}"
   when: "'Updated Packages' in centos_yum_more_packages_to_update.stdout"
   tags: [centos7, yum]
 
@@ -132,4 +132,10 @@
     dest: /etc/yum/yum-cron.conf
     line: "apply_updates = no"
     state: present
+  notify: restart yum-cron
   tags: [centos, yum]
+
+- name: start yum cron service
+  service:
+    name: yum-cron
+    state: started
