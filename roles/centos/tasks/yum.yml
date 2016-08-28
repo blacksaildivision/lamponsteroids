@@ -42,6 +42,15 @@
 
 
 
+# Install delta RPM feature for more optimized and faster downloads of packages
+- name: Install delta RPM
+  yum:
+    name: deltarpm
+    state: latest
+  tags: [centos, yum]
+
+
+
 # Remove packages that are not necessary on the server
 # Proceed with caution and make sure that you really don't need these packages.
 # You can always get info about particular package with command: yum info PACKAGE_NAME_HERE
@@ -52,6 +61,7 @@
     state: removed
   with_items: "{{ centos_yum_unnecessary_packages }}"
   tags: [centos, yum]
+
 
 
 # Update core packages.

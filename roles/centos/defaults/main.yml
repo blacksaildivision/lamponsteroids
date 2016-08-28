@@ -2,10 +2,43 @@
 centos_yum_initial_package_list_path: /etc/yum/initial-packages-list
 
 # List of packages that should be removed from the server
-centos_yum_unnecessary_packages: []
+centos_yum_unnecessary_packages:
+ - gssproxy # leave it if you are using GSSAPI
+ - libgudev1 # allow to connect to WiFi, not necessary on the server
+ - mariadb-libs # leave it if you plan to use MariaDB instead of MySQL
+ - NetworkManager # dependency of libgudev1
+ - NetworkManager-libnm # dependency of libgudev1
+ - NetworkManager-tui # dependency of libgudev1
+ - NetworkManager-wifi # dependency of libgudev1
+ - postfix # leave it if you plan to use postfix for mails, dependency of mariadb-libs
 
 # List of core packages that should be updated to latest versions
-centos_yum_core_packages: []
+centos_yum_core_packages:
+ - bash
+ - dbus
+ - dbus-libs # dependency of dbus
+ - glibc
+ - glibc-common # dependency of glibc
+ - libblkid
+ - libmount # dependency of libblkid
+ - libuuid # dependency of libblkid
+ - python
+ - python-libs # dependency of python
+ - systemd
+ - systemd-libs # dependency of systemd
+ - systemd-sysv # dependency of systemd
+ - util-linux # dependency of libblkid
+ - tzdata
 
 # List of other packages that should be updated to latest versions
-centos_yum_other_packages: []
+centos_yum_other_packages:
+ - device-mapper-persistent-data
+ - epel-release
+ - initscripts
+ - kernel
+ - kernel-tools
+ - kernel-tools-libs # dependency of kernel-tools
+ - lvm2 # dependency of device-mapper-persistent-data
+ - microcode_ctl
+ - python-perf
+ - tuned # dependency of python-perf
