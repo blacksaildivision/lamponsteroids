@@ -119,3 +119,17 @@
   when: "'Updated Packages' in centos_yum_more_packages_to_update.stdout"
   tags: [centos7, yum]
 
+
+# Install Yum cron task
+- name: Install cron for Yum
+  yum:
+    name: yum-cron
+    state: latest
+  tags: [centos7, yum]
+
+- name: Dont install by default
+  lineinfile:
+    dest: /etc/yum/yum-cron.conf
+    line: "apply_updates = no"
+    state: present
+  tags: [centos, yum]
