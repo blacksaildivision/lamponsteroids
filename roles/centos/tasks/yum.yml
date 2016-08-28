@@ -25,6 +25,7 @@
 
 # Make sure that gpgcheck is enabled in all repositories
 # This is the same check as above, but for all repo files in /etc/yum.repos.d directory
+#
 - name: Get all repositories
   shell: find /etc/yum.repos.d -type f -name "*.repo" warn=no
   register: centos_yum_repositories
@@ -37,4 +38,39 @@
     line: gpgcheck=0
     state: absent
   with_items: "{{ centos_yum_repositories.stdout_lines }}"
+  tags: [centos, yum]
+
+
+
+# Remove packages that are not necessary on the server
+# Proceed with caution and make sure that you really don't need these packages.
+# You can always get info about particular package with command: yum info PACKAGE_NAME_HERE
+#
+- name: Remove packages
+  yum:
+    name: "{{ item }}"
+    state: removed
+  with_items: "{{ centos_yum_unnecessary_packages }}"
+  tags: [centos, yum]
+
+
+# Update core packages.
+# CentOS has some packages that can't be removed and they are required for proper server functioning.
+# Let's update them in first place
+- name: Update core packages
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ centos_yum_core_packages }}"
+  tags: [centos, yum]
+
+
+
+# There are also some packages that you want to keep in the latest versions as well.
+# Update them to new versions
+- name: Update other packages
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ centos_yum_other_packages }}"
   tags: [centos, yum]

@@ -1,2 +1,11 @@
 # Path to file where Ansible should storage information about inital list of installed packages
 centos_yum_initial_package_list_path: /etc/yum/initial-packages-list
+
+# List of packages that should be removed from the server
+centos_yum_unnecessary_packages: []
+
+# List of core packages that should be updated to latest versions
+centos_yum_core_packages: []
+
+# List of other packages that should be updated to latest versions
+centos_yum_other_packages: []
