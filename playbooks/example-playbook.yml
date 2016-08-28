@@ -1,5 +1,8 @@
-- hosts: lamponsteroids
+- hosts: example-host
   become: yes
   become_user: root
   roles:
     - ../roles/centos
+
+  vars_files:
+    - ../vars/example-vars.yml

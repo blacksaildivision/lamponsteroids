@@ -1,0 +1,3 @@
+# Here you can override defaults from playbooks
+# Example:
+# centos_yum_additional_tools: []
