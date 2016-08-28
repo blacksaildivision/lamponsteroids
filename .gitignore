@@ -1,0 +1,8 @@
+Vagrantfile
+.vagrant
+hosts
+playbooks/*.yml
+playbooks/*.retry
+!playbooks/example-playbook.yml
+vars/*.yml
+!vars/example-vars.yml

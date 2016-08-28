@@ -1,0 +1,83 @@
+# Path to file where Ansible should storage information about list of installed packages.
+centos_yum_initial_package_list_path: /etc/yum/initial-packages-list
+
+# List of packages that should be removed from the server
+centos_yum_unnecessary_packages:
+ - gssproxy # leave it if you are using GSSAPI
+ - libgudev1 # allow to connect to WiFi, not necessary on the server
+ - mariadb-libs # leave it if you plan to use MariaDB instead of MySQL
+ - NetworkManager # dependencies: libgudev1
+ - NetworkManager-libnm # dependencies: libgudev1
+ - NetworkManager-tui # dependencies: libgudev1
+ - NetworkManager-wifi # dependencies: libgudev1
+ - postfix # leave it if you plan to use postfix for mails, dependencies: mariadb-libs
+
+# List of core packages that should be updated to latest versions
+centos_yum_core_packages:
+ - bash
+ - chkconfig
+ - dbus
+ - dbus-libs # dependencies: dbus
+ - dracut
+ - glibc
+ - glibc-common # dependencies: glibc
+ - kpartx
+ - krb5-libs
+ - libblkid
+ - libmount # dependencies: libblkid
+ - libuuid # dependencies: libblkid
+ - libssh2
+ - libxml2
+ - nspr
+ - nss
+ - nss-softokn
+ - nss-softokn-freebl
+ - nss-sysinit
+ - nss-tools
+ - nss-util
+ - openldap
+ - openssl-libs
+ - pcre
+ - python
+ - python-libs # dependencies: python
+ - systemd
+ - systemd-libs # dependencies: systemd
+ - systemd-sysv # dependencies: systemd
+ - util-linux # dependencies: libblkid
+ - tzdata
+
+# List of other packages that should be updated to latest versions
+centos_yum_other_packages:
+ - authconfig # dependencies: openssl
+ - bind-libs-lite
+ - bind-license # dependencies: bind-libs-lite, dhclient, dracut-network, kexec-tools
+ - cronie
+ - cronie-anacron # dependencies: cronie
+ - crontabs # dependencies: cronie
+ - device-mapper-persistent-data
+ - dhclient # depenencies: bind-libs-lite
+ - dracut-network # dependencies: dracut, iproute, dhclient, bind-libs-lite
+ - dracut-config-rescue # dependencies: dracut
+ - epel-release
+ - iproute
+ - initscripts
+ - kbd # dependencies: iproute
+ - kernel
+ - kernel-tools
+ - kernel-tools-libs # dependencies: kernel-tools
+ - kexec-tools # dependencies: dhclient, bind-libs-lite
+ - lvm2 # dependencies: device-mapper-persistent-data
+ - microcode_ctl
+ - openssh # dependencies: openssh-clients, openssh-server
+ - openssh-clients
+ - openssh-server
+ - openssl
+ - python-perf
+ - selinux-policy
+ - selinux-policy-targeted # depenency of selinux-policy
+ - sudo
+ - tuned # dependencies: python-perf
+
+# List of additional tools that are missing from CentOS minimal installation but are super useful
+centos_yum_additional_tools:
+ - net-tools # add netstat tool
