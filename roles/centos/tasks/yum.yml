@@ -7,6 +7,7 @@
   shell: "yum list installed > {{ centos_yum_initial_package_list_path }} warn=no"
   args:
     creates: "{{ centos_yum_initial_package_list_path }}"
+  tags: [centos, yum]
 
 
 
@@ -18,3 +19,22 @@
     dest: /etc/yum.conf
     line: "gpgcheck=1"
     state: present
+  tags: [centos, yum]
+
+
+
+# Make sure that gpgcheck is enabled in all repositories
+# This is the same check as above, but for all repo files in /etc/yum.repos.d directory
+- name: Get all repositories
+  shell: find /etc/yum.repos.d -type f -name "*.repo" warn=no
+  register: centos_yum_repositories
+  changed_when: false
+  tags: [centos, yum]
+
+- name: Make sure that GPG check is enabled in all repositories
+  lineinfile:
+    dest: "{{ item }}"
+    line: gpgcheck=0
+    state: absent
+  with_items: "{{ centos_yum_repositories.stdout_lines }}"
+  tags: [centos, yum]
