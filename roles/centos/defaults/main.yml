@@ -4,7 +4,12 @@
 centos_manage_yum: no
 
 # Should this role use groups tasks for linux groups management?
-centos_manage_groups: yes
+centos_manage_groups: no
+
+# Should this role use users tasks for linux users management?
+centos_manage_users: yes
+
+
 
 
 
@@ -96,6 +101,8 @@ centos_yum_additional_tools:
 
 
 
+
+
 ####### GROUPS TASKS CONFIGURATION #######
 
 # Path to file where initial list of available groups is stored
@@ -114,7 +121,17 @@ centos_groups_available:
 centos_groups_wheel_password_required: yes
 
 
-# users that will be available in the system
+
+
+
+####### USERS TASKS CONFIGURATION #######
+
+# Path to file where initial list of existing users is stored
+centos_users_initial_users_list_path: /etc/initial-users-list
+
+# List of users to remove from the system
+centos_users_to_remove: []
+
 centos7_users:
   - {
       username: developer,
