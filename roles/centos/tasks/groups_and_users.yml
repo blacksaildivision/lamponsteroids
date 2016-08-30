@@ -32,3 +32,29 @@
     state: present
   with_items: "{{ centos7_groups }}"
   tags: [centos7, users_and_groups]
+
+- name: Dump available users
+  shell: getent passwd > /etc/initial-users-list
+  args:
+    creates: /etc/initial-users-list
+  tags: [centos, yum]
+
+- name: create users
+  user:
+    name: "{{ item.username }}"
+    groups: "{{ item.groups }}"
+    password: "{{ item.password }}"
+    append: true
+    state: present
+    generate_ssh_key: "{{ item.generate_ssh_key }}"
+    ssh_key_bits: 4096
+  with_items: centos7_users
+  tags: [centos7, users_and_groups]
+
+
+- name: add authorized keys to users
+  authorized_key:
+    user: "{{ item.username }}"
+    key: "{{ lookup( 'file', item.path_to_file ) }}"
+  with_items: centos7_users_authorized_keys
+  tags: [centos7, users_and_groups]
