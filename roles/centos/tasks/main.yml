@@ -1,2 +1,5 @@
 # Yum and packages related tasks
-- include: yum.yml
+#- include: yum.yml
+
+# Manage available groups and users
+- include: groups_and_users.yml

@@ -81,3 +81,9 @@ centos_yum_other_packages:
 # List of additional tools that are missing from CentOS minimal installation but are super useful
 centos_yum_additional_tools:
  - net-tools # add netstat tool
+
+centos_passwordless_sudo: no
+
+centos7_groups:
+ - www
+
