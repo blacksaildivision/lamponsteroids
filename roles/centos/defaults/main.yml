@@ -1,3 +1,15 @@
+####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
+
+# Should this role use yum tasks for packages management?
+centos_manage_yum: no
+
+# Should this role use groups tasks for linux groups management?
+centos_manage_groups: yes
+
+
+
+####### YUM TASKS CONFIGURATION #######
+
 # Path to file where Ansible should storage information about list of installed packages.
 centos_yum_initial_package_list_path: /etc/yum/initial-packages-list
 
@@ -82,10 +94,25 @@ centos_yum_other_packages:
 centos_yum_additional_tools:
  - net-tools # add netstat tool
 
-centos_passwordless_sudo: no
 
-centos7_groups:
+
+####### GROUPS TASKS CONFIGURATION #######
+
+# Path to file where initial list of available groups is stored
+centos_groups_initial_groups_list_path: /etc/initial-group-list
+
+# List of groups to remove from the system
+centos_groups_to_remove: []
+
+# List of available groups in the system
+# In www group we usually have all applications that writes to files like php, httpd etc.
+centos_groups_available:
  - www
+
+# Should wheel group use sudo with password or without password?
+# Security recommendation is to set this variable to "yes"
+centos_groups_wheel_password_required: yes
+
 
 # users that will be available in the system
 centos7_users:

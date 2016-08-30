@@ -1,5 +1,8 @@
 # Yum and packages related tasks
-#- include: yum.yml
+- include: yum.yml
+  when: "centos_manage_yum == true"
 
-# Manage available groups and users
-- include: groups_and_users.yml
+# Manage system groups
+- include: groups.yml
+  when: "centos_manage_groups == true"
+

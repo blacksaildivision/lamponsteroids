@@ -1,37 +1,5 @@
-# todo: list and save initial users
-# todo: remove uncessary usres
-# todo: add users
-# todo: set root password
-# todo: manage authorised keys to users
 
-- name: Dump available groups
-  shell: getent group > /etc/initial-group-list
-  args:
-    creates: /etc/initial-group-list
-  tags: [centos, yum]
 
-- name: Make sure that wheel group can use all commands without password
-  lineinfile:
-    dest: /etc/sudoers
-    state: present
-    regexp: "^%wheel"
-    line: "%wheel ALL=(ALL) NOPASSWD: ALL"
-  when: "centos_passwordless_sudo == true"
-
-- name: Make sure that wheel group can use all commands without password
-  lineinfile:
-    dest: /etc/sudoers
-    state: present
-    regexp: "^%wheel"
-    line: "%wheel ALL=(ALL) ALL"
-  when: "centos_passwordless_sudo == false"
-
-- name: create groups
-  group:
-    name: "{{ item }}"
-    state: present
-  with_items: "{{ centos7_groups }}"
-  tags: [centos7, users_and_groups]
 
 - name: Dump available users
   shell: getent passwd > /etc/initial-users-list
