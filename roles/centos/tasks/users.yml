@@ -20,7 +20,10 @@
   tags: [centos, users]
 
 
-- name: create users
+
+# Make sure that following users are available in the system
+#
+- name: Create users
   user:
     name: "{{ item.username }}"
     groups: "{{ item.groups }}"
@@ -29,13 +32,16 @@
     state: present
     generate_ssh_key: "{{ item.generate_ssh_key }}"
     ssh_key_bits: 4096
-  with_items: centos7_users
-  tags: [centos7, users_and_groups]
+  with_items: "{{ centos_users_available }}"
+  tags: [centos, users]
 
 
-- name: add authorized keys to users
+# Add authorised keys to user
+# It's useful when you want to add SSH key which you can connect to given user
+#
+- name: Add authorized keys to users
   authorized_key:
     user: "{{ item.username }}"
     key: "{{ lookup( 'file', item.path_to_file ) }}"
-  with_items: centos7_users_authorized_keys
-  tags: [centos7, users_and_groups]
+  with_items: centos_users_authorized_keys
+  tags: [centos, users]

@@ -132,17 +132,30 @@ centos_users_initial_users_list_path: /etc/initial-users-list
 # List of users to remove from the system
 centos_users_to_remove: []
 
-centos7_users:
+# List of available users
+# If you want to give sudo power to the user, add him to "wheel" group
+# Password should NOT be stored in plain text. To make it secure you should override it variable file and encrypt it with Ansible Vault
+# If generate_ssh_key is set to yes, user will have 4096 bit RSA key in his profile
+centos_users_available:
   - {
       username: developer,
       groups: 'wheel,www',
-      password: "{{ developer_password }}",
+      password: "{{ centos_users_developer_password }}",
       generate_ssh_key: yes
     }
 
-# authorizded keys for users
-centos7_users_authorized_keys:
+# You can't use plain text user passwords with Ansible
+# Password must by encrypted with crypt with following command:
+# python -c 'import crypt; print crypt.crypt("Pa$$w0rD", "$alt_here!@#")'
+# You need to pass password and salt to crypt command.
+# Please remember to use Ansible Vault for keeping such credentials in a safe way
+centos_users_developer_password: $aarRtbtyIpN6
+
+# Authorised keys to add to user
+# Remember to change the path to file.
+# Example path is ~/.ssh/id_rsa
+centos_users_authorized_keys:
   - {
     username: developer,
-    path_to_file: "{{ developer_authorized_key_file }}"
+    path_to_file: "/path/to/private/key"
   }
