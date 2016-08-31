@@ -3,3 +3,13 @@
 # centos_yum_additional_tools: []
 #
 # All .yml files (except of this file) will be ignored from this repository
+
+# Most probably you will want to override two variables
+# First one is developer account password.
+# centos_users_developer_password: YOUR_PASSWORD_HERE
+# Please remember that you need to encrypt password here, it can be set as a plaintext. Check roles/defaults/main.yml (at the bottom of the file) to check how to generate such password
+# If you plan to commit this file somewhere it's important to use Ansible Vault for that purpose
+
+# Second variable that you might want to override is path to your public file. It will be added to authorized_keys on the server so you can login easily over SSH
+# Logging it with password via SSH is strongly NOT recommended
+# centos_users_developer_authorized_key_path: PATH_TO_YOUR_PUBLIC_KEY_HERE

@@ -26,7 +26,7 @@
 # Make sure that gpgcheck is enabled for all repositories
 # This is the same check as above, but for all repo files in /etc/yum.repos.d directory
 #
-- name: Get all repositories
+- name: Get all repositories for GPG check
   shell: find /etc/yum.repos.d -type f -name "*.repo" warn=no
   register: centos_yum_repositories
   changed_when: false
@@ -154,8 +154,9 @@
 
 # Make sure that yum-cron service is up and running
 #
-- name: start yum cron service
+- name: Start yum cron service and enable it on start
   service:
     name: yum-cron
     state: started
+    enabled: yes
   tags: [centos, yum, healthcheck]

@@ -1,3 +1,22 @@
+####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
+
+# Should this role use yum tasks for packages management?
+centos_manage_yum: yes
+
+# Should this role use groups tasks for linux groups management?
+centos_manage_groups: yes
+
+# Should this role use users tasks for linux users management?
+centos_manage_users: yes
+
+# Should this role use sudo tasks for linux sudoers file?
+centos_manage_sudo: yes
+
+
+
+
+####### YUM TASKS CONFIGURATION #######
+
 # Path to file where Ansible should storage information about list of installed packages.
 centos_yum_initial_package_list_path: /etc/yum/initial-packages-list
 
@@ -81,3 +100,72 @@ centos_yum_other_packages:
 # List of additional tools that are missing from CentOS minimal installation but are super useful
 centos_yum_additional_tools:
  - net-tools # add netstat tool
+
+
+
+
+
+####### GROUPS TASKS CONFIGURATION #######
+
+# Path to file where initial list of available groups is stored
+centos_groups_initial_groups_list_path: /etc/initial-group-list
+
+# List of groups to remove from the system
+centos_groups_to_remove: []
+
+# List of available groups in the system
+# In www group we usually have all applications that writes to files like php, httpd etc.
+centos_groups_available:
+ - www
+
+
+
+
+
+####### USERS TASKS CONFIGURATION #######
+
+# Path to file where initial list of existing users is stored
+centos_users_initial_users_list_path: /etc/initial-users-list
+
+# List of users to remove from the system
+centos_users_to_remove: []
+
+# List of available users
+# If you want to give sudo power to the user, add him to "wheel" group
+# Password should NOT be stored in plain text. To make it secure you should override it variable file and encrypt it with Ansible Vault
+# If generate_ssh_key is set to yes, user will have 4096 bit RSA key in his profile
+centos_users_available:
+  - {
+      username: developer,
+      groups: 'wheel,www',
+      password: "{{ centos_users_developer_password }}",
+      generate_ssh_key: yes
+    }
+
+# You can't use plain text user passwords with Ansible
+# Password must by encrypted with crypt with following command:
+# python -c "from passlib.hash import sha512_crypt; import getpass; print sha512_crypt.encrypt(getpass.getpass())"
+# Make sure that you have passlib package installed ( sudo pip install passlib )
+# Please remember to use Ansible Vault for keeping such credentials in a safe way
+centos_users_developer_password: "$6$rounds=656000$rDRHnnGbRxn0LsSU$U.mY3d2.T02InduDX2D7855ESfj71qXEMy3xC7ltfakfoSPJ0ZWIGbgIOySZtdCR8uCGwU8/rYR2Jc/sJNfWc."
+
+# Authorised keys to add to user
+# Path to file must be the path to your public key, not private!
+centos_users_authorized_keys:
+  - {
+    username: developer,
+    path_to_file: "{{ centos_users_developer_authorized_key_path }}"
+  }
+
+
+# To make it simpler to use in vars file, we extracted path to authorized key for developer account as separate variable
+centos_users_developer_authorized_key_path: ~/.ssh/id_rsa.pub
+
+
+
+
+####### SUDO TASKS CONFIGURATION #######
+
+# Should wheel group use sudo with password or without password?
+# Security recommendation is to set this variable to "yes"
+centos_groups_wheel_password_required: yes
