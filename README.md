@@ -29,13 +29,22 @@ ansible-playbook -i hosts playbooks/YOUR_PLAYBOOK_FILE.yml
 
 Some tasks are marked with `healthcheck` tag. They will do some basic checks to see if system is up and running. All tasks should be green. If there are tasks marked as changed, something is not OK.
 ```
-ansible-playbook -i hosts playbooks/YOUR_PLAYBOOK_FILE.yml --tags="healtcheck" 
+ansible-playbook -i hosts playbooks/YOUR_PLAYBOOK_FILE.yml --tags="healthcheck" 
 ``` 
+
+Please take a look at `vars/example-vars.yml` file and make sure that you override default developer account password and path to your public key. 
+Public key is required for logging in via SSH with RSA keys. Logging with password will be turned off.
+Password is required for sudo, if you will set `centos_groups_wheel_password_required` to `yes` (this is default value). Once sudo with password will be available, you must execute playbooks with `-K` argument and pass sudo password:
+
+```
+ansible-playbook -i hosts playbooks/YOUR_PLAYBOOK_FILE.yml -K
+```
 
 Included roles
 --------------
 
-**centos** - Take care of system settings. Configure yum, yum-cron, update and remove packages.
+**centos** - Take care of system settings. Configure yum, yum-cron, update and remove packages. 
+It also take cares of groups and users. Enable sudo. 
 
 Changelog
 ---------
