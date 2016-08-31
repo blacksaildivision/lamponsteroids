@@ -9,6 +9,8 @@ centos_manage_groups: yes
 # Should this role use users tasks for linux users management?
 centos_manage_users: yes
 
+# Should this role use sudo tasks for linux sudoers file?
+centos_manage_sudo: yes
 
 
 
@@ -116,10 +118,6 @@ centos_groups_to_remove: []
 centos_groups_available:
  - www
 
-# Should wheel group use sudo with password or without password?
-# Security recommendation is to set this variable to "yes"
-centos_groups_wheel_password_required: yes
-
 
 
 
@@ -162,3 +160,12 @@ centos_users_authorized_keys:
 
 # To make it simpler to use in vars file, we extracted path to authorized key for developer account as separate variable
 centos_users_developer_authorized_key_path: ~/.ssh/id_rsa.pub
+
+
+
+
+####### SUDO TASKS CONFIGURATION #######
+
+# Should wheel group use sudo with password or without password?
+# Security recommendation is to set this variable to "yes"
+centos_groups_wheel_password_required: yes

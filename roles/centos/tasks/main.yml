@@ -16,3 +16,9 @@
 #
 - include: users.yml
   when: "centos_manage_users == true"
+
+
+
+# Manage sudo
+- include: sudo.yml
+  when: "centos_manage_sudo == true"
