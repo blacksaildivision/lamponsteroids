@@ -43,5 +43,5 @@
   authorized_key:
     user: "{{ item.username }}"
     key: "{{ lookup( 'file', item.path_to_file ) }}"
-  with_items: centos_users_authorized_keys
+  with_items: "{{ centos_users_authorized_keys }}"
   tags: [centos, users]
