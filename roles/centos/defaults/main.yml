@@ -12,6 +12,9 @@ centos_manage_users: yes
 # Should this role use sudo tasks for linux sudoers file?
 centos_manage_sudo: yes
 
+# Should this role use ssh tasks for setting up secure SSH?
+centos_manage_ssh: yes
+
 
 
 
@@ -147,7 +150,7 @@ centos_users_available:
 # python -c "from passlib.hash import sha512_crypt; import getpass; print sha512_crypt.encrypt(getpass.getpass())"
 # Make sure that you have passlib package installed ( sudo pip install passlib )
 # Please remember to use Ansible Vault for keeping such credentials in a safe way
-centos_users_developer_password: "$6$rounds=656000$rDRHnnGbRxn0LsSU$U.mY3d2.T02InduDX2D7855ESfj71qXEMy3xC7ltfakfoSPJ0ZWIGbgIOySZtdCR8uCGwU8/rYR2Jc/sJNfWc."
+centos_users_developer_password: "$6$rounds=656000$DeNu.bf92WDgbQIW$olUwR2s0Oz92c/PFKdBSedZNJS80APVsFkxExoOACwMDMBrM7d.6DHSpx8wW7kBL3QLfCXSyf2O6MQj.sXUnN/"
 
 # Authorised keys to add to user
 # Path to file must be the path to your public key, not private!
@@ -164,8 +167,24 @@ centos_users_developer_authorized_key_path: ~/.ssh/id_rsa.pub
 
 
 
+
 ####### SUDO TASKS CONFIGURATION #######
 
 # Should wheel group use sudo with password or without password?
 # Security recommendation is to set this variable to "yes"
 centos_groups_wheel_password_required: yes
+
+
+
+
+
+####### SSH TASKS CONFIGURATION #######
+
+# Path to SSH config file
+centos_ssh_config_file: /etc/ssh/sshd_config
+
+# Turn on or off authentication with public key (valid values: "yes" | "no")
+centos_ssh_public_key_authentication: "yes"
+
+# Turn on or off authentication with passwords (valid values: "yes" | "no")
+centos_ssh_password_authentication: "no"

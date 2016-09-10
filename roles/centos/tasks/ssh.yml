@@ -1,0 +1,28 @@
+# Turn ON or OFF authentication with public key when trying to access server via SSH
+# It's recommended to set it to "yes", and leave it as the only way to access the server.
+# Passwords and other type of authentication should be disabled
+#
+- name: Set public key authentication
+  lineinfile:
+    dest: "{{ centos_ssh_config_file }}"
+    line: "PubkeyAuthentication {{ centos_ssh_public_key_authentication }}"
+    state: present
+    regexp: '^#?PubkeyAuthentication'
+  notify: restart sshd
+  tags: [centos, ssh]
+
+
+
+# Turn ON or OFF authentication with password when trying to access server via SSH
+# It's recommended to set it to "no" and use public key authentication only.
+# Before you will turn this off, make sure that you can access the server with your SSH keys.
+# If you won't be able to, you will probably close access to server permanently.
+#
+- name: Set password authentication
+  lineinfile:
+    dest: "{{ centos_ssh_config_file }}"
+    line: "PasswordAuthentication {{ centos_ssh_password_authentication }}"
+    state: present
+    regexp: '^#?PasswordAuthentication'
+  notify: restart sshd
+  tags: [centos, ssh]

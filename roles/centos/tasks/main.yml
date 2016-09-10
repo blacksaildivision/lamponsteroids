@@ -22,3 +22,9 @@
 # Manage sudo
 - include: sudo.yml
   when: "centos_manage_sudo == true"
+
+
+
+# Manage SSH
+- include: ssh.yml
+  when: "centos_manage_ssh == true"
