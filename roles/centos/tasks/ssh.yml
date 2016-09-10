@@ -1,0 +1,171 @@
+# Turn ON or OFF certain ways to access server via SSH:
+# - Public key authentication (should be default)
+# - Password authentication (should be turned off, highly insecure)
+# - GSS API (should be turned off if you don't plan to use it)
+# - Kerberos (should be turned off if you don't plan to use it)
+#
+# In general public key authentication should be the only way to access the server
+# Before you will apply these rules, make sure that you can access the server with SSH keys.
+# If you won't be able to, you will probably close access to server permanently.
+#
+- name: Configure public key authentication
+  lineinfile:
+    dest: "{{ centos_ssh_config_file }}"
+    line: "PubkeyAuthentication {{ centos_ssh_authentication_public_key }}"
+    state: present
+    regexp: '^#?PubkeyAuthentication'
+  notify: restart sshd
+  tags: [centos, ssh]
+
+- name: Configure password authentication
+  lineinfile:
+    dest: "{{ centos_ssh_config_file }}"
+    line: "PasswordAuthentication {{ centos_ssh_authentication_password }}"
+    state: present
+    regexp: '^#?PasswordAuthentication'
+  notify: restart sshd
+  tags: [centos, ssh]
+
+- name: Configure GSS API authentication
+  lineinfile:
+    dest: "{{ centos_ssh_config_file }}"
+    line: "GSSAPIAuthentication {{ centos_ssh_authentication_gss_api }}"
+    state: present
+    regexp: '^#?GSSAPIAuthentication'
+  notify: restart sshd
+  tags: [centos, ssh]
+
+- name: Configure Kerberos authentication
+  lineinfile:
+    dest: "{{ centos_ssh_config_file }}"
+    line: "KerberosAuthentication {{ centos_ssh_authentication_kerberos }}"
+    state: present
+    regexp: '^#?KerberosAuthentication'
+  notify: restart sshd
+  tags: [centos, ssh]
+
+
+
+# Turn ON or OFF ability to login as root via SSH
+# It's recommended to set it to "no" for security reasons. Root account is always tested agains attacks to the server
+# Before you will turn this off, make sure that you have additional user that can connect to the server.
+# This user should also have sudo permissions
+#
+- name: Configure logging in as root
+  lineinfile:
+    dest: "{{ centos_ssh_config_file }}"
+    line: "PermitRootLogin {{ centos_ssh_login_as_root }}"
+    state: present
+    regexp: '^#?PermitRootLogin'
+  notify: restart sshd
+  tags: [centos, ssh]
+
+
+
+# Turn ON or OFF access for accounts with empty password
+# It's recommended to set it to "no" for security reasons.
+# Before you will turn this off, make sure that your account has a password
+#
+- name: Configure access for users with empty password
+  lineinfile:
+    dest: "{{ centos_ssh_config_file }}"
+    line: "PermitEmptyPasswords {{ centos_ssh_login_with_empty_password }}"
+    state: present
+    regexp: '^#?PermitEmptyPasswords'
+  notify: restart sshd
+  tags: [centos, ssh]
+
+
+
+# Turn ON or OFF strict mode checks during login
+# It's recommended to set it to "yes" for security reasons.
+# Before you will turn this on, make sure that your keys, known_hosts and .ssh directory has correct permissions.
+#
+- name: Configure strict mode
+  lineinfile:
+    dest: "{{ centos_ssh_config_file }}"
+    line: "StrictModes {{ centos_ssh_strict_mode }}"
+    state: present
+    regexp: '^#?StrictModes'
+  notify: restart sshd
+  tags: [centos, ssh]
+
+
+
+# Allow logging via SSH only to given users.
+# If the list is empty, make sure that all users can log in.
+#
+- name: Configure list of users that have access to server
+  lineinfile:
+    dest: "{{ centos_ssh_config_file }}"
+    line: "AllowUsers {{ centos_ssh_allowed_users | join (' ') }}"
+    state: present
+    regexp: '^#?AllowUsers'
+  notify: restart sshd
+  when: "centos_ssh_allowed_users | length > 0"
+  tags: [centos, ssh]
+
+- name: Make sure that all users can access the server
+  lineinfile:
+    dest: "{{ centos_ssh_config_file }}"
+    state: absent
+    regexp: '^AllowUsers'
+  notify: restart sshd
+  when: "centos_ssh_allowed_users | length == 0"
+  tags: [centos, ssh]
+
+
+
+# Should SSH ignore checking .rhosts and .shost files during login
+# It's recommended to set it to "yes" for security reasons
+#
+- name: Set .rhosts and .shosts files checks
+  lineinfile:
+    dest: "{{ centos_ssh_config_file }}"
+    line: "IgnoreRhosts {{ centos_ssh_ignore_rhosts }}"
+    state: present
+    regexp: '^#?IgnoreRhosts'
+  notify: restart sshd
+  tags: [centos, ssh]
+
+
+
+# Turn ON or OFF X11 Forwarding
+# It's recommended to turn it OFF due to security reasons
+#
+- name: Configure X11 Forwarding
+  lineinfile:
+    dest: "{{ centos_ssh_config_file }}"
+    line: "X11Forwarding {{ centos_ssh_x11_forwarding }}"
+    state: present
+    regexp: '^#?X11Forwarding'
+  notify: restart sshd
+  tags: [centos, ssh]
+
+
+
+# Make sure that SSH uses protocol 2
+# SSH protocol in version 1 is not that secure
+#
+- name: Make sure that protocol 2 is enabled
+  lineinfile:
+    dest: "{{ centos_ssh_config_file }}"
+    line: "Protocol 2"
+    state: present
+    regexp: '^#?Protocol'
+  notify: restart sshd
+  tags: [centos, ssh]
+
+
+
+# Print last log information after SSH to the server
+# Information about last successful login will be printed out
+#
+- name: Make sure that printing last log is enabled
+  lineinfile:
+    dest: "{{ centos_ssh_config_file }}"
+    line: "PrintLastLog yes"
+    state: present
+    regexp: '^#?PrintLastLog'
+  notify: restart sshd
+  tags: [centos, ssh]

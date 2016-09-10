@@ -5,3 +5,13 @@
   service:
     name: yum-cron
     state: restarted
+
+
+
+# Restart sshd service
+# This handler is executed on changes in sshd_config file
+#
+- name: restart sshd
+  service:
+    name: sshd
+    state: restarted

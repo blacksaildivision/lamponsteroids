@@ -36,6 +36,7 @@
   tags: [centos, users]
 
 
+
 # Add authorised keys to user
 # It's useful when you want to add SSH key which you can connect to given user
 #
