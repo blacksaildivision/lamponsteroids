@@ -197,3 +197,16 @@ centos_ssh_authentication_kerberos: "no"
 
 # Turn on or off logging in as root (valid values: "yes" | "no")
 centos_ssh_login_as_root: "no"
+
+# Turn on or off logging for users with empty password (valid values: "yes" | "no")
+centos_ssh_login_with_empty_password: "no"
+
+# Turn on or off strict mode
+centos_ssh_strict_mode: "yes"
+
+# List of users that are able to login via SSH. Leave it empty ( value:  [] )to turn this feature off (all users are able to login)
+centos_ssh_allowed_users:
+  - developer
+
+# Turn on or off ignoring .rhosts and .shosts files (valid values: "yes" | "no")
+centos_ssh_ignore_rhosts: "yes"

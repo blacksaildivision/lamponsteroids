@@ -8,7 +8,7 @@
 # Before you will apply these rules, make sure that you can access the server with SSH keys.
 # If you won't be able to, you will probably close access to server permanently.
 #
-- name: Set public key authentication
+- name: Configure public key authentication
   lineinfile:
     dest: "{{ centos_ssh_config_file }}"
     line: "PubkeyAuthentication {{ centos_ssh_authentication_public_key }}"
@@ -17,7 +17,7 @@
   notify: restart sshd
   tags: [centos, ssh]
 
-- name: Set password authentication
+- name: Configure password authentication
   lineinfile:
     dest: "{{ centos_ssh_config_file }}"
     line: "PasswordAuthentication {{ centos_ssh_authentication_password }}"
@@ -26,7 +26,7 @@
   notify: restart sshd
   tags: [centos, ssh]
 
-- name: Set GSS API authentication
+- name: Configure GSS API authentication
   lineinfile:
     dest: "{{ centos_ssh_config_file }}"
     line: "GSSAPIAuthentication {{ centos_ssh_authentication_gss_api }}"
@@ -35,7 +35,7 @@
   notify: restart sshd
   tags: [centos, ssh]
 
-- name: Set Kerberos authentication
+- name: Configure Kerberos authentication
   lineinfile:
     dest: "{{ centos_ssh_config_file }}"
     line: "KerberosAuthentication {{ centos_ssh_authentication_kerberos }}"
@@ -45,12 +45,13 @@
   tags: [centos, ssh]
 
 
+
 # Turn ON or OFF ability to login as root via SSH
-# It's recommended to set it to "no" for security reasons. root account is always tested agains attacks to the server
+# It's recommended to set it to "no" for security reasons. Root account is always tested agains attacks to the server
 # Before you will turn this off, make sure that you have additional user that can connect to the server.
 # This user should also have sudo permissions
 #
-- name: Set logging in as root
+- name: Configure logging in as root
   lineinfile:
     dest: "{{ centos_ssh_config_file }}"
     line: "PermitRootLogin {{ centos_ssh_login_as_root }}"
@@ -58,3 +59,71 @@
     regexp: '^#?PermitRootLogin'
   notify: restart sshd
   tags: [centos, ssh]
+
+
+
+# Turn ON or OFF access for accounts with empty password
+# It's recommended to set it to "no" for security reasons.
+# Before you will turn this off, make sure that your account has a password
+#
+- name: Configure access for users with empty password
+  lineinfile:
+    dest: "{{ centos_ssh_config_file }}"
+    line: "PermitEmptyPasswords {{ centos_ssh_login_with_empty_password }}"
+    state: present
+    regexp: '^#?PermitEmptyPasswords'
+  notify: restart sshd
+  tags: [centos, ssh]
+
+
+
+# Turn ON or OFF strict mode checks during login
+# It's recommended to set it to "yes" for security reasons.
+# Before you will turn this on, make sure that your keys, known_hosts and .ssh directory has correct permissions.
+#
+- name: Configure strict mode
+  lineinfile:
+    dest: "{{ centos_ssh_config_file }}"
+    line: "StrictModes {{ centos_ssh_strict_mode }}"
+    state: present
+    regexp: '^#?StrictModes'
+  notify: restart sshd
+  tags: [centos, ssh]
+
+
+
+# Allow logging via SSH only to given users.
+# If the list is empty, make sure that all users can log in.
+- name: Configure list of users that have access to server
+  lineinfile:
+    dest: "{{ centos_ssh_config_file }}"
+    line: "AllowUsers {{ centos_ssh_allowed_users | join (' ') }}"
+    state: present
+    regexp: '^#?AllowUsers'
+  notify: restart sshd
+  when: "centos_ssh_allowed_users | length > 0"
+  tags: [centos, ssh]
+
+- name: Make sure that all users can access the server
+  lineinfile:
+    dest: "{{ centos_ssh_config_file }}"
+    state: absent
+    regexp: '^AllowUsers'
+  notify: restart sshd
+  when: "centos_ssh_allowed_users | length == 0"
+  tags: [centos, ssh]
+
+
+# Should SSH ignore checking .rhosts and .shost files during login
+# It's recommended to set it to "yes" for security reasons
+#
+- name: Set .rhosts and .shosts files checks
+  lineinfile:
+    dest: "{{ centos_ssh_config_file }}"
+    line: "IgnoreRhosts {{ centos_ssh_ignore_rhosts }}"
+    state: present
+    regexp: '^#?IgnoreRhosts'
+  notify: restart sshd
+  tags: [centos, ssh]
+
+
