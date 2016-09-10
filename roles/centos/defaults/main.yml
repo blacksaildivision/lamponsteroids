@@ -210,3 +210,6 @@ centos_ssh_allowed_users:
 
 # Turn on or off ignoring .rhosts and .shosts files (valid values: "yes" | "no")
 centos_ssh_ignore_rhosts: "yes"
+
+# Turn on or off X11 Forwarding (valid values: "yes" | "no")
+centos_ssh_x11_forwarding: "no"
