@@ -1,28 +1,60 @@
-# Turn ON or OFF authentication with public key when trying to access server via SSH
-# It's recommended to set it to "yes", and leave it as the only way to access the server.
-# Passwords and other type of authentication should be disabled
+# Turn ON or OFF certain ways to access server via SSH:
+# - Public key authentication (should be default)
+# - Password authentication (should be turned off, highly insecure)
+# - GSS API (should be turned off if you don't plan to use it)
+# - Kerberos (should be turned off if you don't plan to use it)
+#
+# In general public key authentication should be the only way to access the server
+# Before you will apply these rules, make sure that you can access the server with SSH keys.
+# If you won't be able to, you will probably close access to server permanently.
 #
 - name: Set public key authentication
   lineinfile:
     dest: "{{ centos_ssh_config_file }}"
-    line: "PubkeyAuthentication {{ centos_ssh_public_key_authentication }}"
+    line: "PubkeyAuthentication {{ centos_ssh_authentication_public_key }}"
     state: present
     regexp: '^#?PubkeyAuthentication'
   notify: restart sshd
   tags: [centos, ssh]
 
-
-
-# Turn ON or OFF authentication with password when trying to access server via SSH
-# It's recommended to set it to "no" and use public key authentication only.
-# Before you will turn this off, make sure that you can access the server with your SSH keys.
-# If you won't be able to, you will probably close access to server permanently.
-#
 - name: Set password authentication
   lineinfile:
     dest: "{{ centos_ssh_config_file }}"
-    line: "PasswordAuthentication {{ centos_ssh_password_authentication }}"
+    line: "PasswordAuthentication {{ centos_ssh_authentication_password }}"
     state: present
     regexp: '^#?PasswordAuthentication'
+  notify: restart sshd
+  tags: [centos, ssh]
+
+- name: Set GSS API authentication
+  lineinfile:
+    dest: "{{ centos_ssh_config_file }}"
+    line: "GSSAPIAuthentication {{ centos_ssh_authentication_gss_api }}"
+    state: present
+    regexp: '^#?GSSAPIAuthentication'
+  notify: restart sshd
+  tags: [centos, ssh]
+
+- name: Set Kerberos authentication
+  lineinfile:
+    dest: "{{ centos_ssh_config_file }}"
+    line: "KerberosAuthentication {{ centos_ssh_authentication_kerberos }}"
+    state: present
+    regexp: '^#?KerberosAuthentication'
+  notify: restart sshd
+  tags: [centos, ssh]
+
+
+# Turn ON or OFF ability to login as root via SSH
+# It's recommended to set it to "no" for security reasons. root account is always tested agains attacks to the server
+# Before you will turn this off, make sure that you have additional user that can connect to the server.
+# This user should also have sudo permissions
+#
+- name: Set logging in as root
+  lineinfile:
+    dest: "{{ centos_ssh_config_file }}"
+    line: "PermitRootLogin {{ centos_ssh_login_as_root }}"
+    state: present
+    regexp: '^#?PermitRootLogin'
   notify: restart sshd
   tags: [centos, ssh]

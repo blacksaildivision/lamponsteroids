@@ -184,7 +184,16 @@ centos_groups_wheel_password_required: yes
 centos_ssh_config_file: /etc/ssh/sshd_config
 
 # Turn on or off authentication with public key (valid values: "yes" | "no")
-centos_ssh_public_key_authentication: "yes"
+centos_ssh_authentication_public_key: "yes"
 
 # Turn on or off authentication with passwords (valid values: "yes" | "no")
-centos_ssh_password_authentication: "no"
+centos_ssh_authentication_password: "no"
+
+# Turn on or off GSS API authentication (valid values: "yes" | "no")
+centos_ssh_authentication_gss_api: "no"
+
+# Turn on or off Kerberos authentication (valid values: "yes" | "no")
+centos_ssh_authentication_kerberos: "no"
+
+# Turn on or off logging in as root (valid values: "yes" | "no")
+centos_ssh_login_as_root: "no"
