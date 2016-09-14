@@ -3,6 +3,8 @@
 # Should this role set timezone?
 ntp_manage_timezone: yes
 
+# Should this role install NTP server?
+ntp_manage_ntp: yes
 
 
 

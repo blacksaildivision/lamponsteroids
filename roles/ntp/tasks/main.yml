@@ -2,3 +2,10 @@
 #
 - include: timezone.yml
   when: "ntp_manage_timezone == true"
+
+
+
+# Install and configure NTP server
+#
+- include: ntp.yml
+  when: "ntp_manage_ntp == true"

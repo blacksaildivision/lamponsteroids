@@ -1,0 +1,45 @@
+# CentOS comes with default NTP server called chrony
+# It has much less configuration options than ntp package
+# It should be removed before ntp package will be installed
+# Having both up and running on the server can cause desynchronisation
+#
+- name: Uninstall chrony
+  yum:
+    name: chrony
+    state: absent
+  tags: [ntp]
+
+
+
+# Install ntp package that will take care of system datetime synchornisation
+# As dependencies autogen-libopts and ntpdate will be installed
+#
+- name: Install NTP package
+  yum:
+    name: ntp
+    state: latest
+  tags: [ntp]
+
+
+
+# Turn off monlist
+# This is very important from security reasons. It will block NTP-based DDoS attacks
+#
+- name: Make sure that monlist is disabled
+  lineinfile:
+    dest: /etc/ntp.conf
+    line: disable monitor
+    insertafter: EOF
+  notify: restart ntpd
+  tags: [ntp]
+
+
+
+# Start and enable ntp on system boot
+#
+- name: Start ntp service and enable it on boot
+  service:
+    name: ntpd
+    state: started
+    enabled: yes
+  tags: [ntp]
