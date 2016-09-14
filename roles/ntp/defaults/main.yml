@@ -1,0 +1,11 @@
+####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
+
+# Should this role set timezone?
+ntp_manage_timezone: yes
+
+
+
+
+
+####### TIMEZONE TASKS CONFIGURATION #######
+ntp_timezone: UTC
