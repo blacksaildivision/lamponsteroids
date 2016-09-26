@@ -43,8 +43,10 @@ ansible-playbook -i hosts playbooks/YOUR_PLAYBOOK_FILE.yml -K
 Included roles
 --------------
 
-**centos** - Take care of system settings. Configure yum, yum-cron, update and remove packages. 
-It also take cares of groups and users. Enable sudo. 
+**centos** - Takes care of system settings. Configure yum, yum-cron, update and remove packages. 
+It also take cares of groups and users. Enable sudo. Configure secure SSH
+
+**ntp** - Takes care of system timezone and NTP server. It uses Chrony for using NTP.
 
 Changelog
 ---------

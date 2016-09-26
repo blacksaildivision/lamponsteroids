@@ -1,0 +1,12 @@
+# Before we will install NTP server, we need to set timezone
+#
+- name: Check current timezone
+  shell: timedatectl | awk '/Time zone:/ {print $3}'
+  register: ntp_current_timezone
+  changed_when: false
+  tags: [ntp, timezone]
+
+- name: Change timezone if needed
+  command: "timedatectl set-timezone {{ ntp_timezone }}"
+  when: ntp_current_timezone.stdout != "{{ ntp_timezone }}"
+  tags: [ntp, timezone]

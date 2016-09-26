@@ -1,0 +1,30 @@
+####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
+
+# Should this role set timezone?
+ntp_manage_timezone: yes
+
+# Should this role install Chrony NTP server?
+ntp_manage_chrony: yes
+
+
+
+
+####### TIMEZONE TASKS CONFIGURATION #######
+
+# System timezone
+ntp_timezone: UTC
+
+
+
+
+####### NTP SERVER CONFIGURATION #######
+
+# Should this role remove ntpd if present? Chrony is used by default
+ntp_chrony_remove_ntpd: yes
+
+# List of servers to sync with
+ntp_chrony_servers:
+  - 0.pool.ntp.org
+  - 1.pool.ntp.org
+  - 2.pool.ntp.org
+  - 3.pool.ntp.org
