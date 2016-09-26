@@ -169,3 +169,14 @@
     regexp: '^#?PrintLastLog'
   notify: restart sshd
   tags: [centos, ssh]
+
+
+
+# Make sure that sshd service is started and enabled on boot
+#
+- name: Start sshd service
+  service:
+    name: sshd
+    state: started
+    enabled: yes
+  tags: [centos, ssh, healthcheck]

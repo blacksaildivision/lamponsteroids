@@ -7,5 +7,5 @@
 
 # Install and configure NTP server
 #
-- include: ntp.yml
-  when: "ntp_manage_ntp == true"
+- include: chrony.yml
+  when: "ntp_manage_chrony == true"

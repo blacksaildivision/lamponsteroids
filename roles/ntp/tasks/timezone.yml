@@ -6,7 +6,7 @@
   changed_when: false
   tags: [ntp, timezone]
 
-- name: Set timezone
+- name: Change timezone if needed
   command: "timedatectl set-timezone {{ ntp_timezone }}"
   when: ntp_current_timezone.stdout != "{{ ntp_timezone }}"
   tags: [ntp, timezone]

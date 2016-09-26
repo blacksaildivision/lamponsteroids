@@ -1,7 +1,7 @@
-# Restart ntpd service
-# This is usually executed on changes in /etc/ntp.conf file
+# Restart chronyd service
+# This is usually executed on changes in /etc/chrony.conf file
 #
-- name: restart ntpd
+- name: restart chronyd
   service:
-    name: ntpd
+    name: chronyd
     state: restarted
