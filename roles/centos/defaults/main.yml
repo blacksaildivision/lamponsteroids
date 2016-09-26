@@ -43,6 +43,8 @@ centos_yum_core_packages:
  - dracut
  - glibc
  - glibc-common # dependencies: glibc
+ - kmod
+ - kmod-libs
  - kpartx
  - krb5-libs
  - libblkid

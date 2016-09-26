@@ -1,10 +1,13 @@
 # Make sure that ntpd is removed
 # Having two NTP servers installed can cause synchronisation issues
 #
-- name: Remove ntp package if present
+- name: Remove ntp packages if present
   yum:
-    name: ntp
+    name: "{{ item }}"
     state: removed
+  with_items:
+    - ntp
+    - ntpdate
   when: ntp_chrony_remove_ntpd == true
   tags: [ntp, chrony]
 
@@ -43,7 +46,7 @@
 
 # Make sure that chronyd service is started and enabled on boot
 #
-- name: Start chrony service
+- name: Start and enable chronyd service
   service:
     name: chronyd
     state: started
