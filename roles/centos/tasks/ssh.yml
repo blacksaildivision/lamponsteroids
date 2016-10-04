@@ -218,9 +218,23 @@
 
 
 
+# Setup SSH connection ciphers
+# They are used to encrypt the data after authentication. You should only use secure ciphers, that are not easy to break
+#
+- name: Configure SSH ciphers
+  lineinfile:
+    dest: "{{ centos_ssh_config_file }}"
+    line: "Ciphers {{ centos_ssh_ciphers | join (',') }}"
+    state: present
+    regexp: '^#?Ciphers'
+  notify: restart sshd
+  tags: [centos, ssh]
+
+
+
 # Make sure that sshd service is started and enabled on boot
 #
-- name: Start sshd service
+- name: Make sure that sshd service is started and enabled on boot
   service:
     name: sshd
     state: started

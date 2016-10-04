@@ -228,3 +228,12 @@ centos_ssh_key_exchange_algorithms:
 centos_ssh_server_key_authentications:
   - ssh_host_ed25519_key
   - ssh_host_rsa_key
+
+# List of secure SSH ciphers. The default are the safest one.
+centos_ssh_ciphers:
+  - chacha20-poly1305@openssh.com
+  - aes256-gcm@openssh.com
+  - aes128-gcm@openssh.com
+  - aes256-ctr
+  - aes192-ctr
+  - aes128-ctr
