@@ -219,3 +219,8 @@ centos_ssh_x11_forwarding: "no"
 # Setup key exchange algorithm. Default is the safest one, but if you need some compatilibity with other tools, please check http://ssh-comparison.quendi.de/comparison/kex.html this website
 centos_ssh_key_exchange_algorithms:
   - curve25519-sha256@libssh.org
+
+# List of keys for ssh server authentication. The defaults are the safest one. Path ( /etc/ssh ) should be omited
+centos_ssh_server_key_authentications:
+  - ssh_host_ed25519_key
+  - ssh_host_rsa_key

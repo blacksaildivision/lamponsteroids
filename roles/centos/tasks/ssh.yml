@@ -180,6 +180,30 @@
     dest: "{{ centos_ssh_config_file }}"
     line: "KexAlgorithms {{ centos_ssh_key_exchange_algorithms | join (',') }}"
     state: present
+    regexp: '^#?KexAlgorithms'
+  notify: restart sshd
+  tags: [centos, ssh]
+
+
+
+# Setup SSH server authentication
+# Same as in key exchange, there are some algorithms that are less secure than others.
+# We should only keep the secure ones.
+#
+- name: Enable secure keys for server authentication
+  lineinfile:
+    dest: "{{ centos_ssh_config_file }}"
+    line: "HostKey /etc/ssh/{{ item }}"
+    state: present
+  with_items: "{{ centos_ssh_server_key_authentications }}"
+  notify: restart sshd
+  tags: [centos, ssh]
+
+- name: Remove all other keys for server authentication
+  lineinfile:
+    dest: "{{ centos_ssh_config_file }}"
+    regexp: "HostKey /etc/ssh/(?!{{ centos_ssh_server_key_authentications | join('|') }})"
+    state: absent
   notify: restart sshd
   tags: [centos, ssh]
 
