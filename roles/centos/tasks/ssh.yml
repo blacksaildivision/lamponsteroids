@@ -232,6 +232,20 @@
 
 
 
+# Configure authentication codes
+# They provide integrity for encryption. Only secure algorithms should be used
+#
+- name: Configure SSH MACs
+  lineinfile:
+    dest: "{{ centos_ssh_config_file }}"
+    line: "MACs {{ centos_ssh_macs | join (',') }}"
+    state: present
+    regexp: '^#?MACs'
+  notify: restart sshd
+  tags: [centos, ssh]
+
+
+
 # Make sure that sshd service is started and enabled on boot
 #
 - name: Make sure that sshd service is started and enabled on boot

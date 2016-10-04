@@ -229,7 +229,7 @@ centos_ssh_server_key_authentications:
   - ssh_host_ed25519_key
   - ssh_host_rsa_key
 
-# List of secure SSH ciphers. The default are the safest one.
+# List of SSH ciphers. The default are the safest one.
 centos_ssh_ciphers:
   - chacha20-poly1305@openssh.com
   - aes256-gcm@openssh.com
@@ -237,3 +237,14 @@ centos_ssh_ciphers:
   - aes256-ctr
   - aes192-ctr
   - aes128-ctr
+
+# List of MACs. The default are the safest one.
+centos_ssh_macs:
+  - hmac-sha2-512-etm@openssh.com
+  - hmac-sha2-256-etm@openssh.com
+  - hmac-ripemd160-etm@openssh.com
+  - umac-128-etm@openssh.com
+  - hmac-sha2-512
+  - hmac-sha2-256
+  - hmac-ripemd160
+  - umac-128@openssh.com
