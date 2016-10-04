@@ -172,6 +172,19 @@
 
 
 
+# Setup SSH key exchange
+# Not all key exchange algorithms are secure enough, so we can disable some of them
+#
+- name: Configure key exchange
+  lineinfile:
+    dest: "{{ centos_ssh_config_file }}"
+    line: "KexAlgorithms {{ centos_ssh_key_exchange_algorithms | join (',') }}"
+    state: present
+  notify: restart sshd
+  tags: [centos, ssh]
+
+
+
 # Make sure that sshd service is started and enabled on boot
 #
 - name: Start sshd service
