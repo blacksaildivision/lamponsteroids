@@ -26,6 +26,15 @@
   notify: restart sshd
   tags: [centos, ssh]
 
+- name: Configure PAM authentication
+  lineinfile:
+    dest: "{{ centos_ssh_config_file }}"
+    line: "ChallengeResponseAuthentication {{ centos_ssh_challenge_response }}"
+    state: present
+    regexp: '^#?ChallengeResponseAuthentication'
+  notify: restart sshd
+  tags: [centos, ssh]
+
 - name: Configure GSS API authentication
   lineinfile:
     dest: "{{ centos_ssh_config_file }}"

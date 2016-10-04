@@ -197,6 +197,10 @@ centos_ssh_authentication_gss_api: "no"
 # Turn on or off Kerberos authentication (valid values: "yes" | "no")
 centos_ssh_authentication_kerberos: "no"
 
+# Turn on or off PAM-based authentication (valid values: "yes" | "no")
+# If you will set centos_ssh_authentication_password to "no", you should set this to "no" as well to trully disable password authentication.
+centos_ssh_challenge_response: "no"
+
 # Turn on or off logging in as root (valid values: "yes" | "no")
 centos_ssh_login_as_root: "no"
 
