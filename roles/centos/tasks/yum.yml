@@ -103,9 +103,19 @@
 # Remove unused packages with autoremove
 #
 - name: Remove unused packages
-  shell: yum autoremove -y warn=no
+  shell: yum autoremove -y | grep "Erasing" | awk '{print $3}' warn=no
   register: centos_yum_autoremove
-  changed_when: "'Removing' in centos_yum_autoremove.stdout"
+  changed_when: "centos_yum_autoremove.stdout != ''"
+  tags: [centos, yum]
+
+- debug:
+    msg: "List of autoremoved packages:"
+  when: "centos_yum_autoremove.stdout != ''"
+  tags: [centos, yum]
+
+- debug:
+    msg: "{{ centos_yum_autoremove.stdout_lines }}"
+  when: "centos_yum_autoremove.stdout != ''"
   tags: [centos, yum]
 
 
