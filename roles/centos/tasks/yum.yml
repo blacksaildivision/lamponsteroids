@@ -115,14 +115,19 @@
 # We can login to server and check if this package is really necessary there?
 #
 - name: Are there any packages left for update?
-  shell: yum list updates warn=no
+  shell: yum list updates | sed -e '1,/Updated Packages/d' warn=no
   register: centos_yum_more_packages_to_update
   changed_when: false
   tags: [centos, yum, healthcheck]
 
 - debug:
-    msg: "There are packges that were not updated! Please login to server and check them manually. {{ centos_yum_more_packages_to_update.stdout }}"
-  when: "'Updated Packages' in centos_yum_more_packages_to_update.stdout"
+    msg: "There are packges that were not updated! Please login to server and check them manually or try to re-run the playbook."
+  when: "centos_yum_more_packages_to_update.stdout != ''"
+  tags: [centos, yum, healthcheck]
+
+- debug:
+    msg: "{{ centos_yum_more_packages_to_update.stdout_lines }}"
+  when: "centos_yum_more_packages_to_update.stdout != ''"
   tags: [centos, yum, healthcheck]
 
 
