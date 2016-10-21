@@ -1,0 +1,35 @@
+*filter
+
+# Clear all iptables rules (everything is open)
+-X
+-F
+-Z
+
+# Allow loopback interface (lo0) and drop all traffic to 127/8 that doesn't use lo0
+-A INPUT -i lo -j ACCEPT
+-A OUTPUT -o lo -j ACCEPT
+-A INPUT -d 127.0.0.0/8 -j REJECT
+-A OUTPUT -d 127.0.0.0/8 -j REJECT
+
+# Keep all established connections
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+-A OUTPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+
+# Allow ping
+-A OUTPUT -p icmp --icmp-type echo-request -j ACCEPT
+-A INPUT -p icmp --icmp-type echo-reply -j ACCEPT
+-A INPUT -p icmp --icmp-type echo-request -j ACCEPT
+-A OUTPUT -p icmp --icmp-type echo-reply -j ACCEPT
+
+# temporary allow 22
+-A INPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+-A OUTPUT -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
+-A INPUT -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
+-A OUTPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+# Drop all other traffic
+-A INPUT -j DROP
+-A FORWARD -j DROP
+-A OUTPUT -j DROP
+
+COMMIT

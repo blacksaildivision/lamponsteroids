@@ -1,0 +1,36 @@
+# Firewalld must not be used along with iptables.
+# When both are running, weird situations can occur. It might be hard to debug when something does not work.
+#
+- name: Remove firewalld
+  yum:
+    name: firewalld
+    state: absent
+  tags: [centos, iptables]
+
+
+
+# Make sure that iptables and iptables-services are installed in latest versions
+# iptables-services packages is add-on to iptables and it enables to manage iptable like service
+#
+- name: Install iptables packages
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - iptables
+    - iptables-services
+  tags: [centos, iptables]
+
+
+
+# Create file with iptables firewall rules
+#
+- name: Add firewall rules
+  template:
+    src: firewall-rules.j2
+    dest: /etc/sysconfig/firewall-rules
+    owner: root
+    group: root
+    mode: 0644
+  #notify: realod iptables
+  tags: [centos, iptables, tt]
