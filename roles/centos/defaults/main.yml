@@ -1,19 +1,19 @@
 ####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
 
 # Should this role use yum tasks for packages management?
-centos_manage_yum: yes
+centos_manage_yum: no
 
 # Should this role use groups tasks for linux groups management?
-centos_manage_groups: yes
+centos_manage_groups: no
 
 # Should this role use users tasks for linux users management?
-centos_manage_users: yes
+centos_manage_users: no
 
 # Should this role use sudo tasks for linux sudoers file?
-centos_manage_sudo: yes
+centos_manage_sudo: no
 
 # Should this role use ssh tasks for setting up secure SSH?
-centos_manage_ssh: yes
+centos_manage_ssh: no
 
 # Should this role use iptables task for setting up firewall?
 centos_manage_iptables: yes
