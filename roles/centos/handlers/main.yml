@@ -15,3 +15,13 @@
   service:
     name: sshd
     state: restarted
+
+
+
+# Reload iptables
+# This handler is executed on changes in firewall rule-set
+#
+- name: restart iptables
+  service:
+    name: iptables
+    state: restarted

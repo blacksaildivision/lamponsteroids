@@ -15,6 +15,9 @@ centos_manage_sudo: yes
 # Should this role use ssh tasks for setting up secure SSH?
 centos_manage_ssh: yes
 
+# Should this role use iptables task for setting up firewall?
+centos_manage_iptables: yes
+
 
 
 
@@ -105,6 +108,7 @@ centos_yum_other_packages:
 # List of additional tools that are missing from CentOS minimal installation but are super useful
 centos_yum_additional_tools:
  - net-tools # add netstat tool
+ - libselinux-python # required for Ansible when creating public key
 
 
 
@@ -161,7 +165,6 @@ centos_users_authorized_keys:
     username: developer,
     path_to_file: "{{ centos_users_developer_authorized_key_path }}"
   }
-
 
 # To make it simpler to use in vars file, we extracted path to authorized key for developer account as separate variable
 centos_users_developer_authorized_key_path: ~/.ssh/id_rsa.pub
@@ -248,3 +251,43 @@ centos_ssh_macs:
   - hmac-sha2-256
   - hmac-ripemd160
   - umac-128@openssh.com
+
+
+
+
+
+####### IPTABLES TASKS CONFIGURATION #######
+
+# Should port scanning attempts be blocked?
+centos_iptables_enable_port_scan_protection: yes
+
+# Should fragemented packages be dropped?
+centos_iptables_drop_fragmented_packages: yes
+
+# Should ping of death attack be blocked?
+centos_iptables_enable_ping_of_death_protection: yes
+
+# Should SYN packets be checked? Prevent SYN flood
+centos_iptables_force_syn_packets_check: yes
+
+# Open UDP ports for outgoing traffic
+centos_iptables_outgoing_udp_ports:
+  - 53 # DNS port. It's required for resolving domains etc.
+  - 123 # NTP port. It's required for proper time synchronisation.
+
+# Open UDP ports for incoming traffic
+centos_iptables_incoming_udp_ports: []
+
+# Open TCP ports for outgoing traffic
+centos_iptables_outgoing_tcp_ports:
+  - 80 # HTTP port. It's required for curl, yum etc.
+  - 443 # HTTPS port. It's required for curl etc.
+
+# Open TCP ports for incoming traffic
+centos_iptables_incoming_tcp_ports:
+  - 22 # SSH port. It's required for SSH access to the server.
+  - 80 # HTTP port. Mostly used by httpd or nginx. If you don't have any web server, don't enable that port.
+  - 443 # HTTPS port. Mostly used by httpd or nginx. If you don't have any web server with SSL, don't enable that port.
+
+# Additional iptables rules (each rule is one line in firewall file)
+centos_iptables_extra_rules: []
