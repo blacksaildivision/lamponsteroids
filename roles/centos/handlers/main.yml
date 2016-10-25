@@ -21,7 +21,7 @@
 # Reload iptables
 # This handler is executed on changes in firewall rule-set
 #
-- name: reload firewall
-  shell: "{{ item }}"
-  with_items:
-    - iptables-restore < /etc/sysconfig/firewall-rules
+- name: restart iptables
+  service:
+    name: iptables
+    state: restarted

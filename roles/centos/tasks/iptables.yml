@@ -28,9 +28,20 @@
 - name: Add firewall rules
   template:
     src: firewall-rules.j2
-    dest: /etc/sysconfig/firewall-rules
+    dest: /etc/sysconfig/iptables
     owner: root
     group: root
     mode: 0644
-  #notify: realod iptables
-  tags: [centos, iptables, tt]
+  notify: restart iptables
+  tags: [centos, iptables]
+
+
+
+# Make sure that iptables are running and service will start on boot
+#
+- name: Start and enable iptables service
+  service:
+    name: iptables
+    state: started
+    enabled: yes
+  tags: [centos, iptables, healthcheck]
