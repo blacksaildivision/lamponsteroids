@@ -251,3 +251,21 @@ centos_ssh_macs:
   - hmac-sha2-256
   - hmac-ripemd160
   - umac-128@openssh.com
+
+
+
+
+
+####### IPTABLES TASKS CONFIGURATION #######
+
+# Should port scanning attempts be blocked?
+centos_iptables_enable_port_scan_protection: yes
+
+# Should fragemented packages be dropped?
+centos_iptables_drop_fragmented_packages: yes
+
+# Should ping of death attack be blocked?
+centos_iptables_enable_ping_of_death_protection: yes
+
+# Should SYN packets be checked? Prevent SYN flood
+centos_iptables_force_syn_packets_check: yes
