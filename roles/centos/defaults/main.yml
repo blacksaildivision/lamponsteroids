@@ -269,3 +269,19 @@ centos_iptables_enable_ping_of_death_protection: yes
 
 # Should SYN packets be checked? Prevent SYN flood
 centos_iptables_force_syn_packets_check: yes
+
+# Open UDP ports for outgoing traffic
+centos_iptables_outgoing_udp_ports:
+  - 53 # DNS port. It's required for resolving domains etc.
+
+# Open UDP ports for incoming traffic
+centos_iptables_incoming_udp_ports: []
+
+# Open TCP ports for outgoing traffic
+centos_iptables_outgoing_tcp_ports:
+  - 80 # HTTP port. It's required for curl, yum etc.
+  - 443 # HTTPS port. It's required for curl etc.
+
+# Open TCP ports for incoming traffic
+centos_iptables_incoming_tcp_ports:
+  - 22 # SSH port. It's required for SSH access to the server.

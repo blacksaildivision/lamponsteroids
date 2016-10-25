@@ -55,11 +55,37 @@
 -A INPUT -p tcp ! --syn -m state --state NEW -j DROP
 {% endif %}
 
-# temporary allow 22
--A INPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
--A OUTPUT -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
--A INPUT -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
--A OUTPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+{% if centos_iptables_outgoing_udp_ports|length > 0 %}
+# Open ports for outgoing UDP traffic
+{% for port in centos_iptables_outgoing_udp_ports %}
+-A INPUT -p udp --sport {{ port }} -j ACCEPT
+-A OUTPUT -p udp --dport {{ port }} -j ACCEPT
+{% endfor %}
+{% endif %}
+
+{% if centos_iptables_incoming_udp_ports|length > 0 %}
+# Open ports for incoming UDP traffic
+{% for port in centos_iptables_incoming_udp_ports %}
+-A INPUT -p udp --dport {{ port }} -j ACCEPT
+-A OUTPUT -p udp --sport {{ port }} -j ACCEPT
+{% endfor %}
+{% endif %}
+
+{% if centos_iptables_incoming_tcp_ports|length > 0 %}
+# Open TCP ports for incoming traffic
+{% for port in centos_iptables_incoming_tcp_ports %}
+-A INPUT -p tcp --dport {{ port }} -m state --state NEW,ESTABLISHED -j ACCEPT
+-A OUTPUT -p tcp --sport {{ port }} -m state --state ESTABLISHED -j ACCEPT
+{% endfor %}
+{% endif %}
+
+{% if centos_iptables_outgoing_tcp_ports|length > 0 %}
+# Open TCP ports for outgoing traffic
+{% for port in centos_iptables_outgoing_tcp_ports %}
+-A INPUT -p tcp --sport {{ port }} -m state --state ESTABLISHED -j ACCEPT
+-A OUTPUT -p tcp --dport {{ port }} -m state --state NEW,ESTABLISHED -j ACCEPT
+{% endfor %}
+{% endif %}
 
 # Drop all other traffic
 -A INPUT -j DROP
