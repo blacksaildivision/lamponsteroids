@@ -21,6 +21,14 @@
 -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
 -A OUTPUT -p icmp --icmp-type echo-reply -j ACCEPT
 
+{% if centos_iptables_enable_ping_of_death_protection %}
+# Protect from ping of death
+-N PING_OF_DEATH
+-A PING_OF_DEATH -p icmp --icmp-type echo-request -m hashlimit --hashlimit 1/s --hashlimit-burst 10 --hashlimit-htable-expire 300000 --hashlimit-mode srcip --hashlimit-name t_PING_OF_DEATH -j RETURN
+-A PING_OF_DEATH -j DROP
+-A INPUT -p icmp --icmp-type echo-request -j PING_OF_DEATH
+{% endif %}
+
 {% if centos_iptables_enable_port_scan_protection %}
 # Prevent port scanning
 -N PORTSCAN
@@ -40,14 +48,6 @@
 {% if centos_iptables_drop_fragmented_packages %}
 # Drop fragmented packages
 -A INPUT -f -j DROP
-{% endif %}
-
-{% if centos_iptables_enable_ping_of_death_protection %}
-# Protect from ping of death
--N PING_OF_DEATH
--A PING_OF_DEATH -p icmp --icmp-type echo-request -m hashlimit --hashlimit 1/s --hashlimit-burst 10 --hashlimit-htable-expire 300000 --hashlimit-mode srcip --hashlimit-name t_PING_OF_DEATH -j RETURN
--A PING_OF_DEATH -j DROP
--A INPUT -p icmp --icmp-type echo-request -j PING_OF_DEATH
 {% endif %}
 
 {% if centos_iptables_force_syn_packets_check %}
