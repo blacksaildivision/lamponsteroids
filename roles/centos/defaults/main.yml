@@ -273,6 +273,7 @@ centos_iptables_force_syn_packets_check: yes
 # Open UDP ports for outgoing traffic
 centos_iptables_outgoing_udp_ports:
   - 53 # DNS port. It's required for resolving domains etc.
+  - 123 # NTP port. It's required for proper time synchronisation.
 
 # Open UDP ports for incoming traffic
 centos_iptables_incoming_udp_ports: []
