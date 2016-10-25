@@ -87,6 +87,13 @@
 {% endfor %}
 {% endif %}
 
+{% if centos_iptables_extra_rules|length > 0 %}
+# Additonal rules
+{% for rule in centos_iptables_extra_rules %}
+{{ rule }}
+{% endfor %}
+{% endif %}
+
 # Drop all other traffic
 -A INPUT -j DROP
 -A FORWARD -j DROP

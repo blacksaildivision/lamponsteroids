@@ -285,3 +285,6 @@ centos_iptables_outgoing_tcp_ports:
 # Open TCP ports for incoming traffic
 centos_iptables_incoming_tcp_ports:
   - 22 # SSH port. It's required for SSH access to the server.
+
+# Additional iptables rules (each rule is one line in firewall file)
+centos_iptables_extra_rules: []
