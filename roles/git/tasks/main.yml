@@ -10,19 +10,23 @@
 - set_fact:
     git_is_installed: true
   when: git_is_installed_test.rc != 2
+  tags: [git]
 
 - set_fact:
     git_is_installed: false
     git_install_new_version: true
   when: git_is_installed_test.rc == 2
+  tags: [git]
 
 - set_fact:
     git_install_new_version: true
   when: ( git_is_installed == true ) and ( git_is_installed_test.stdout | replace('git version ','') != git_version )
+  tags: [git]
 
 - set_fact:
     git_install_new_version: false
   when: ( git_is_installed == true ) and ( git_is_installed_test.stdout | replace('git version ','') == git_version )
+  tags: [git]
 
 
 
