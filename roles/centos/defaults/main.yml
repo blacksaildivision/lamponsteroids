@@ -280,6 +280,7 @@ centos_iptables_incoming_udp_ports: []
 
 # Open TCP ports for outgoing traffic
 centos_iptables_outgoing_tcp_ports:
+  - 22 # SSH port. Useful when you are using GIT for fetching repositories via SSH
   - 80 # HTTP port. It's required for curl, yum etc.
   - 443 # HTTPS port. It's required for curl etc.
 

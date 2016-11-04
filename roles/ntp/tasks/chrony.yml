@@ -17,8 +17,11 @@
 #
 - name: Install chrony
   yum:
-    name: chrony
+    name: "{{ item }}"
     state: latest
+  with_items:
+    - chrony
+    - libselinux-python # Required for Ansible templates
   tags: [ntp, chrony]
 
 

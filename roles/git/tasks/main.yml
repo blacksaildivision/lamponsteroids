@@ -1,0 +1,39 @@
+# Check if git is installed or not and if it should be updated or not
+#
+- name: Check if git is installed
+  command: git --version warn=no
+  register: git_is_installed_test
+  ignore_errors: yes
+  changed_when: false
+  tags: [git]
+
+- set_fact:
+    git_is_installed: true
+  when: git_is_installed_test.rc != 2
+  tags: [git]
+
+- set_fact:
+    git_is_installed: false
+    git_install_new_version: true
+  when: git_is_installed_test.rc == 2
+  tags: [git]
+
+- set_fact:
+    git_install_new_version: true
+  when: ( git_is_installed == true ) and ( git_is_installed_test.stdout | replace('git version ','') != git_version )
+  tags: [git]
+
+- set_fact:
+    git_install_new_version: false
+  when: ( git_is_installed == true ) and ( git_is_installed_test.stdout | replace('git version ','') == git_version )
+  tags: [git]
+
+
+
+# Install/Update git to desired version
+# These tasks will be executed when
+#  1. Git is not installed
+#  2. Git is installed but not in desired version
+#
+- include: install.yml
+  when: "git_install_new_version == true"

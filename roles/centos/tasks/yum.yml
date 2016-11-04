@@ -101,9 +101,10 @@
 
 
 # Remove unused packages with autoremove
+# Package libselinux-python is required for Ansible templating and it should not be autoremoved
 #
 - name: Remove unused packages
-  shell: yum autoremove -y | grep "Erasing" | awk '{print $3}' warn=no
+  shell: yum autoremove --exclude="libselinux-python" -y | grep "Erasing" | awk '{print $3}' warn=no
   register: centos_yum_autoremove
   changed_when: "centos_yum_autoremove.stdout != ''"
   tags: [centos, yum]

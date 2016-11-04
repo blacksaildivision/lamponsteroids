@@ -1,0 +1,100 @@
+# Install required software for compiling git from source
+#
+- name: Install required tools for compiling git
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - autoconf # Dependencies: m4 perl perl-Carp perl-Data-Dumper perl-Encode perl-Exporter perl-File-Path perl-File-Temp perl-Filter perl-Getopt-Long perl-HTTP-Tiny perl-PathTools perl-Pod-Escapes perl-Pod-Perldoc perl-Pod-Simple perl-Pod-Usage perl-Scalar-List-Utils perl-Socket perl-Storable perl-Text-ParseWords perl-Time-HiRes perl-Time-Local perl-constant perl-libs perl-macros perl-parent perl-podlators perl-threads perl-threads-shared
+    - libcurl-devel
+    - expat-devel
+    - gcc # Dependencies: cpp glibc-devel glibc-headers kernel-headers libmpc mpfr
+    - gettext-devel # Dependencies: gettext-common-devel git libgnome-keyring perl perl-Carp perl-Encode perl-Error perl-Exporter perl-File-Path perl-File-Temp perl-Filter perl-Getopt-Long perl-Git perl-HTTP-Tiny perl-PathTools perl-Pod-Escapesperl-Pod-Perldoc perl-Pod-Simple perl-Pod-Usage perl-Scalar-List-Utils perl-Socket perl-Storable perl-TermReadKey perl-Text-ParseWords perl-Time-HiRes perl-Time-Local perl-constant perl-libs perl-macros perl-parent perl-podlators perl-threads perl-threads-shared
+    - kernel-headers
+    - openssl-devel # Dependencies: keyutils-libs-devel krb5-devel libcom_err-devel libselinux-devel libsepol-devel libverto-devel pcre-devel zlib-devel
+    - perl-devel # Dependencies: gdbm-devel glibc-devel glibc-headers kernel-headers libdb-devel perl perl-Carp perl-Encode perl-Exporter perl-ExtUtils-Install  perl-ExtUtils-MakeMaker perl-ExtUtils-Manifest perl-ExtUtils-ParseXS perl-File-Path perl-File-Temp perl-Filter perl-Getopt-Long perl-HTTP-Tiny perl-PathTools perl-Pod-Escapes perl-Pod-Perldoc perl-Pod-Simple perl-Pod-Usage perl-Scalar-List-Utils perl-Socket perl-Storable perl-Test-Harness perl-Text-ParseWords perl-Time-HiRes perl-Time-Local perl-constant perl-libs perl-macros perl-parent perl-podlators perl-threads perl-threads-shared pyparsing systemtap-sdt-devel
+    - zlib-devel
+  tags: [git, install]
+
+
+
+# Download git sources from github releases:
+# https://github.com/git/git/releases
+#
+- name: Download git sources
+  get_url:
+    dest: "{{ git_sources_location }}"
+    url: "https://github.com/git/git/archive/v{{ git_version }}.tar.gz"
+  tags: [git, install]
+
+
+
+# Unpack downloaded git sources
+#
+- name: Unpack downloaded git sources
+  unarchive:
+    src: "{{ git_sources_location }}/git-{{ git_version }}.tar.gz"
+    dest: "{{ git_sources_location }}"
+    owner: "{{ git_build_user }}"
+    group: "{{ git_build_group }}"
+    copy: no
+    creates: "{{ git_sources_location }}/git-{{ git_version }}"
+  tags: [git, install]
+
+
+
+# Compile git
+# It will be compiled by using different user than root.
+#
+- name: Compile git
+  command: "{{ item }}"
+  args:
+    chdir: "{{ git_sources_location }}/git-{{ git_version }}"
+  with_items:
+    - make clean
+    - make configure
+    - ./configure --prefix=/usr
+    - make
+  become: true
+  become_user: "{{ git_build_user }}"
+  tags: [git, install]
+
+
+
+# Install compiled git
+# This operation must be executed as sudo user
+#
+- name: Install compiled git
+  command: make install
+  args:
+    chdir: "{{ git_sources_location }}/git-{{ git_version }}"
+  tags: [git, install]
+
+
+
+# Remove downloaded soureces after installation
+#
+- name: Cleanup downloaded sources
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ git_sources_location }}/git-{{ git_version }}.tar.gz"
+    - "{{ git_sources_location }}/git-{{ git_version }}"
+  when: "git_cleanup_after_install == true"
+  tags: [git, install]
+
+
+
+# Disable updating git with yum
+# It will prevent yum update git and yum install git commands
+# If you will not override it, after new version of git will be available in CentOS repository, it will replace your compiled version
+#
+- name: Disable git package in yum
+  lineinfile:
+    dest: /etc/yum.conf
+    line: "exclude=git*"
+    insertafter: "^gpgcheck"
+    state: present
+  when: "git_disable_in_yum == true"
+  tags: [git, install]
