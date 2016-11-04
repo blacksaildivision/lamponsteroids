@@ -1,14 +1,17 @@
 # Version of git that should be present in the system
-git_version: "2.10.0"
+git_version: "2.10.2"
 
 # Location of files for git sources
 git_sources_location: /usr/src
 
 # User that will build git. Please never use root account for compiling software. It can lead to serious issues
-git_build_user: vagrant
+git_build_user: developer
 
 # Group of the build user.
-git_build_group: vagrant
+git_build_group: developer
 
 # Should downloaded source files be deleted after installation?
 git_cleanup_after_install: yes
+
+# Should git package be disabled in yum?
+git_disable_in_yum: yes

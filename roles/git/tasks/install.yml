@@ -80,4 +80,20 @@
   with_items:
     - "{{ git_sources_location }}/git-{{ git_version }}.tar.gz"
     - "{{ git_sources_location }}/git-{{ git_version }}"
+  when: "git_cleanup_after_install == true"
+  tags: [git, install]
+
+
+
+# Disable updating git with yum
+# It will prevent yum update git and yum install git commands
+# If you will not override it, after new version of git will be available in CentOS repository, it will replace your compiled version
+#
+- name: Disable git package in yum
+  lineinfile:
+    dest: /etc/yum.conf
+    line: "exclude=git*"
+    insertafter: "^gpgcheck"
+    state: present
+  when: "git_disable_in_yum == true"
   tags: [git, install]
