@@ -37,3 +37,14 @@
 #
 - include: install.yml
   when: "mongodb_is_installed == false"
+
+
+
+# Make sure that mongod service is started and enabled on boot
+#
+- name: Start and enable MongoDB service
+  service:
+    name: mongod
+    state: started
+    enabled: yes
+  tags: [mongodb, healthcheck]
