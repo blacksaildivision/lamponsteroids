@@ -1,0 +1,32 @@
+# Check if MongoDB is installed or not and if it should be updated or not
+#
+- name: Check if MongoDB is installed
+  command: mongod --version warn=no
+  register: mongodb_is_installed_test
+  ignore_errors: yes
+  changed_when: false
+  tags: [mongodb]
+
+- set_fact:
+    mongodb_is_installed: true
+  when: mongodb_is_installed_test.rc != 2
+  tags: [mongodb]
+
+- set_fact:
+    mongodb_is_installed: false
+    mongodb_install_new_version: true
+  when: mongodb_is_installed_test.rc == 2
+  tags: [mongodb]
+
+- debug:
+    msg: "{{mongodb_is_installed  }}"
+#
+#- set_fact:
+#    mongodb_install_new_version: true
+#  when: ( mongodb_is_installed == true ) and ( mongodb_is_installed_test.stdout | replace('MongoDB shell version\: ','') != mongodb_version )
+#  tags: [mongodb]
+#
+#- set_fact:
+#    mongodb_install_new_version: false
+#  when: ( mongodb_is_installed == true ) and ( mongodb_is_installed_test.stdout | replace('MongoDB shell version\: ','') == mongodb_version )
+#  tags: [mongodb_version]
