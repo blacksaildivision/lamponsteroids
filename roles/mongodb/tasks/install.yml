@@ -1,0 +1,22 @@
+# MongoDB comes with it's own repository
+# Here we add it to yum repository
+#
+- name: Make sure that MongoDB repository is available
+  template:
+    src: mongodb-org.repo.j2
+    dest: /etc/yum.repos.d/mongodb-org-3.2.repo
+    owner: root
+    group: root
+    mode: 0644
+  tags: [mongodb, install]
+
+
+
+# Install MongoDB packages:
+# mongodb-org, mongodb-org-server, mongodb-org-shell, mongodb-org-mongos, mongodb-org-tools
+#
+- name: Install MongoDB packages
+  yum:
+    name: "mongodb-org-{{ mongodb_version }}"
+    state: latest
+  tags: [mongodb, install]
