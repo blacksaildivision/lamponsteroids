@@ -21,4 +21,5 @@ httpd_configure_options:
   - --enable-ssl
   - --enable-so
   - --with-mpm=event
+  - --with-included-apr
   - --prefix=/usr/local/httpd

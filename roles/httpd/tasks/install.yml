@@ -11,6 +11,8 @@
     - pcre-devel
   tags: [httpd, install]
 
+
+
 # For building Apache httpd from source you need couple of packages:
 # 1. Apache httpd itself - https://github.com/apache/httpd/releases
 # 2. Apache APR (portable runtime library) - https://github.com/apache/apr/releases
@@ -32,48 +34,51 @@
 #
 - name: Unpack downloaded Apache httpd sources
   unarchive:
-    src: "{{ httpd_sources_location }}/{{ item }}.tar.gz"
+    src: "{{ httpd_sources_location }}/httpd-{{ httpd_version }}.tar.gz"
     dest: "{{ httpd_sources_location }}"
     owner: "{{ httpd_build_user }}"
     group: "{{ httpd_build_group }}"
     copy: no
-    creates: "{{ httpd_sources_location }}/{{ item }}"
+    creates: "{{ httpd_sources_location }}/httpd-{{ httpd_version }}"
+  tags: [httpd, install]
+
+
+
+# Unpack downloaded APR and APR-Util sources
+#
+- name: Unpack downloaded APR packages
+  unarchive:
+    src: "{{ httpd_sources_location }}/{{ item }}.tar.gz"
+    dest: "{{ httpd_sources_location }}/httpd-{{ httpd_version }}/srclib"
+    owner: "{{ httpd_build_user }}"
+    group: "{{ httpd_build_group }}"
+    copy: no
+    creates: "{{ httpd_sources_location }}/httpd-{{ httpd_version }}/{{ item }}"
   with_items:
-    - "httpd-{{ httpd_version }}"
     - "apr-{{ httpd_apr_version }}"
     - "apr-util-{{ httpd_apr_util_version }}"
   tags: [httpd, install]
 
 
 
-# Make APR library required for compiling Apache httpd
+# Rename APR directory for compiling purposes
 #
-- name: Make Apache APR
-  command: "{{ item }}"
+- name: Rename APR directory
+  command: "cp -R apr-{{ httpd_apr_version }} apr"
   args:
-    chdir: "{{ httpd_sources_location }}/apr-{{ httpd_apr_version }}"
-  with_items:
-    - ./buildconf
-    - ./configure
-    - make
-  become: true
-  become_user: "{{ httpd_build_user }}"
+    chdir: "{{ httpd_sources_location }}/httpd-{{ httpd_version }}/srclib"
+    creates: "{{ httpd_sources_location }}/httpd-{{ httpd_version }}/srclib/apr"
   tags: [httpd, install]
 
 
 
-# Make APR util required for compiling Apache httpd
+# Rename APR-Util directory for compiling purposes
 #
-- name: Make Apache APR Util
-  command: "{{ item }}"
+- name: Rename APR-Util directory
+  command: "cp -R apr-util-{{ httpd_apr_util_version }} apr-util"
   args:
-    chdir: "{{ httpd_sources_location }}/apr-util-{{ httpd_apr_util_version }}"
-  with_items:
-    - "./buildconf --with-apr={{ httpd_sources_location }}/apr-{{ httpd_apr_version }}"
-    - "./configure --with-apr={{ httpd_sources_location }}/apr-{{ httpd_apr_version }}"
-    - make
-  become: true
-  become_user: "{{ httpd_build_user }}"
+    chdir: "{{ httpd_sources_location }}/httpd-{{ httpd_version }}/srclib"
+    creates: "{{ httpd_sources_location }}/httpd-{{ httpd_version }}/srclib/apr-util"
   tags: [httpd, install]
 
 
@@ -86,8 +91,8 @@
   args:
     chdir: "{{ httpd_sources_location }}/httpd-{{ httpd_version }}"
   with_items:
-    - "./buildconf --with-apr={{ httpd_sources_location }}/apr-{{ httpd_apr_version }} --with-apr-util={{ httpd_sources_location }}/apr-util-{{ httpd_apr_util_version }}"
-    - "./configure --with-apr={{ httpd_sources_location }}/apr-{{ httpd_apr_version }} --with-apr-util={{ httpd_sources_location }}/apr-util-{{ httpd_apr_util_version }} {{ httpd_configure_options | join(' ') }}"
+    - ./buildconf
+    - "./configure {{ httpd_configure_options | join(' ') }}"
     - make
   become: true
   become_user: "{{ httpd_build_user }}"
