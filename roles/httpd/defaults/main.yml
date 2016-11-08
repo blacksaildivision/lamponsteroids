@@ -16,9 +16,13 @@ httpd_apr_version: 1.5.2
 # Version fo APR-util requried for compiling Apache httpd
 httpd_apr_util_version: 1.5.4
 
+# Path where Apache httpd will be installed
+httpd_path: /usr/local/apache2
+
 # List of configuration options for Apache httpd. APR and APR-Util paths are added automatically, you don't need to include them here.
 httpd_configure_options:
   - --enable-ssl
   - --enable-so
   - --with-mpm=event
   - --with-included-apr
+  - "--prefix={{ httpd_path }}"

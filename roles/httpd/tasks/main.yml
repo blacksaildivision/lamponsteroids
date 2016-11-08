@@ -1,32 +1,35 @@
 # Check if Apache HTTPD is installed or not and if it should be updated or not
+# Setting PATH is required, because sometimes Ansible doesn't use /etc/profile.d data;/
 #
 - name: Check if Apache httpd is installed
-  command: httpd --version warn=no
+  command: httpd -v warn=no
   register: httpd_is_installed_test
   ignore_errors: yes
   changed_when: false
-  tags: [https]
+  environment:
+    PATH: "{{ ansible_env.PATH }}:{{ httpd_path }}/bin"
+  tags: [httpd]
 
 - set_fact:
     httpd_is_installed: true
   when: httpd_is_installed_test.rc != 2
-  tags: [git]
+  tags: [httpd]
 
 - set_fact:
     httpd_is_installed: false
     httpd_install_new_version: true
   when: httpd_is_installed_test.rc == 2
-  tags: [git]
+  tags: [httpd]
 
-#- set_fact:
-#    git_install_new_version: true
-#  when: ( git_is_installed == true ) and ( git_is_installed_test.stdout | replace('git version ','') != git_version )
-#  tags: [git]
+- set_fact:
+    httpd_install_new_version: true
+  when: ( httpd_is_installed == true ) and ( httpd_is_installed_test.stdout_lines[0] | regex_replace('[^0-9.]','') != httpd_version )
+  tags: [httpd]
 
-#- set_fact:
-#    git_install_new_version: false
-#  when: ( git_is_installed == true ) and ( git_is_installed_test.stdout | replace('git version ','') == git_version )
-#  tags: [git]
+- set_fact:
+    httpd_install_new_version: false
+  when: ( httpd_is_installed == true ) and ( httpd_is_installed_test.stdout_lines[0] | regex_replace('[^0-9.]','') == httpd_version )
+  tags: [httpd]
 
 
 
@@ -36,4 +39,4 @@
 #  2. Apache httpd is installed but not in desired version
 #
 - include: install.yml
-  when: "httpd_is_installed == false"
+  when: "httpd_install_new_version == true"
