@@ -1,0 +1,105 @@
+# Install required software for compiling Apache httpd from source
+#
+- name: Install required tools for compiling Apache httpd
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - autoconf # Dependencies: m4 perl perl-Carp perl-Data-Dumper perl-Encode perl-Exporter perl-File-Path perl-File-Temp perl-Filter perl-Getopt-Long perl-HTTP-Tiny perl-PathTools perl-Pod-Escapes perl-Pod-Perldoc perl-Pod-Simple perl-Pod-Usage perl-Scalar-List-Utils perl-Socket perl-Storable perl-Text-ParseWords perl-Time-HiRes perl-Time-Local perl-constant perl-libs perl-macros perl-parent perl-podlators perl-threads perl-threads-shared
+    - libtool # Dependencies: autoconf automake cpp gcc glibc-devel glibc-headers kernel-headers libmpc m4 mpfr perl perl-Carp perl-Data-Dumper perl-Encode perl-Exporter perl-File-Path perl-File-Temp perl-Filter perl-Getopt-Long perl-HTTP-Tiny perl-PathTools perl-Pod-Escapes perl-Pod-Perldoc perl-Pod-Simple perl-Pod-Usage perl-Scalar-List-Utils perl-Socket perl-Storable perl-Test-Harness perl-Text-ParseWords perl-Thread-Queue perl-Time-HiRes perl-Time-Local perl-constant perl-libs perl-macros perl-parent perl-podlators perl-threads perl-threads-shared
+    - openssl-devel
+    - pcre-devel
+  tags: [httpd, install]
+
+# For building Apache httpd from source you need couple of packages:
+# 1. Apache httpd itself - https://github.com/apache/httpd/releases
+# 2. Apache APR (portable runtime library) - https://github.com/apache/apr/releases
+# 3. Apache APR-util (utilities for APR) - https://github.com/apache/apr-util/releases
+#
+- name: Download required source files
+  get_url:
+    dest: "{{ httpd_sources_location }}"
+    url: "{{ item }}"
+  with_items:
+    - "https://github.com/apache/httpd/archive/{{ httpd_version }}.tar.gz"
+    - "https://github.com/apache/apr/archive/{{ httpd_apr_version }}.tar.gz"
+    - "https://github.com/apache/apr-util/archive/{{ httpd_apr_util_version }}.tar.gz"
+  tags: [httpd, install]
+
+
+
+# Unpack downloaded Apache httpd sources
+#
+- name: Unpack downloaded Apache httpd sources
+  unarchive:
+    src: "{{ httpd_sources_location }}/{{ item }}.tar.gz"
+    dest: "{{ httpd_sources_location }}"
+    owner: "{{ httpd_build_user }}"
+    group: "{{ httpd_build_group }}"
+    copy: no
+    creates: "{{ httpd_sources_location }}/{{ item }}"
+  with_items:
+    - "httpd-{{ httpd_version }}"
+    - "apr-{{ httpd_apr_version }}"
+    - "apr-util-{{ httpd_apr_util_version }}"
+  tags: [httpd, install]
+
+
+
+# Make APR library required for compiling Apache httpd
+#
+- name: Make Apache APR
+  command: "{{ item }}"
+  args:
+    chdir: "{{ httpd_sources_location }}/apr-{{ httpd_apr_version }}"
+  with_items:
+    - ./buildconf
+    - ./configure
+    - make
+  become: true
+  become_user: "{{ httpd_build_user }}"
+  tags: [httpd, install]
+
+
+
+# Make APR util required for compiling Apache httpd
+#
+- name: Make Apache APR Util
+  command: "{{ item }}"
+  args:
+    chdir: "{{ httpd_sources_location }}/apr-util-{{ httpd_apr_util_version }}"
+  with_items:
+    - "./buildconf --with-apr={{ httpd_sources_location }}/apr-{{ httpd_apr_version }}"
+    - "./configure --with-apr={{ httpd_sources_location }}/apr-{{ httpd_apr_version }}"
+    - make
+  become: true
+  become_user: "{{ httpd_build_user }}"
+  tags: [httpd, install]
+
+
+
+# Compile Apache httpd
+# It will be compiled by using different user than root.
+#
+- name: Compile Apache httpd
+  command: "{{ item }}"
+  args:
+    chdir: "{{ httpd_sources_location }}/httpd-{{ httpd_version }}"
+  with_items:
+    - "./buildconf --with-apr={{ httpd_sources_location }}/apr-{{ httpd_apr_version }} --with-apr-util={{ httpd_sources_location }}/apr-util-{{ httpd_apr_util_version }}"
+    - "./configure --with-apr={{ httpd_sources_location }}/apr-{{ httpd_apr_version }} --with-apr-util={{ httpd_sources_location }}/apr-util-{{ httpd_apr_util_version }} {{ httpd_configure_options | join(' ') }}"
+    - make
+  become: true
+  become_user: "{{ httpd_build_user }}"
+  tags: [httpd, install]
+
+
+
+# Install compiled Apache httpd
+# This operation must be executed as sudo user
+#
+- name: Install compiled Apache httpd
+  command: make install
+  args:
+    chdir: "{{ httpd_sources_location }}/httpd-{{ httpd_version }}"
+  tags: [httpd, install]

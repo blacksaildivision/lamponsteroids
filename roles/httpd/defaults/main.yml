@@ -1,0 +1,24 @@
+# Version of Apache httpd that should be present in the system
+httpd_version: "2.4.23"
+
+# Location of files for Apache httpd sources
+httpd_sources_location: /usr/src
+
+# User that will build httpd. Please never use root account for compiling software. It can lead to serious security issues
+httpd_build_user: vagrant
+
+# Group of the build user.
+httpd_build_group: vagrant
+
+# Version of APR library required for compiling Apache httpd
+httpd_apr_version: 1.5.2
+
+# Version fo APR-util requried for compiling Apache httpd
+httpd_apr_util_version: 1.5.4
+
+# List of configuration options for Apache httpd. APR and APR-Util paths are added automatically, you don't need to include them here.
+httpd_configure_options:
+  - --enable-ssl
+  - --enable-so
+  - --with-mpm=event
+  - --prefix=/usr/local/httpd
