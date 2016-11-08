@@ -22,4 +22,3 @@ httpd_configure_options:
   - --enable-so
   - --with-mpm=event
   - --with-included-apr
-  - --prefix=/usr/local/httpd
