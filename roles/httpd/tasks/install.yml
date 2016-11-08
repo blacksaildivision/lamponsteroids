@@ -7,7 +7,7 @@
   with_items:
     - autoconf # Dependencies: m4 perl perl-Carp perl-Data-Dumper perl-Encode perl-Exporter perl-File-Path perl-File-Temp perl-Filter perl-Getopt-Long perl-HTTP-Tiny perl-PathTools perl-Pod-Escapes perl-Pod-Perldoc perl-Pod-Simple perl-Pod-Usage perl-Scalar-List-Utils perl-Socket perl-Storable perl-Text-ParseWords perl-Time-HiRes perl-Time-Local perl-constant perl-libs perl-macros perl-parent perl-podlators perl-threads perl-threads-shared
     - libtool # Dependencies: autoconf automake cpp gcc glibc-devel glibc-headers kernel-headers libmpc m4 mpfr perl perl-Carp perl-Data-Dumper perl-Encode perl-Exporter perl-File-Path perl-File-Temp perl-Filter perl-Getopt-Long perl-HTTP-Tiny perl-PathTools perl-Pod-Escapes perl-Pod-Perldoc perl-Pod-Simple perl-Pod-Usage perl-Scalar-List-Utils perl-Socket perl-Storable perl-Test-Harness perl-Text-ParseWords perl-Thread-Queue perl-Time-HiRes perl-Time-Local perl-constant perl-libs perl-macros perl-parent perl-podlators perl-threads perl-threads-shared
-    - openssl-devel
+    - openssl-devel # Dependencies: keyutils-libs-devel krb5-devel libcom_err-devel libselinux-devel libsepol-devel libverto-devel pcre-devel zlib-devel
     - pcre-devel
   tags: [httpd, install]
 
@@ -62,23 +62,29 @@
 
 
 # Rename APR directory for compiling purposes
+# Become is needed to set correct permissions for copied files
 #
 - name: Rename APR directory
   command: "cp -R apr-{{ httpd_apr_version }} apr"
   args:
     chdir: "{{ httpd_sources_location }}/httpd-{{ httpd_version }}/srclib"
     creates: "{{ httpd_sources_location }}/httpd-{{ httpd_version }}/srclib/apr"
+  become: true
+  become_user: "{{ httpd_build_user }}"
   tags: [httpd, install]
 
 
 
 # Rename APR-Util directory for compiling purposes
+# Become is needed to set correct permissions for copied files
 #
 - name: Rename APR-Util directory
   command: "cp -R apr-util-{{ httpd_apr_util_version }} apr-util"
   args:
     chdir: "{{ httpd_sources_location }}/httpd-{{ httpd_version }}/srclib"
     creates: "{{ httpd_sources_location }}/httpd-{{ httpd_version }}/srclib/apr-util"
+  become: true
+  become_user: "{{ httpd_build_user }}"
   tags: [httpd, install]
 
 
@@ -107,4 +113,18 @@
   command: make install
   args:
     chdir: "{{ httpd_sources_location }}/httpd-{{ httpd_version }}"
+  tags: [httpd, install]
+
+
+
+# Add Apache httpd executables to PATH
+# It'll be easier to execute some commands without typing full path
+#
+- name: Add Apache httpd executables to PATH
+  template:
+    src: httpd.sh.j2
+    dest: /etc/profile.d/httpd.sh
+    owner: root
+    group: root
+    mode: 0644
   tags: [httpd, install]
