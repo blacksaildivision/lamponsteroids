@@ -7,7 +7,7 @@
   ignore_errors: yes
   changed_when: false
   environment:
-    PATH: "{{ ansible_env.PATH }}:{{ httpd_path }}/bin"
+    PATH: "{{ ansible_env.PATH }}:{{ httpd_install_path }}/bin"
   tags: [httpd]
 
 - set_fact:

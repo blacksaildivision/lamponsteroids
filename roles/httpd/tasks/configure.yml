@@ -1,3 +1,29 @@
+# Set Apache Root directory
+#
+- name: Set Apache root directory
+  lineinfile:
+    dest: "{{ httpd_config_file }}"
+    line: "ServerRoot {{ httpd_install_path }}"
+    state: present
+    regexp: '^#?ServerRoot'
+  notify: restart httpd
+  tags: [httpd, configure]
+
+
+
+# Set Apache port
+#
+- name: Set Apache port
+  lineinfile:
+    dest: "{{ httpd_config_file }}"
+    line: "Listen {{ httpd_port }}"
+    state: present
+    regexp: '^#?Listen'
+  notify: restart httpd
+  tags: [httpd, configure]
+
+
+
 # Set Apache ServerName
 #
 - name: Set Apache httpd server name
@@ -6,5 +32,91 @@
     line: "ServerName {{ httpd_server_name }}"
     state: present
     regexp: '^#?ServerName'
+  notify: restart httpd
+  tags: [httpd, configure]
+
+
+
+#LoadModule authn_dbm_module modules/mod_authn_dbm.so
+#LoadModule authn_anon_module modules/mod_authn_anon.so
+#LoadModule authn_dbd_module modules/mod_authn_dbd.so
+#LoadModule authn_socache_module modules/mod_authn_socache.so
+#LoadModule authz_dbm_module modules/mod_authz_dbm.so
+#LoadModule authz_owner_module modules/mod_authz_owner.so
+#LoadModule authz_dbd_module modules/mod_authz_dbd.so
+#LoadModule auth_form_module modules/mod_auth_form.so
+#LoadModule auth_digest_module modules/mod_auth_digest.so
+#LoadModule allowmethods_module modules/mod_allowmethods.so
+#LoadModule file_cache_module modules/mod_file_cache.so
+#LoadModule cache_module modules/mod_cache.so
+#LoadModule cache_disk_module modules/mod_cache_disk.so
+#LoadModule cache_socache_module modules/mod_cache_socache.so
+#LoadModule socache_shmcb_module modules/mod_socache_shmcb.so
+#LoadModule socache_dbm_module modules/mod_socache_dbm.so
+#LoadModule socache_memcache_module modules/mod_socache_memcache.so
+#LoadModule watchdog_module modules/mod_watchdog.so
+#LoadModule macro_module modules/mod_macro.so
+#LoadModule dbd_module modules/mod_dbd.so
+#LoadModule dumpio_module modules/mod_dumpio.so
+#LoadModule buffer_module modules/mod_buffer.so
+#LoadModule ratelimit_module modules/mod_ratelimit.so
+#LoadModule ext_filter_module modules/mod_ext_filter.so
+#LoadModule request_module modules/mod_request.so
+#LoadModule include_module modules/mod_include.so
+#LoadModule substitute_module modules/mod_substitute.so
+#LoadModule sed_module modules/mod_sed.so
+#LoadModule deflate_module modules/mod_deflate.so
+#LoadModule log_debug_module modules/mod_log_debug.so
+#LoadModule logio_module modules/mod_logio.so
+#LoadModule expires_module modules/mod_expires.so
+#LoadModule unique_id_module modules/mod_unique_id.so
+#LoadModule remoteip_module modules/mod_remoteip.so
+#LoadModule proxy_module modules/mod_proxy.so
+#LoadModule proxy_connect_module modules/mod_proxy_connect.so
+#LoadModule proxy_ftp_module modules/mod_proxy_ftp.so
+#LoadModule proxy_http_module modules/mod_proxy_http.so
+#LoadModule proxy_fcgi_module modules/mod_proxy_fcgi.so
+#LoadModule proxy_scgi_module modules/mod_proxy_scgi.so
+#LoadModule proxy_wstunnel_module modules/mod_proxy_wstunnel.so
+#LoadModule proxy_ajp_module modules/mod_proxy_ajp.so
+#LoadModule proxy_balancer_module modules/mod_proxy_balancer.so
+#LoadModule proxy_express_module modules/mod_proxy_express.so
+#LoadModule proxy_hcheck_module modules/mod_proxy_hcheck.so
+#LoadModule session_module modules/mod_session.so
+#LoadModule session_cookie_module modules/mod_session_cookie.so
+#LoadModule session_dbd_module modules/mod_session_dbd.so
+#LoadModule slotmem_shm_module modules/mod_slotmem_shm.so
+#LoadModule ssl_module modules/mod_ssl.so
+#LoadModule lbmethod_byrequests_module modules/mod_lbmethod_byrequests.so
+#LoadModule lbmethod_bytraffic_module modules/mod_lbmethod_bytraffic.so
+#LoadModule lbmethod_bybusyness_module modules/mod_lbmethod_bybusyness.so
+#LoadModule lbmethod_heartbeat_module modules/mod_lbmethod_heartbeat.so
+#LoadModule dav_module modules/mod_dav.so
+#LoadModule info_module modules/mod_info.so
+#LoadModule cgid_module modules/mod_cgid.so
+#LoadModule dav_fs_module modules/mod_dav_fs.so
+#LoadModule vhost_alias_module modules/mod_vhost_alias.so
+#LoadModule negotiation_module modules/mod_negotiation.so
+#LoadModule actions_module modules/mod_actions.so
+#LoadModule speling_module modules/mod_speling.so
+#LoadModule userdir_module modules/mod_userdir.so
+#LoadModule rewrite_module modules/mod_rewrite.so
+
+# Enable required Apache modules
+#
+- name: Enable required modules
+  lineinfile:
+    dest: "{{ httpd_config_file }}"
+    line: "LoadModule {{ item }}_module modules/mod_{{ item }}.so"
+    state: present
+  with_items: "{{ httpd_active_modules }}"
+  notify: restart httpd
+  tags: [httpd, configure]
+
+- name: Disable all other modules
+  lineinfile:
+    dest: "{{ httpd_config_file }}"
+    regexp: "LoadModule (?!{{ httpd_active_modules | join('|') }})"
+    state: absent
   notify: restart httpd
   tags: [httpd, configure]

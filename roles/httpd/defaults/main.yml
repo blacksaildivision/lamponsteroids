@@ -16,8 +16,8 @@ httpd_apr_version: 1.5.2
 # Version fo APR-util requried for compiling Apache httpd
 httpd_apr_util_version: 1.5.4
 
-# Path where Apache httpd will be installed
-httpd_path: /usr/local/apache2
+# Path where Apache httpd will be installed. NO trailing slash at the end!
+httpd_install_path: /usr/local/apache2
 
 # List of configuration options for Apache httpd. APR and APR-Util paths are added automatically, you don't need to include them here.
 httpd_configure_options:
@@ -25,10 +25,38 @@ httpd_configure_options:
   - --enable-so
   - --with-mpm=event
   - --with-included-apr
-  - "--prefix={{ httpd_path }}"
+  - "--prefix={{ httpd_install_path }}"
 
 # Apache httpd config file
-httpd_config_file: "{{ httpd_path }}/conf/httpd.conf"
+httpd_config_file: "{{ httpd_install_path }}/conf/httpd.conf"
 
 # Apache httpd server name
 httpd_server_name: Apache
+
+# Apache httpd port
+httpd_port: 80
+
+# Modules disabled by default: authn_dbm authn_anon authn_dbd authn_socache authz_dbm authz_owner auth_form auth_digest allowmethods file_cache cache cache_disk cache_socache socache_shmcb socache_dbm socache_memcache watchdog  macro dbd dumpio buffer ratelimit ext_filter request include substitute sed deflate log_debug logio expires unique_id remoteip proxy proxy_connect proxy_ftp proxy_http proxy_fcgi proxy_scgi proxy_wstunnel proxy_ajp proxy_balancer proxy_express proxy_hcheck session session_cookie session_dbd slotmem_shm ssl lbmethod_byrequests lbmethod_bytraffic lbmethod_bybusyness lbmethod_heartbeat dav info cgid dav_fs vhost_alias negotiation actions speling userdir rewrite
+# Modules enabled by default: authn_file authn_core authz_host authz_groupfile authz_user authz_core access_compat auth_basic reqtimeout filter mime log_config env headers setenvif version unixd status autoindex dir alias
+httpd_active_modules:
+ - authn_file
+ - authn_core
+ - authz_host
+ - authz_groupfile
+ - authz_user
+ - authz_core
+ - access_compat
+ - auth_basic
+ - reqtimeout
+ - filter
+ - mime
+ - log_config
+ - env
+ - headers
+ - setenvif
+ - version
+ - unixd
+ - status
+ - autoindex
+ - dir
+ - alias
