@@ -26,3 +26,9 @@ httpd_configure_options:
   - --with-mpm=event
   - --with-included-apr
   - "--prefix={{ httpd_path }}"
+
+# Apache httpd config file
+httpd_config_file: "{{ httpd_path }}/conf/httpd.conf"
+
+# Apache httpd server name
+httpd_server_name: Apache

@@ -128,3 +128,16 @@
     group: root
     mode: 0644
   tags: [httpd, install]
+
+
+
+# Create Apache httpd systemctl entry
+#
+- name: Add Apache httpd executables to PATH
+  template:
+    src: httpd.service.j2
+    dest: /etc/systemd/system/httpd.service
+    owner: root
+    group: root
+    mode: 0644
+  tags: [httpd, install]

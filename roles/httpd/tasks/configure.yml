@@ -1,0 +1,10 @@
+# Set Apache ServerName
+#
+- name: Set Apache httpd server name
+  lineinfile:
+    dest: "{{ httpd_config_file }}"
+    line: "ServerName {{ httpd_server_name }}"
+    state: present
+    regexp: '^#?ServerName'
+  notify: restart httpd
+  tags: [httpd, configure]
