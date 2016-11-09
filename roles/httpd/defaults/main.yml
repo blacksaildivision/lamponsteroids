@@ -60,3 +60,6 @@ httpd_active_modules:
  - autoindex
  - dir
  - alias
+
+httpd_user: httpd
+httpd_group: httpd
