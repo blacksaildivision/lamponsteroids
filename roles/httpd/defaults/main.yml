@@ -55,3 +55,11 @@ httpd_virtualhosts:
   DirectoryOwner: "{{ httpd_user }}",
   DirectoryGroup: "{{ httpd_group }}"
  }
+
+httpd_mpm_config:
+  - { key: "StartServers", value: 5 }
+  - { key: "MinSpareThreads", value: 75 }
+  - { key: "MaxSpareThreads", value: 250 }
+  - { key: "ThreadsPerChild", value: 25 }
+  - { key: "MaxRequestWorkers", value: 400 }
+  - { key: "MaxConnectionsPerChild", value: 0 }

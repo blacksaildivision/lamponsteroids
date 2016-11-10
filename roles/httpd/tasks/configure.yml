@@ -96,3 +96,23 @@
     regexp: '^#?ServerName'
   notify: restart httpd
   tags: [httpd, configure]
+
+- name: Make sure that MPM is enabled
+  lineinfile:
+    dest: "{{ httpd_config_file }}"
+    line: "Include conf/extra/httpd-mpm.conf"
+    state: present
+    regexp: '^#?Include\ conf\/extra/\httpd-mpm'
+  notify: restart httpd
+  tags: [httpd, configure]
+
+
+- name: Make sure that MPM Start server
+  replace:
+    dest: "{{ httpd_install_path }}/conf/extra/httpd-mpm.conf"
+    replace: "    {{ item.key }}  {{ item.value }}"
+    regexp: '^[ \t]+{{ item.key }}(.+)$'
+  notify: restart httpd
+  with_items: "{{ httpd_mpm_config }}"
+  tags: [httpd, configure, t2]
+
