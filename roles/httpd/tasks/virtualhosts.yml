@@ -1,0 +1,63 @@
+# Configure httpd.conf entry point
+# Set up virutalhosts
+# add users that should be in httpd group
+
+- name: Make sure that main website directory exists
+  file:
+    path: "{{ httpd_websites_directory }}"
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+  tags: [httpd, virtualhosts]
+
+- name: Make sure that website directory exists
+  file:
+    path: "{{ httpd_websites_directory }}/{{ item.ServerName }}"
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+  with_items: "{{ httpd_virtualhosts }}"
+  tags: [httpd, virtualhosts]
+
+- name: Make sure that website DocumentRoot directory exists
+  file:
+    path: "{{ httpd_websites_directory }}/{{ item.ServerName }}/htdocs"
+    state: directory
+    mode: "2775"
+    owner: "{{ item.DirectoryOwner }}"
+    group: "{{ item.DirectoryGroup }}"
+  with_items: "{{ httpd_virtualhosts }}"
+  tags: [httpd, virtualhosts]
+
+- name: Make sure that website logs directory exists
+  file:
+    path: "{{ httpd_websites_directory }}/{{ item.ServerName }}/logs"
+    state: directory
+    mode: "2775"
+    owner: "{{ item.DirectoryOwner }}"
+    group: "{{ item.DirectoryGroup }}"
+  with_items: "{{ httpd_virtualhosts }}"
+  tags: [httpd, virtualhosts]
+
+- name: Add VirtualHosts files
+  template:
+    src: VirtualHost.conf.j2
+    dest: "{{ httpd_install_path }}/conf/extra/{{ item.ServerName }}.conf"
+    owner: root
+    group: root
+    mode: 0644
+  with_items: "{{ httpd_virtualhosts }}"
+  notify: restart httpd
+  tags: [httpd, virtualhosts]
+
+- name: Add virtualhosts entries to httpd.conf file
+  lineinfile:
+    dest: "{{ httpd_config_file }}"
+    line: "Include conf/extra/{{ item.ServerName }}.conf"
+    state: present
+    insertafter: EOF
+  with_items: "{{ httpd_virtualhosts }}"
+  notify: restart httpd
+  tags: [httpd, virtualhosts]

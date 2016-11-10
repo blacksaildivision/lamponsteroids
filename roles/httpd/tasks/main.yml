@@ -47,6 +47,7 @@
 #
 - include: configure.yml
 
+- include: virtualhosts.yml
 
 
 # Make sure that chronyd service is started and enabled on boot
@@ -56,4 +57,4 @@
     name: httpd
     state: started
     enabled: yes
-  tags: [ntp, chrony, healthcheck]
+  tags: [httpd, healthcheck]

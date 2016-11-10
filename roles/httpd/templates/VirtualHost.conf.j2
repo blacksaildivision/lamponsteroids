@@ -1,0 +1,17 @@
+<VirtualHost *:{{ httpd_port }}>
+
+    ServerName {{ item.ServerName }}
+
+    # Directory settings
+    DocumentRoot {{ httpd_websites_directory }}/{{ item.ServerName }}/htdocs
+    <Directory {{ httpd_websites_directory }}/{{ item.ServerName }}/htdocs>
+        AllowOverride All
+        Require all granted
+        Options +FollowSymLinks
+    </Directory>
+
+    # Logging
+    ErrorLog "{{ httpd_websites_directory }}/{{ item.ServerName }}/logs/httpd-error.log"
+    CustomLog "{{ httpd_websites_directory }}/{{ item.ServerName }}/logs/httpd-access.log" common
+
+</VirtualHost>

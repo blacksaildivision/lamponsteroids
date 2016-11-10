@@ -63,3 +63,11 @@ httpd_active_modules:
 
 httpd_user: httpd
 httpd_group: httpd
+httpd_websites_directory: /var/www
+
+httpd_virtualhosts:
+ - {
+  ServerName: dev.testtest.com,
+  DirectoryOwner: "{{ httpd_user }}",
+  DirectoryGroup: "{{ httpd_group }}"
+ }
