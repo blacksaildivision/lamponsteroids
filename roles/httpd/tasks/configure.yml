@@ -34,6 +34,7 @@
     dest: "{{ httpd_config_file }}"
     line: "LoadModule {{ item }}_module modules/mod_{{ item }}.so"
     state: present
+    insertbefore: "<IfModule unixd_module>"
   with_items: "{{ httpd_active_modules }}"
   notify: restart httpd
   tags: [httpd, configure]

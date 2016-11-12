@@ -10,8 +10,13 @@
     <Directory {{ httpd_websites_directory }}/{{ item.ServerName }}/htdocs>
         AllowOverride All
         Require all granted
-        Options +FollowSymLinks
+        Options +FollowSymLinks -Indexes -Includes
     </Directory>
+
+    {% if item.PhpFpm is defined %}
+    # PHP-FPM settings
+    ProxyPassMatch "^/(.*\.php(/.*)?)$" "fcgi://127.0.0.1:{{ item.PhpFpm.port }}{{ httpd_websites_directory }}/{{ item.ServerName }}/htdocs"
+    {% endif %}
 
     # Logging
     ErrorLog "{{ httpd_websites_directory }}/{{ item.ServerName }}/logs/httpd-error.log"

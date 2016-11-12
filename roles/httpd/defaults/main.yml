@@ -40,10 +40,12 @@ httpd_port: 80
 # Modules enabled by default: authn_file authn_core authz_host authz_groupfile authz_user authz_core access_compat auth_basic reqtimeout filter mime log_config env headers setenvif version unixd status autoindex dir alias
 httpd_active_modules:
  - authz_core
- - mime
- - log_config
- - unixd
  - dir
+ - log_config
+ - mime
+ - proxy
+ - proxy_fcgi
+ - unixd
 
 httpd_user: httpd
 httpd_group: httpd

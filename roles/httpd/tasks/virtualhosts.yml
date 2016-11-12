@@ -44,7 +44,7 @@
 - name: Add VirtualHosts files
   template:
     src: VirtualHost.conf.j2
-    dest: "{{ httpd_install_path }}/conf/extra/{{ item.ServerName }}.conf"
+    dest: "{{ httpd_install_path }}/conf/extra/httpd-vhost-{{ item.ServerName }}.conf"
     owner: root
     group: root
     mode: 0644
