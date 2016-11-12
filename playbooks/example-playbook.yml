@@ -6,9 +6,11 @@
   become: yes
   become_user: root
   roles:
-    - ../roles/centos
-    - ../roles/ntp
-    - ../roles/git
+    - ../roles/httpd
+    #- ../roles/centos
+    #- ../roles/ntp
+    #- ../roles/git
+
   vars_files:
     - ../vars/example-vars.yml
 

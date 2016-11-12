@@ -73,3 +73,5 @@ httpd_server_tokens: Prod
 httpd_server_signature: "off"
 
 httpd_file_etag: none
+
+httpd_directory_index: index.php index.html

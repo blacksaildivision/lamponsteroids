@@ -150,3 +150,12 @@
   with_items: "{{ httpd_mpm_config }}"
   tags: [httpd, configure]
 
+
+- name: Set Directory index
+  lineinfile:
+    dest: "{{ httpd_config_file }}"
+    line: "DirectoryIndex {{ httpd_directory_index }}"
+    state: present
+    regexp: '^[ \t]+DirectoryIndex'
+  notify: restart httpd
+  tags: [httpd, configure]
