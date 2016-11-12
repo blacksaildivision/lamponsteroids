@@ -1,25 +1,38 @@
+{% if item.subdirectory is defined %}
+  {% set directory_root = httpd_websites_directory + "/" + item.serverName + "/htdocs/" + item.subdirectory %}
+{% else %}
+  {% set directory_root = httpd_websites_directory + "/" + item.serverName + "/htdocs" %}
+{% endif %}
 <VirtualHost *:{{ httpd_port }}>
 
-    ServerName {{ item.ServerName }}
-    {% if item.ServerAlias is defined %}
-    ServerAlias {{ item.ServerAlias }}
-    {% endif %}
+    ServerName {{ item.serverName }}
+{% if item.serverAlias is defined %}
+    ServerAlias {{ item.serverAlias }}
+{% endif %}
 
     # Directory settings
-    DocumentRoot {{ httpd_websites_directory }}/{{ item.ServerName }}/htdocs
-    <Directory {{ httpd_websites_directory }}/{{ item.ServerName }}/htdocs>
+    DocumentRoot {{ directory_root }}
+    <Directory {{ directory_root }}>
         AllowOverride All
         Require all granted
         Options +FollowSymLinks -Indexes -Includes
     </Directory>
 
-    {% if item.PhpFpm is defined %}
+{% if item.extra_config is defined %}
+    # Extra config
+{% for config in item.extra_config %}
+    {{ config }}
+{% endfor %}
+{% endif %}
+
+{% if item.phpFpm is defined %}
     # PHP-FPM settings
-    ProxyPassMatch "^/(.*\.php(/.*)?)$" "fcgi://127.0.0.1:{{ item.PhpFpm.port }}{{ httpd_websites_directory }}/{{ item.ServerName }}/htdocs"
-    {% endif %}
+    ProxyPassMatch "^/(.*\.php(/.*)?)$" "fcgi://127.0.0.1:{{ item.phpFpm.port }}{{ directory_root }}"
+{% endif %}
 
     # Logging
-    ErrorLog "{{ httpd_websites_directory }}/{{ item.ServerName }}/logs/httpd-error.log"
-    CustomLog "{{ httpd_websites_directory }}/{{ item.ServerName }}/logs/httpd-access.log" common
+    ErrorLog "{{ httpd_websites_directory }}/{{ item.serverName }}/logs/httpd-error.log"
+    CustomLog "{{ httpd_websites_directory }}/{{ item.serverName }}/logs/httpd-access.log" common
 
 </VirtualHost>
+

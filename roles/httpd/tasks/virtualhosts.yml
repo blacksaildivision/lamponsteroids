@@ -13,7 +13,7 @@
 
 - name: Make sure that website directory exists
   file:
-    path: "{{ httpd_websites_directory }}/{{ item.ServerName }}"
+    path: "{{ httpd_websites_directory }}/{{ item.serverName }}"
     state: directory
     mode: 0755
     owner: root
@@ -23,39 +23,39 @@
 
 - name: Make sure that website DocumentRoot directory exists
   file:
-    path: "{{ httpd_websites_directory }}/{{ item.ServerName }}/htdocs"
+    path: "{{ httpd_websites_directory }}/{{ item.serverName }}/htdocs"
     state: directory
     mode: "2775"
-    owner: "{{ item.DirectoryOwner }}"
-    group: "{{ item.DirectoryGroup }}"
+    owner: "{{ item.directoryOwner }}"
+    group: "{{ item.directoryGroup }}"
   with_items: "{{ httpd_virtualhosts }}"
   tags: [httpd, virtualhosts]
 
 - name: Make sure that website logs directory exists
   file:
-    path: "{{ httpd_websites_directory }}/{{ item.ServerName }}/logs"
+    path: "{{ httpd_websites_directory }}/{{ item.serverName }}/logs"
     state: directory
     mode: "2775"
-    owner: "{{ item.DirectoryOwner }}"
-    group: "{{ item.DirectoryGroup }}"
+    owner: "{{ item.directoryOwner }}"
+    group: "{{ item.directoryGroup }}"
   with_items: "{{ httpd_virtualhosts }}"
   tags: [httpd, virtualhosts]
 
 - name: Add VirtualHosts files
   template:
     src: VirtualHost.conf.j2
-    dest: "{{ httpd_install_path }}/conf/extra/httpd-vhost-{{ item.ServerName }}.conf"
+    dest: "{{ httpd_install_path }}/conf/extra/httpd-vhost-{{ item.serverName }}.conf"
     owner: root
     group: root
     mode: 0644
   with_items: "{{ httpd_virtualhosts }}"
   notify: restart httpd
-  tags: [httpd, virtualhosts]
+  tags: [httpd, virtualhosts, t2]
 
 - name: Add virtualhosts entries to httpd.conf file
   lineinfile:
     dest: "{{ httpd_config_file }}"
-    line: "Include conf/extra/httpd-vhost-{{ item.ServerName }}.conf"
+    line: "Include conf/extra/httpd-vhost-{{ item.serverName }}.conf"
     state: present
     insertafter: EOF
   with_items: "{{ httpd_virtualhosts }}"
@@ -65,7 +65,7 @@
 - name: Disable all others
   lineinfile:
     dest: "{{ httpd_config_file }}"
-    regexp: "httpd-vhost-(?!{{ httpd_virtualhosts | map(attribute='ServerName') | join('|') }})"
+    regexp: "httpd-vhost-(?!{{ httpd_virtualhosts | map(attribute='serverName') | join('|') }})"
     state: absent
   notify: restart httpd
   tags: [httpd, virtualhosts]

@@ -39,6 +39,7 @@ httpd_port: 80
 # Modules disabled by default: authn_dbm authn_anon authn_dbd authn_socache authz_dbm authz_owner auth_form auth_digest allowmethods file_cache cache cache_disk cache_socache socache_shmcb socache_dbm socache_memcache watchdog  macro dbd dumpio buffer ratelimit ext_filter request include substitute sed deflate log_debug logio expires unique_id remoteip proxy proxy_connect proxy_ftp proxy_http proxy_fcgi proxy_scgi proxy_wstunnel proxy_ajp proxy_balancer proxy_express proxy_hcheck session session_cookie session_dbd slotmem_shm ssl lbmethod_byrequests lbmethod_bytraffic lbmethod_bybusyness lbmethod_heartbeat dav info cgid dav_fs vhost_alias negotiation actions speling userdir rewrite
 # Modules enabled by default: authn_file authn_core authz_host authz_groupfile authz_user authz_core access_compat auth_basic reqtimeout filter mime log_config env headers setenvif version unixd status autoindex dir alias
 httpd_active_modules:
+ - alias
  - authz_core
  - dir
  - log_config
