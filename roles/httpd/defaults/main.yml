@@ -1,3 +1,17 @@
+####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
+
+# Should this role use install tasks for compiling Apache httpd?
+httpd_manage_installation: yes
+
+# Should this role use configure tasks for configuring Apache httpd?
+centos_manage_configuration: yes
+
+# Should this role use virtualhosts tasks for setting up virtualhosts?
+centos_manage_virtualhosts: yes
+
+
+
+
 # Version of Apache httpd that should be present in the system
 httpd_version: "2.4.23"
 
