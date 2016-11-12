@@ -148,6 +148,7 @@
 
 
 # Create Apache httpd systemctl entry
+# It will allow httpd to be manage by systemctl (ie. sudo systemctl start httpd).
 #
 - name: Add Apache httpd executables to PATH
   template:

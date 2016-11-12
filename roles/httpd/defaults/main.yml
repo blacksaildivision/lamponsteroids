@@ -12,8 +12,16 @@ centos_manage_virtualhosts: yes
 
 
 
+####### INSTALL TASKS CONFIGURATION #######
+
 # Version of Apache httpd that should be present in the system
 httpd_version: "2.4.23"
+
+# Version of APR library required for compiling Apache httpd
+httpd_apr_version: "1.5.2"
+
+# Version fo APR-util requried for compiling Apache httpd
+httpd_apr_util_version: "1.5.4"
 
 # Location of files for Apache httpd sources
 httpd_sources_location: /usr/src
@@ -23,12 +31,6 @@ httpd_build_user: developer
 
 # Group of the build user.
 httpd_build_group: developer
-
-# Version of APR library required for compiling Apache httpd
-httpd_apr_version: 1.5.2
-
-# Version fo APR-util requried for compiling Apache httpd
-httpd_apr_util_version: 1.5.4
 
 # Path where Apache httpd will be installed. NO trailing slash at the end!
 httpd_install_path: /usr/local/apache2
