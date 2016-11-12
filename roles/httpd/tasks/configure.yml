@@ -97,6 +97,39 @@
   notify: restart httpd
   tags: [httpd, configure]
 
+- name: Set Apache httpd server name
+  lineinfile:
+    dest: "{{ httpd_config_file }}"
+    line: "ServerTokens {{ httpd_server_tokens }}"
+    state: present
+    regexp: '^#?ServerTokens'
+    insertbefore: EOF
+  notify: restart httpd
+  tags: [httpd, configure]
+
+- name: Set Apache httpd server name
+  lineinfile:
+    dest: "{{ httpd_config_file }}"
+    line: "ServerSignature {{ httpd_server_signature }}"
+    state: present
+    insertbefore: EOF
+    regexp: '^#?ServerSignature'
+  notify: restart httpd
+  tags: [httpd, configure]
+
+- name: Set Apache httpd etag name
+  lineinfile:
+    dest: "{{ httpd_config_file }}"
+    line: "FileETag {{ httpd_file_etag }}"
+    state: present
+    insertbefore: EOF
+    regexp: '^#?FileETag'
+  notify: restart httpd
+  tags: [httpd, configure]
+
+
+
+
 - name: Make sure that MPM is enabled
   lineinfile:
     dest: "{{ httpd_config_file }}"
@@ -114,5 +147,5 @@
     regexp: '^[ \t]+{{ item.key }}(.+)$'
   notify: restart httpd
   with_items: "{{ httpd_mpm_config }}"
-  tags: [httpd, configure, t2]
+  tags: [httpd, configure]
 

@@ -55,9 +55,17 @@
 - name: Add virtualhosts entries to httpd.conf file
   lineinfile:
     dest: "{{ httpd_config_file }}"
-    line: "Include conf/extra/{{ item.ServerName }}.conf"
+    line: "Include conf/extra/httpd-vhost-{{ item.ServerName }}.conf"
     state: present
     insertafter: EOF
   with_items: "{{ httpd_virtualhosts }}"
+  notify: restart httpd
+  tags: [httpd, virtualhosts]
+
+- name: Disable all others
+  lineinfile:
+    dest: "{{ httpd_config_file }}"
+    regexp: "httpd-vhost-(?!{{ httpd_virtualhosts | map(attribute='ServerName') | join('|') }})"
+    state: absent
   notify: restart httpd
   tags: [httpd, virtualhosts]

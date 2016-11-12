@@ -5,10 +5,10 @@ httpd_version: "2.4.23"
 httpd_sources_location: /usr/src
 
 # User that will build httpd. Please never use root account for compiling software. It can lead to serious security issues
-httpd_build_user: vagrant
+httpd_build_user: developer
 
 # Group of the build user.
-httpd_build_group: vagrant
+httpd_build_group: developer
 
 # Version of APR library required for compiling Apache httpd
 httpd_apr_version: 1.5.2
@@ -51,7 +51,8 @@ httpd_websites_directory: /var/www
 
 httpd_virtualhosts:
  - {
-  ServerName: dev.testtest.com,
+  ServerName: testtest.com,
+  ServerAlias: dev.testtest.com,
   DirectoryOwner: "{{ httpd_user }}",
   DirectoryGroup: "{{ httpd_group }}"
  }
@@ -63,3 +64,9 @@ httpd_mpm_config:
   - { key: "ThreadsPerChild", value: 25 }
   - { key: "MaxRequestWorkers", value: 400 }
   - { key: "MaxConnectionsPerChild", value: 0 }
+
+httpd_server_tokens: Prod
+
+httpd_server_signature: "off"
+
+httpd_file_etag: none

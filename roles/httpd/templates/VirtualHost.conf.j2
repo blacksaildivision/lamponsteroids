@@ -1,6 +1,9 @@
 <VirtualHost *:{{ httpd_port }}>
 
     ServerName {{ item.ServerName }}
+    {% if item.ServerAlias is defined %}
+    ServerAlias {{ item.ServerAlias }}
+    {% endif %}
 
     # Directory settings
     DocumentRoot {{ httpd_websites_directory }}/{{ item.ServerName }}/htdocs
