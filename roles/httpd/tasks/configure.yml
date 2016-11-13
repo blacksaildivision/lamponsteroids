@@ -1,6 +1,27 @@
-# Set Apache Root directory
+# Make sure that dedicated Apache httpd daemon user and group exists
+# It's nice to create separate user for each service like httpd, nginx etc.
 #
-- name: Set Apache root directory
+- name: Create dedicated Apache httpd group
+  group:
+    name: "{{ httpd_group }}"
+    state: present
+  tags: [httpd, configure]
+
+- name: Create dedicated Apache httpd user
+  user:
+    name: "{{ httpd_user }}"
+    createhome: no
+    group: "{{ httpd_group }}"
+    state: present
+    shell: /sbin/nologin
+  tags: [httpd, configure]
+
+
+
+# Set Apache Root directory
+# It should point to path where Apache httpd is installed
+#
+- name: Configure Apache root directory
   lineinfile:
     dest: "{{ httpd_config_file }}"
     line: "ServerRoot {{ httpd_install_path }}"
@@ -13,7 +34,7 @@
 
 # Set Apache port
 #
-- name: Set Apache port
+- name: Configure Apache port
   lineinfile:
     dest: "{{ httpd_config_file }}"
     line: "Listen {{ httpd_port }}"
@@ -24,10 +45,7 @@
 
 
 
-
-
-
-# Enable required Apache modules
+# Enable/disable required Apache modules
 #
 - name: Enable required modules
   lineinfile:
@@ -48,28 +66,10 @@
   tags: [httpd, configure]
 
 
-# Make sure that dedicated Apache group exists
+
+# Set Apache httpd user and group created in previous tasks
 #
-- name: Create dedicated Apache httpd group
-  group:
-    name: "{{ httpd_group }}"
-    state: present
-  tags: [httpd, configure]
-
-
-# Make sure that dedicated Apache user exists
-#
-- name: Create dedicated Apache httpd user
-  user:
-    name: "{{ httpd_user }}"
-    createhome: no
-    group: "{{ httpd_group }}"
-    state: present
-    shell: /sbin/nologin
-  tags: [httpd, configure]
-
-
-- name: Set Apache httpd user
+- name: Configure Apache httpd user
   lineinfile:
     dest: "{{ httpd_config_file }}"
     line: "User {{ httpd_user }}"
@@ -78,7 +78,7 @@
   notify: restart httpd
   tags: [httpd, configure]
 
-- name: Set Apache httpd group
+- name: Configure Apache httpd group
   lineinfile:
     dest: "{{ httpd_config_file }}"
     line: "Group {{ httpd_group }}"
@@ -87,9 +87,11 @@
   notify: restart httpd
   tags: [httpd, configure]
 
+
+
 # Set Apache ServerName
 #
-- name: Set Apache httpd server name
+- name: Configure Apache httpd server name
   lineinfile:
     dest: "{{ httpd_config_file }}"
     line: "ServerName {{ httpd_server_name }}"
@@ -98,7 +100,25 @@
   notify: restart httpd
   tags: [httpd, configure]
 
-- name: Set Apache httpd server name
+
+
+# Set DirectoryIndex option
+# Which files should be loaded by default
+#
+- name: Configure Directory index
+  lineinfile:
+    dest: "{{ httpd_config_file }}"
+    line: "    DirectoryIndex {{ httpd_directory_index }}"
+    state: present
+    regexp: '^[ \t]+DirectoryIndex'
+  notify: restart httpd
+  tags: [httpd, configure]
+
+
+
+# Set ServerTokens option. It displays informations in response header about Apache
+#
+- name: Configure Apache httpd response tokens
   lineinfile:
     dest: "{{ httpd_config_file }}"
     line: "ServerTokens {{ httpd_server_tokens }}"
@@ -108,7 +128,11 @@
   notify: restart httpd
   tags: [httpd, configure]
 
-- name: Set Apache httpd server name
+
+
+# Set Apache signature on build-in response files, like proxy faults etc.
+#
+- name: Configure Apache httpd server signature
   lineinfile:
     dest: "{{ httpd_config_file }}"
     line: "ServerSignature {{ httpd_server_signature }}"
@@ -118,7 +142,11 @@
   notify: restart httpd
   tags: [httpd, configure]
 
-- name: Set Apache httpd etag name
+
+
+# Configure tagging files
+#
+- name: Configure Apache httpd file tags
   lineinfile:
     dest: "{{ httpd_config_file }}"
     line: "FileETag {{ httpd_file_etag }}"
@@ -130,8 +158,10 @@
 
 
 
-
-- name: Make sure that MPM is enabled
+# Make sure that MPM configuration is enabled
+# It will override Apache httpd defaults
+#
+- name: Make sure that MPM config is enabled
   lineinfile:
     dest: "{{ httpd_config_file }}"
     line: "Include conf/extra/httpd-mpm.conf"
@@ -141,21 +171,14 @@
   tags: [httpd, configure]
 
 
-- name: Make sure that MPM Start server
+
+# Configure MPM
+#
+- name: Configure MPM for Apache httpd
   replace:
     dest: "{{ httpd_install_path }}/conf/extra/httpd-mpm.conf"
     replace: "    {{ item.key }}  {{ item.value }}"
     regexp: '^[ \t]+{{ item.key }}(.+)$'
   notify: restart httpd
   with_items: "{{ httpd_mpm_config }}"
-  tags: [httpd, configure]
-
-
-- name: Set Directory index
-  lineinfile:
-    dest: "{{ httpd_config_file }}"
-    line: "    DirectoryIndex {{ httpd_directory_index }}"
-    state: present
-    regexp: '^[ \t]+DirectoryIndex'
-  notify: restart httpd
   tags: [httpd, configure]

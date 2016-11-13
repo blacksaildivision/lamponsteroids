@@ -43,15 +43,28 @@ httpd_configure_options:
   - --with-included-apr
   - "--prefix={{ httpd_install_path }}"
 
+
+
+
+
+####### CONFIGURE TASKS CONFIGURATION #######
+
+# User for Apache httpd daemon(s)
+httpd_user: httpd
+
+# Group for Apache httpd daemon(s)
+httpd_group: httpd
+
 # Apache httpd config file
 httpd_config_file: "{{ httpd_install_path }}/conf/httpd.conf"
 
 # Apache httpd server name
-httpd_server_name: Apache
+httpd_server_name: localhost
 
 # Apache httpd port
 httpd_port: 80
 
+# Apache modules
 # Modules disabled by default: authn_dbm authn_anon authn_dbd authn_socache authz_dbm authz_owner auth_form auth_digest allowmethods file_cache cache cache_disk cache_socache socache_shmcb socache_dbm socache_memcache watchdog  macro dbd dumpio buffer ratelimit ext_filter request include substitute sed deflate log_debug logio expires unique_id remoteip proxy proxy_connect proxy_ftp proxy_http proxy_fcgi proxy_scgi proxy_wstunnel proxy_ajp proxy_balancer proxy_express proxy_hcheck session session_cookie session_dbd slotmem_shm ssl lbmethod_byrequests lbmethod_bytraffic lbmethod_bybusyness lbmethod_heartbeat dav info cgid dav_fs vhost_alias negotiation actions speling userdir rewrite
 # Modules enabled by default: authn_file authn_core authz_host authz_groupfile authz_user authz_core access_compat auth_basic reqtimeout filter mime log_config env headers setenvif version unixd status autoindex dir alias
 httpd_active_modules:
@@ -66,8 +79,27 @@ httpd_active_modules:
  - rewrite
  - unixd
 
-httpd_user: httpd
-httpd_group: httpd
+# DirectoryIndex - which file should be loaded by default
+httpd_directory_index: index.php index.html
+
+# Server tokens mode available in response headers
+httpd_server_tokens: Prod
+
+# Server signature in footer of Apache files
+httpd_server_signature: "off"
+
+# ETag mode for files
+httpd_file_etag: none
+
+# MPM configuration
+httpd_mpm_config:
+  - { key: "StartServers", value: 5 }
+  - { key: "MinSpareThreads", value: 75 }
+  - { key: "MaxSpareThreads", value: 250 }
+  - { key: "ThreadsPerChild", value: 25 }
+  - { key: "MaxRequestWorkers", value: 400 }
+  - { key: "MaxConnectionsPerChild", value: 0 }
+
 httpd_websites_directory: /var/www
 
 httpd_virtualhosts:
@@ -78,18 +110,5 @@ httpd_virtualhosts:
   DirectoryGroup: "{{ httpd_group }}"
  }
 
-httpd_mpm_config:
-  - { key: "StartServers", value: 5 }
-  - { key: "MinSpareThreads", value: 75 }
-  - { key: "MaxSpareThreads", value: 250 }
-  - { key: "ThreadsPerChild", value: 25 }
-  - { key: "MaxRequestWorkers", value: 400 }
-  - { key: "MaxConnectionsPerChild", value: 0 }
 
-httpd_server_tokens: Prod
 
-httpd_server_signature: "off"
-
-httpd_file_etag: none
-
-httpd_directory_index: index.php index.html
