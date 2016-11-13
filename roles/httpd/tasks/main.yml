@@ -48,13 +48,18 @@
 - include: configure.yml
   when: "centos_manage_configuration == true"
 
+
+
+# Configure Apache httpd VirtualHosts
+#
 - include: virtualhosts.yml
   when: "centos_manage_virtualhosts == true"
 
 
-# Make sure that chronyd service is started and enabled on boot
+
+# Make sure that Apache httpd service is started and enabled on boot
 #
-- name: Start and enable chronyd service
+- name: Start and enable Apache httpd service
   service:
     name: httpd
     state: started
