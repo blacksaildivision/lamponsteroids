@@ -1,0 +1,7 @@
+# Restart httpd service
+# This handler is executed on changes in Apache httpd config files
+#
+- name: restart httpd
+  service:
+    name: httpd
+    state: restarted

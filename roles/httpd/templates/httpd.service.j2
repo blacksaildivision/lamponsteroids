@@ -1,0 +1,14 @@
+[Unit]
+Description=The Apache HTTP Server
+After=network.target
+
+[Service]
+Type=forking
+ExecStart={{ httpd_install_path }}/bin/apachectl -k start
+ExecReload={{ httpd_install_path }}/bin/apachectl -k graceful
+ExecStop={{ httpd_install_path }}/bin/apachectl -k graceful-stop
+PIDFile={{ httpd_install_path }}/logs/httpd.pid
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

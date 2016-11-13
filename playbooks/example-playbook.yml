@@ -9,6 +9,8 @@
     - ../roles/centos
     - ../roles/ntp
     - ../roles/git
+    - ../roles/httpd
+
   vars_files:
     - ../vars/example-vars.yml
 

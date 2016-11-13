@@ -1,0 +1,38 @@
+<VirtualHost *:{{ httpd_port }}>
+{% if item.subdirectory is defined %}
+  {% set directory_root = httpd_websites_directory + "/" + item.server_name + "/htdocs/" + item.subdirectory %}
+{% else %}
+  {% set directory_root = httpd_websites_directory + "/" + item.server_name + "/htdocs" %}
+{% endif %}
+
+    ServerName {{ item.server_name }}
+{% if item.server_alias is defined %}
+    ServerAlias {{ item.server_alias }}
+{% endif %}
+
+    # Directory settings
+    DocumentRoot {{ directory_root }}
+    <Directory {{ directory_root }}>
+        AllowOverride All
+        Require all granted
+        Options +FollowSymLinks -Indexes -Includes
+    </Directory>
+
+{% if item.extra_config is defined %}
+    # Extra config
+{% for config in item.extra_config %}
+    {{ config }}
+{% endfor %}
+{% endif %}
+
+{% if item.php is defined %}
+    # PHP-FPM settings
+    ProxyPassMatch "^/(.*\.php(/.*)?)$" "fcgi://127.0.0.1:{{ item.php.port }}{{ directory_root }}"
+{% endif %}
+
+    # Logging
+    ErrorLog "{{ httpd_websites_directory }}/{{ item.server_name }}/logs/httpd-error.log"
+    CustomLog "{{ httpd_websites_directory }}/{{ item.server_name }}/logs/httpd-access.log" common
+
+</VirtualHost>
+

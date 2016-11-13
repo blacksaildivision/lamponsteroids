@@ -1,0 +1,160 @@
+# Install required software for compiling Apache httpd from source
+#
+- name: Install required tools for compiling Apache httpd
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - autoconf # Dependencies: m4 perl perl-Carp perl-Data-Dumper perl-Encode perl-Exporter perl-File-Path perl-File-Temp perl-Filter perl-Getopt-Long perl-HTTP-Tiny perl-PathTools perl-Pod-Escapes perl-Pod-Perldoc perl-Pod-Simple perl-Pod-Usage perl-Scalar-List-Utils perl-Socket perl-Storable perl-Text-ParseWords perl-Time-HiRes perl-Time-Local perl-constant perl-libs perl-macros perl-parent perl-podlators perl-threads perl-threads-shared
+    - libtool # Dependencies: autoconf automake cpp gcc glibc-devel glibc-headers kernel-headers libmpc m4 mpfr perl perl-Carp perl-Data-Dumper perl-Encode perl-Exporter perl-File-Path perl-File-Temp perl-Filter perl-Getopt-Long perl-HTTP-Tiny perl-PathTools perl-Pod-Escapes perl-Pod-Perldoc perl-Pod-Simple perl-Pod-Usage perl-Scalar-List-Utils perl-Socket perl-Storable perl-Test-Harness perl-Text-ParseWords perl-Thread-Queue perl-Time-HiRes perl-Time-Local perl-constant perl-libs perl-macros perl-parent perl-podlators perl-threads perl-threads-shared
+    - openssl-devel # Dependencies: keyutils-libs-devel krb5-devel libcom_err-devel libselinux-devel libsepol-devel libverto-devel pcre-devel zlib-devel
+    - pcre-devel
+  tags: [httpd, install]
+
+
+
+# For building Apache httpd from source you need couple of packages:
+# 1. Apache httpd itself - https://github.com/apache/httpd/releases
+# 2. Apache APR (portable runtime library) - https://github.com/apache/apr/releases
+# 3. Apache APR-util (utilities for APR) - https://github.com/apache/apr-util/releases
+#
+- name: Download required source files
+  get_url:
+    dest: "{{ httpd_sources_location }}"
+    url: "{{ item }}"
+  with_items:
+    - "https://github.com/apache/httpd/archive/{{ httpd_version }}.tar.gz"
+    - "https://github.com/apache/apr/archive/{{ httpd_apr_version }}.tar.gz"
+    - "https://github.com/apache/apr-util/archive/{{ httpd_apr_util_version }}.tar.gz"
+  tags: [httpd, install]
+
+
+
+# Unpack downloaded Apache httpd sources
+#
+- name: Unpack downloaded Apache httpd sources
+  unarchive:
+    src: "{{ httpd_sources_location }}/httpd-{{ httpd_version }}.tar.gz"
+    dest: "{{ httpd_sources_location }}"
+    owner: "{{ httpd_build_user }}"
+    group: "{{ httpd_build_group }}"
+    copy: no
+    creates: "{{ httpd_sources_location }}/httpd-{{ httpd_version }}"
+  tags: [httpd, install]
+
+
+
+# Unpack downloaded APR and APR-Util sources
+#
+- name: Unpack downloaded APR packages
+  unarchive:
+    src: "{{ httpd_sources_location }}/{{ item }}.tar.gz"
+    dest: "{{ httpd_sources_location }}/httpd-{{ httpd_version }}/srclib"
+    owner: "{{ httpd_build_user }}"
+    group: "{{ httpd_build_group }}"
+    copy: no
+    creates: "{{ httpd_sources_location }}/httpd-{{ httpd_version }}/{{ item }}"
+  with_items:
+    - "apr-{{ httpd_apr_version }}"
+    - "apr-util-{{ httpd_apr_util_version }}"
+  tags: [httpd, install]
+
+
+
+# Rename APR directory for compiling purposes
+# Become is needed to set correct permissions for copied files
+#
+- name: Rename APR directory
+  command: "cp -R apr-{{ httpd_apr_version }} apr"
+  args:
+    chdir: "{{ httpd_sources_location }}/httpd-{{ httpd_version }}/srclib"
+    creates: "{{ httpd_sources_location }}/httpd-{{ httpd_version }}/srclib/apr"
+  become: true
+  become_user: "{{ httpd_build_user }}"
+  tags: [httpd, install]
+
+
+
+# Rename APR-Util directory for compiling purposes
+# Become is needed to set correct permissions for copied files
+#
+- name: Rename APR-Util directory
+  command: "cp -R apr-util-{{ httpd_apr_util_version }} apr-util"
+  args:
+    chdir: "{{ httpd_sources_location }}/httpd-{{ httpd_version }}/srclib"
+    creates: "{{ httpd_sources_location }}/httpd-{{ httpd_version }}/srclib/apr-util"
+  become: true
+  become_user: "{{ httpd_build_user }}"
+  tags: [httpd, install]
+
+
+
+# Compile Apache httpd
+# It will be compiled by using different user than root.
+#
+- name: Compile Apache httpd
+  command: "{{ item }}"
+  args:
+    chdir: "{{ httpd_sources_location }}/httpd-{{ httpd_version }}"
+  with_items:
+    - ./buildconf
+    - "./configure {{ httpd_configure_options | join(' ') }}"
+    - make
+  become: true
+  become_user: "{{ httpd_build_user }}"
+  tags: [httpd, install]
+
+
+
+# Install compiled Apache httpd
+# This operation must be executed as sudo user
+#
+- name: Install compiled Apache httpd
+  command: make install
+  args:
+    chdir: "{{ httpd_sources_location }}/httpd-{{ httpd_version }}"
+  tags: [httpd, install]
+
+
+
+# Remove downloaded sources after installation
+#
+- name: Cleanup downloaded sources
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ httpd_sources_location }}/httpd-{{ httpd_version }}.tar.gz"
+    - "{{ httpd_sources_location }}/httpd-{{ httpd_version }}"
+    - "{{ httpd_sources_location }}/apr-{{ httpd_apr_version }}.tar.gz"
+    - "{{ httpd_sources_location }}/apr-util-{{ httpd_apr_util_version }}.tar.gz"
+  when: "git_cleanup_after_install == true"
+  tags: [httpd, install]
+
+
+
+# Add Apache httpd executables to PATH
+# It'll be easier to execute some commands without typing full path
+#
+- name: Add Apache httpd executables to PATH
+  template:
+    src: httpd.sh.j2
+    dest: /etc/profile.d/httpd.sh
+    owner: root
+    group: root
+    mode: 0644
+  tags: [httpd, install]
+
+
+
+# Create Apache httpd systemctl entry
+# It will allow httpd to be manage by systemctl (ie. sudo systemctl start httpd).
+#
+- name: Add Apache httpd executables to PATH
+  template:
+    src: httpd.service.j2
+    dest: /etc/systemd/system/httpd.service
+    owner: root
+    group: root
+    mode: 0644
+  tags: [httpd, install]

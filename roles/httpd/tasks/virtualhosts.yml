@@ -1,0 +1,88 @@
+# All websites should be stored under one directory.
+# On CentOS it's usually /var/www. Make sure that this directory exists
+#
+- name: Make sure that main website directory exists
+  file:
+    path: "{{ httpd_websites_directory }}"
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+  tags: [httpd, virtualhosts]
+
+
+
+# Each website is hosted in separate directory. Directory is named after domain name
+# Example: /var/www/blacksaildivision.com
+#
+- name: Make sure that website directory exists
+  file:
+    path: "{{ httpd_websites_directory }}/{{ item.server_name }}"
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+  with_items: "{{ httpd_virtualhosts }}"
+  tags: [httpd, virtualhosts]
+
+
+
+# Each website directory has htdocs and logs directory for storing website files and logs
+# Example: /var/www/blacksaildivision.com/htdocs, /var/www/blacksaildivision.com/logs
+#
+- name: Make sure that website DocumentRoot directory exists
+  file:
+    path: "{{ httpd_websites_directory }}/{{ item.server_name }}/htdocs"
+    state: directory
+    mode: "2775"
+    owner: "{{ item.directory_owner }}"
+    group: "{{ item.directory_group }}"
+  with_items: "{{ httpd_virtualhosts }}"
+  tags: [httpd, virtualhosts]
+
+- name: Make sure that website logs directory exists
+  file:
+    path: "{{ httpd_websites_directory }}/{{ item.server_name }}/logs"
+    state: directory
+    mode: "2775"
+    owner: "{{ item.directory_owner }}"
+    group: "{{ item.directory_group }}"
+  with_items: "{{ httpd_virtualhosts }}"
+  tags: [httpd, virtualhosts]
+
+
+
+# Add Apache httpd VirtualHost files for each domain
+#
+- name: Add VirtualHosts files
+  template:
+    src: VirtualHost.conf.j2
+    dest: "{{ httpd_install_path }}/conf/extra/httpd-vhost-{{ item.server_name }}.conf"
+    owner: root
+    group: root
+    mode: 0644
+  with_items: "{{ httpd_virtualhosts }}"
+  notify: restart httpd
+  tags: [httpd, virtualhosts]
+
+
+
+# Add created VirtualHost files to httpd.conf
+#
+- name: Add VirtualHost entries to httpd.conf file
+  lineinfile:
+    dest: "{{ httpd_config_file }}"
+    line: "Include conf/extra/httpd-vhost-{{ item.server_name }}.conf"
+    state: present
+    insertafter: EOF
+  with_items: "{{ httpd_virtualhosts }}"
+  notify: restart httpd
+  tags: [httpd, virtualhosts]
+
+- name: Remove all unused VirtualHosts from httpd.conf file
+  lineinfile:
+    dest: "{{ httpd_config_file }}"
+    regexp: "httpd-vhost-(?!{{ httpd_virtualhosts | map(attribute='server_name') | join('|') }})"
+    state: absent
+  notify: restart httpd
+  tags: [httpd, virtualhosts]
