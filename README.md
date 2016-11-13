@@ -50,6 +50,8 @@ It also take cares of groups and users. Enable sudo. Configure secure SSH. Set u
 
 **git** - Install latest version of git. 
 
+**httpd** - Install and configure latest version of Apache httpd.
+
 Changelog
 ---------
 
