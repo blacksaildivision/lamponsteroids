@@ -100,15 +100,32 @@ httpd_mpm_config:
   - { key: "MaxRequestWorkers", value: 400 }
   - { key: "MaxConnectionsPerChild", value: 0 }
 
+
+
+
+
+####### VIRTUALHOSTS TASKS CONFIGURATION #######
+
+# Root directory for hosting all VirtualHosts
 httpd_websites_directory: /var/www
 
+# List of virtualhosts that should be enabled.
+# Here is full entry with all available options"
+# - {
+#  server_name: your.domain.here # mandatory field
+#  server_alias: optional.domain.alias.here # optional field
+#  directory_owner: existing system user # mandatory field
+#  directory_group: existing group # mandatory field
+#  subdirectory: path to subdirectory. By default DocumentDirectory is set to htdocs. # optinal field
+#  extra_config: [] list of extra lines to be included in VirtualHost file # optional field
+#  php: { # optinal field
+#    port: port number for PHP-FPM daemon
+#  }
+# }
 httpd_virtualhosts:
  - {
-  ServerName: testtest.com,
-  ServerAlias: dev.testtest.com,
-  DirectoryOwner: "{{ httpd_user }}",
-  DirectoryGroup: "{{ httpd_group }}"
+  server_name: testtest.com,
+  server_alias: dev.testtest.com,
+  directory_owner: "{{ httpd_user }}",
+  directory_group: "{{ httpd_group }}"
  }
-
-
-
