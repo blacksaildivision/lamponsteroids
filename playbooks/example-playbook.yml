@@ -10,6 +10,7 @@
     - ../roles/ntp
     - ../roles/git
     - ../roles/httpd
+    - ../roles/datadog
 
   vars_files:
     - ../vars/example-vars.yml
