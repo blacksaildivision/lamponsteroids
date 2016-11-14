@@ -1,4 +1,4 @@
-# DataDog key
+# Datadog key. It must be valid key
 datadog_key: 37bd293b3418375da9349de40623a273
 
 # Datadog hostname

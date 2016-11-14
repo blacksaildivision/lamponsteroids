@@ -1,4 +1,4 @@
-# DataDog comes with it's own repository. Add repo file to Yum here
+# Datadog comes with it's own repository. Add repo file to Yum here
 #
 - name: Make sure that DataDog repository is available
   template:
@@ -11,7 +11,7 @@
 
 
 
-# Install DataDog Agent
+# Install Datadog agent
 #
 - name: Install DataDog agent
   yum:
@@ -21,7 +21,7 @@
 
 
 
-# Set DataDog config file
+# Set Datadog config file
 #
 - name: Configure DataDog
   template:
@@ -35,7 +35,7 @@
 
 
 
-# Make sure that DataDog Agent service is started and enabled on boot
+# Make sure that Datadog agent service is started and enabled on boot
 #
 - name: Start and enable DataDog agent service
   service:
