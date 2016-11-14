@@ -52,6 +52,8 @@ It also take cares of groups and users. Enable sudo. Configure secure SSH. Set u
 
 **httpd** - Install and configure latest version of Apache httpd.
 
+**datadog** - Install and configure datadog agent.
+
 Changelog
 ---------
 
