@@ -37,3 +37,15 @@
 #
 - include: install.yml
   when: "nodejs_install_new_version == true"
+
+
+
+# Install global NPM packages like gulp, grunt etc
+#
+- name: Install global NPM packages
+  npm:
+    name: "{{ item }}"
+    global: yes
+    state: present
+  with_items: "{{ nodejs_global_packages }}"
+  tags: [nodejs]
