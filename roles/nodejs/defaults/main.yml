@@ -1,5 +1,5 @@
 # Node.js version
 nodejs_version: "7.1.0"
 
-# Global packages (list of packages that will be installed with -g option)
+# Global packages (list of packages installed with -g option)
 nodejs_global_packages: []
