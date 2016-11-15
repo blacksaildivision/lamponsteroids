@@ -10,6 +10,7 @@
     - ../roles/ntp
     - ../roles/git
     - ../roles/httpd
+    - ../roles/nodejs
     - ../roles/datadog
 
   vars_files:
