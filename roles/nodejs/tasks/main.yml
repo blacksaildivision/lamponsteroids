@@ -1,0 +1,51 @@
+# Check if Node.js is installed or not and if it should be updated or not
+#
+- name: Check if Node.js is installed
+  command: node --version warn=no
+  register: nodejs_is_installed_test
+  ignore_errors: yes
+  changed_when: false
+  tags: [nodejs]
+
+- set_fact:
+    nodejs_is_installed: true
+  when: nodejs_is_installed_test.rc != 2
+  tags: [nodejs]
+
+- set_fact:
+    nodejs_is_installed: false
+    nodejs_install_new_version: true
+  when: nodejs_is_installed_test.rc == 2
+  tags: [nodejs]
+
+- set_fact:
+    nodejs_install_new_version: true
+  when: ( nodejs_is_installed == true ) and ( nodejs_is_installed_test.stdout | replace('v','') != nodejs_version )
+  tags: [nodejs]
+
+- set_fact:
+    nodejs_install_new_version: false
+  when: ( nodejs_is_installed == true ) and ( nodejs_is_installed_test.stdout | replace('v','') == nodejs_version )
+  tags: [nodejs]
+
+
+
+# Install/Update Node.js to desired version
+# These tasks will be executed when
+#  1. Node.js is not installed
+#  2. Node.js is installed but not in desired version
+#
+- include: install.yml
+  when: "nodejs_install_new_version == true"
+
+
+
+# Install global NPM packages like gulp, grunt etc
+#
+- name: Install global NPM packages
+  npm:
+    name: "{{ item }}"
+    global: yes
+    state: present
+  with_items: "{{ nodejs_global_packages }}"
+  tags: [nodejs]
