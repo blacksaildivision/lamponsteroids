@@ -18,6 +18,10 @@ centos_manage_ssh: yes
 # Should this role use iptables task for setting up firewall?
 centos_manage_iptables: yes
 
+# Should this role disable Transparent Huge Pages? ( Should be set to yes on hosts with databaes like MySQL, Oracle, MariaDb, MongoDB etc)
+centos_disable_thp: yes
+
+
 
 
 

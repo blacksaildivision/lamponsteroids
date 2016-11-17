@@ -1,0 +1,22 @@
+# There are couple of ways of disabling THP. The easiest way is to add systemd entry that will disable THP on system startup.
+# It doesn't require any changes in GRUB file
+#
+- name: Add script for disabling THP to SystemD
+  template:
+    src: disable-thp.service.j2
+    dest: /etc/systemd/system/disable-thp.service
+    owner: root
+    group: root
+    mode: 0644
+  tags: [centos, thp]
+
+
+
+# Make sure that script is stated and will start on boot
+#
+- name: Start and enable script for disabling THP
+  service:
+    name: disable-thp
+    state: started
+    enabled: yes
+  tags: [centos, thp]

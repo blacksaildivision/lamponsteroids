@@ -1,0 +1,10 @@
+[Unit]
+Description=Disable Transparent Huge Pages (THP)
+After=mongod mongodb-mms-automation-agent
+
+[Service]
+Type=notify
+ExecStart=echo 'never' > /sys/kernel/mm/transparent_hugepage/enabled && echo 'never' > /sys/kernel/mm/transparent_hugepage/defrag
+
+[Install]
+WantedBy=multi-user.target
