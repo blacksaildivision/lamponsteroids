@@ -1,2 +1,8 @@
 # MySQL version. Tested only on version 5.7.x
 mysql_version: "5.7.16"
+
+# Set root password
+mysql_set_root_password: yes
+
+# MySQL root password
+mysql_root_password: "r8gyl5#a:xHT12a7R_IgC]HZx"

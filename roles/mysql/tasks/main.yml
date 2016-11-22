@@ -1,3 +1,13 @@
+# Make sure that MySQL-python libs is installed. Ansible rely on this package for mysql connections
+#
+- name: Instally MySQL-python for Ansible
+  yum:
+    name: MySQL-python
+    state: latest
+  tags: [mysql]
+
+
+
 # Check if MySQL server is installed or not and if it should be updated or not
 #
 - name: Check if MySQL is installed
@@ -37,3 +47,9 @@
 #
 - include: install.yml
   when: "mysql_install_new_version == true"
+
+
+
+# Set MySQL root password
+- include: root-password.yml
+  when: "mysql_set_root_password == true"
