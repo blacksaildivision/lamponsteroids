@@ -1,0 +1,2 @@
+# MySQL version. Tested only on version 5.7.x
+mysql_version: "5.7.16"
