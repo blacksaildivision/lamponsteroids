@@ -51,5 +51,13 @@
 
 
 # Set MySQL root password
+#
 - include: root-password.yml
   when: "mysql_set_root_password == true"
+
+
+
+# Configure MySQL server
+#
+- include: configure.yml
+  when: "mysql_configure_server == true"

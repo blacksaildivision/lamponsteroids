@@ -6,3 +6,17 @@ mysql_set_root_password: yes
 
 # MySQL root password
 mysql_root_password: "r8gyl5#a:xHT12a7R_IgC]HZx"
+
+# Should this role configure MySQL
+mysql_configure_server: yes
+
+# Path to configuration file
+mysql_config_file: /etc/my.cnf
+
+mysql_tmp_table_size: 32M
+
+mysql_max_heap_table_size: 32M
+
+mysql_query_cache_type: 1
+
+mysql_query_cache_size: 32M
