@@ -1,6 +1,6 @@
 # Make sure that MySQL-python libs is installed. Ansible rely on this package for mysql connections
 #
-- name: Instally MySQL-python for Ansible
+- name: Install MySQL-python for Ansible
   yum:
     name: MySQL-python
     state: latest
