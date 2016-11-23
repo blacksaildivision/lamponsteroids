@@ -1,0 +1,122 @@
+# Configure maximum size of internal in-memory temporary tables and maximum size of user-created MEMORY tables.
+# Increase this value if you are doing lot of advanced GROUP BY queries
+# Both tmp_table_size and max_heap_table_size should be set to equal values
+#
+- name: Configure tmp_table_size
+  lineinfile:
+    dest: "{{ mysql_config_file }}"
+    line: "tmp-table-size={{ mysql_tmp_table_size }}"
+    state: present
+    insertbefore: EOF
+    regexp: '^#?tmp-table-size'
+  notify: restart mysqld
+  tags: [mysql, configure]
+
+- name: Configure max_heap_table_size
+  lineinfile:
+    dest: "{{ mysql_config_file }}"
+    line: "max-heap-table-size={{ mysql_max_heap_table_size }}"
+    state: present
+    insertbefore: EOF
+    regexp: '^#?max-heap-table-size'
+  notify: restart mysqld
+  tags: [mysql, configure]
+
+
+
+# Configure query caching. First enable the cache, second, set the size of cache
+#
+- name: Configure query_cache_type
+  lineinfile:
+    dest: "{{ mysql_config_file }}"
+    line: "query-cache-type={{ mysql_query_cache_type }}"
+    state: present
+    insertbefore: EOF
+    regexp: '^#?query-cache-type'
+  notify: restart mysqld
+  tags: [mysql, configure]
+
+- name: Configure query_cache_size
+  lineinfile:
+    dest: "{{ mysql_config_file }}"
+    line: "query-cache-size={{ mysql_query_cache_size }}"
+    state: present
+    insertbefore: EOF
+    regexp: '^#?query-cache-size'
+  notify: restart mysqld
+  tags: [mysql, configure]
+
+
+
+# Configure InnoDB buffer
+#
+- name: Configure innodb_buffer_pool_instances
+  lineinfile:
+    dest: "{{ mysql_config_file }}"
+    line: "innodb-buffer-pool-instances={{ mysql_innodb_buffer_pool_instances }}"
+    state: present
+    insertbefore: EOF
+    regexp: '^#?innodb-buffer-pool-instances'
+  notify: restart mysqld
+  tags: [mysql, configure]
+
+- name: Configure innodb_buffer_pool_size
+  lineinfile:
+    dest: "{{ mysql_config_file }}"
+    line: "innodb-buffer-pool-size={{ mysql_innodb_buffer_pool_size }}"
+    state: present
+    insertbefore: EOF
+    regexp: '^#?innodb-buffer-pool-size'
+  notify: restart mysqld
+  tags: [mysql, configure]
+
+
+
+# Configure MySQL slow log for logging sloweset queries. Pretty useful for debugging and optimisation.
+#
+- name: Configure slow_query_log
+  lineinfile:
+    dest: "{{ mysql_config_file }}"
+    line: "slow-query-log={{ mysql_slow_query_log }}"
+    state: present
+    insertbefore: EOF
+    regexp: '^#?slow-query-log='
+  notify: restart mysqld
+  tags: [mysql, configure]
+
+- name: Configure slow_query_log_file
+  lineinfile:
+    dest: "{{ mysql_config_file }}"
+    line: "slow-query-log-file={{ mysql_slow_query_log_file }}"
+    state: present
+    insertbefore: EOF
+    regexp: '^#?slow-query-log-file'
+  notify: restart mysqld
+  tags: [mysql, configure]
+
+
+
+# Configure how TIMESTAMP fields are handler (Enable new bahaviour).
+# This will also remove warning from log files on MySQL startup
+#
+- name: Configure explicit_defaults_for_timestamp
+  lineinfile:
+    dest: "{{ mysql_config_file }}"
+    line: "explicit-defaults-for-timestamp={{ mysql_explicit_defaults_for_timestamp }}"
+    state: present
+    insertbefore: EOF
+    regexp: '^#?explicit-defaults-for-timestamp'
+  notify: restart mysqld
+  tags: [mysql, configure]
+
+
+
+# Add users to mysql group so they will be able to read log files wihout using sudo
+#
+- name: Add users to mysql group
+  user:
+    name: "{{ item }}"
+    append: yes
+    groups: mysql
+  with_items: "{{ mysql_group_users }}"
+  tags: [mysql, configure]

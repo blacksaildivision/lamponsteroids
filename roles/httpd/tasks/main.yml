@@ -46,14 +46,14 @@
 # Configure Apache httpd
 #
 - include: configure.yml
-  when: "centos_manage_configuration == true"
+  when: "httpd_manage_configuration == true"
 
 
 
 # Configure Apache httpd VirtualHosts
 #
 - include: virtualhosts.yml
-  when: "centos_manage_virtualhosts == true"
+  when: "httpd_manage_virtualhosts == true"
 
 
 

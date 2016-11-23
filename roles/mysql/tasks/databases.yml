@@ -1,0 +1,25 @@
+# Craete databases
+#
+- name: Create databases
+  mysql_db:
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    name: "{{ item.database }}"
+    state: present
+  with_items: "{{ mysql_databases }}"
+  tags: [mysql, databases]
+
+
+
+# Create database users with passwords and assign them to created databases
+#
+- name: Create users and assign them to databases
+  mysql_user:
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    name: "{{ item.user }}"
+    password: "{{ item.password }}"
+    state: present
+    priv: "{{ item.database }}.*:ALL"
+  with_items: "{{ mysql_databases }}"
+  tags: [mysql, databases]

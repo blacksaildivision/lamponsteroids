@@ -1,0 +1,7 @@
+# Restart mysqld service
+# This handler is executed on changes in MySQL server configuration file
+#
+- name: restart mysqld
+  service:
+    name: mysqld
+    state: restarted
