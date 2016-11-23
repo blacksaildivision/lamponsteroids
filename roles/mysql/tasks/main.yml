@@ -46,25 +46,36 @@
 #  2. MySQL is installed but not in desired version
 #
 - include: install.yml
-  when: "mysql_install_new_version == true"
+  when: "mysql_install_new_version == true and mysql_manage_installation == true"
 
 
 
 # Set MySQL root password
 #
 - include: root-password.yml
-  when: "mysql_set_root_password == true"
+  when: "mysql_manage_root_password == true"
 
 
 
 # Configure MySQL server
 #
 - include: configure.yml
-  when: "mysql_configure_server == true"
+  when: "mysql_manage_configuration == true"
 
 
 
 # Setup databases and database users
 #
 - include: databases.yml
-  when: "mysql_setup_databases == true"
+  when: "mysql_manage_databases_and_users == true"
+
+
+
+# Make sure that MySQL server service is started and enabled on boot
+#
+- name: Start and enable MySQL server service
+  service:
+    name: mysqld
+    state: started
+    enabled: yes
+  tags: [mysql, healthcheck]

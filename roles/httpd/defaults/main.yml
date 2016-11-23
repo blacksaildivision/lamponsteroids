@@ -4,10 +4,10 @@
 httpd_manage_installation: yes
 
 # Should this role use configure tasks for configuring Apache httpd?
-centos_manage_configuration: yes
+httpd_manage_configuration: yes
 
 # Should this role use virtualhosts tasks for setting up virtualhosts?
-centos_manage_virtualhosts: yes
+httpd_manage_virtualhosts: yes
 
 
 
