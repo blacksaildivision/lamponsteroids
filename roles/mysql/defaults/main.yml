@@ -20,3 +20,13 @@ mysql_max_heap_table_size: 32M
 mysql_query_cache_type: 1
 
 mysql_query_cache_size: 32M
+
+mysql_innodb_buffer_pool_instances: 1
+
+mysql_innodb_buffer_pool_size: 128M
+
+mysql_slow_query_log: 1
+
+mysql_slow_query_log_file: /var/lib/mysql/localhost-slow-query.log
+
+mysql_explicit_defaults_for_timestamp: 1
