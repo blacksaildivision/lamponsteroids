@@ -30,3 +30,14 @@ mysql_slow_query_log: 1
 mysql_slow_query_log_file: /var/lib/mysql/localhost-slow-query.log
 
 mysql_explicit_defaults_for_timestamp: 1
+
+mysql_group_users: vagrant
+
+mysql_setup_databases: yes
+
+mysql_databases:
+ - {
+  database: example,
+  user: example,
+  password: "+;GPS,uP6%MXYTFo2k8bpo57v"
+ }

@@ -108,3 +108,15 @@
     regexp: '^#?explicit-defaults-for-timestamp'
   notify: restart mysqld
   tags: [mysql, configure]
+
+
+
+# Add users to mysql group so they will be able to read log files wihout using sudo
+#
+- name: Add users to mysql group
+  user:
+    name: "{{ item }}"
+    append: yes
+    groups: mysql
+  with_items: "{{ mysql_group_users }}"
+  tags: [mysql, configure]
