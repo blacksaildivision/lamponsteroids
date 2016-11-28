@@ -58,6 +58,8 @@ It also take cares of groups and users. Enable sudo. Configure secure SSH. Set u
 
 **mysql** - Install and configure MySQL community server. Create databases and users. 
 
+**awscli** - Install and configure AWS CLI command line tool
+
 Changelog
 ---------
 
