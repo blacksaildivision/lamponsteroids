@@ -1,0 +1,21 @@
+# Installing AWS CLI is the simplest via PIP.
+# Pip package is in epel repository so you need to make sure that you have both installed
+#
+- name: Make sure that pip is installed
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - epel-release
+    - python-pip # Dependencies python-backports python-backports-ssl_match_hostname python-setuptools
+  tags: [awscli]
+
+
+
+# Install AWS CLI command line tool
+#
+- name: Install AWS CLI
+  pip:
+    name: awscli
+    state: latest
+  tags: [awscli]
