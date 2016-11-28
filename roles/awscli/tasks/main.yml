@@ -1,5 +1,6 @@
 # Installing AWS CLI is the simplest via PIP.
 # Pip package is in epel repository so you need to make sure that you have both installed
+# libselinux-python is required for Ansible templates
 #
 - name: Make sure that pip is installed
   yum:
@@ -7,6 +8,7 @@
     state: latest
   with_items:
     - epel-release
+    - libselinux-python
     - python-pip # Dependencies python-backports python-backports-ssl_match_hostname python-setuptools
   tags: [awscli]
 
@@ -18,4 +20,32 @@
   pip:
     name: awscli
     state: latest
+  tags: [awscli]
+
+
+
+# Create AWS config directory for storing credentials and config
+#
+- name: Create AWS config directory
+  file:
+    path: "/home/{{ item }}/.aws"
+    state: directory
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    mode: 0775
+  with_items: "{{ awscli_users }}"
+  tags: [awscli]
+
+
+
+# Setup credentials file with Access Key and Secret
+#
+- name: Add credentials file
+  template:
+    src: credentials.j2
+    dest: "/home/{{ item }}/.aws/credentials"
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    mode: 0600
+  with_items: "{{ awscli_users }}"
   tags: [awscli]
