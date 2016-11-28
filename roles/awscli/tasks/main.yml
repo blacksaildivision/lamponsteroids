@@ -40,10 +40,24 @@
 
 # Setup credentials file with Access Key and Secret
 #
-- name: Add credentials file
+- name: Add AWS credentials file
   template:
     src: credentials.j2
     dest: "/home/{{ item }}/.aws/credentials"
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    mode: 0600
+  with_items: "{{ awscli_users }}"
+  tags: [awscli]
+
+
+
+# Setup config file with default region and output
+#
+- name: Add AWS config file
+  template:
+    src: config.j2
+    dest: "/home/{{ item }}/.aws/config"
     owner: "{{ item }}"
     group: "{{ item }}"
     mode: 0600
