@@ -120,7 +120,10 @@ httpd_websites_directory: /var/www
 #  extra_config: [] list of extra lines to be included in VirtualHost file # optional field
 #  php: { # optinal field
 #    port: port number for PHP-FPM daemon
-#  }
+#  },
+#  redirect: "http(s)://redirect.domain.com" # Optional parameter. It will redirect everything to different domain. Protocol is required, trailing slash must be omitted.
+#  logs: no # Turn off access and error log. Default is set to yes, it means that both access and error log will be active
+#  htdocs: no # Turn off crating directory for htdocs. Default is set to yes, which means that directory will be created
 # }
 httpd_virtualhosts:
  - {

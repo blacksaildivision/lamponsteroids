@@ -22,6 +22,7 @@
     mode: 0755
     owner: root
     group: root
+  when: "(item.htdocs is not defined or item.htdocs == true) and (item.logs is not defined or item.logs == true)"
   with_items: "{{ httpd_virtualhosts }}"
   tags: [httpd, virtualhosts]
 
@@ -38,6 +39,7 @@
     owner: "{{ item.directory_owner }}"
     group: "{{ item.directory_group }}"
   with_items: "{{ httpd_virtualhosts }}"
+  when: "item.htdocs is not defined or item.htdocs == true"
   tags: [httpd, virtualhosts]
 
 - name: Make sure that website logs directory exists
@@ -47,6 +49,7 @@
     mode: "2775"
     owner: "{{ item.directory_owner }}"
     group: "{{ item.directory_group }}"
+  when: "item.logs is not defined or item.logs == true"
   with_items: "{{ httpd_virtualhosts }}"
   tags: [httpd, virtualhosts]
 

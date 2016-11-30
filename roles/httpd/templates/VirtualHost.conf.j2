@@ -10,6 +10,14 @@
     ServerAlias {{ item.server_alias }}
 {% endif %}
 
+{% if item.redirect is defined %}
+    # Redirect everything permanently to {{ item.redirect }}
+    RewriteEngine on
+    RewriteCond %{HTTP_HOST} {{ item.server_name }}
+    RewriteRule ^/(.*)$ {{ item.redirect }}/$1 [L,R=301]
+{% endif %}
+
+{% if item.htdocs is not defined or item.htdocs == true %}
     # Directory settings
     DocumentRoot {{ directory_root }}
     <Directory {{ directory_root }}>
@@ -17,6 +25,7 @@
         Require all granted
         Options +FollowSymLinks -Indexes -Includes
     </Directory>
+{% endif %}
 
 {% if item.extra_config is defined %}
     # Extra config
@@ -30,9 +39,15 @@
     ProxyPassMatch "^/(.*\.php(/.*)?)$" "fcgi://127.0.0.1:{{ item.php.port }}{{ directory_root }}"
 {% endif %}
 
+{% if item.logs is not defined or item.logs == true %}
     # Logging
     ErrorLog "{{ httpd_websites_directory }}/{{ item.server_name }}/logs/httpd-error.log"
     CustomLog "{{ httpd_websites_directory }}/{{ item.server_name }}/logs/httpd-access.log" common
+{% else%}
+    # Turn off logging
+    ErrorLog /dev/null
+    CustomLog /dev/null common
+{% endif %}
 
 </VirtualHost>
 
