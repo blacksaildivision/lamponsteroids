@@ -10,6 +10,13 @@
     ServerAlias {{ item.server_alias }}
 {% endif %}
 
+{% if item.redirect is defined %}
+    # Redirect everything permanently to {{ item.redirect }}
+    RewriteEngine on
+    RewriteCond %{HTTP_HOST} {{ item.server_name }}
+    RewriteRule ^/(.*)$ {{ item.redirect }}/$1 [L,R=301]
+{% endif %}
+
     # Directory settings
     DocumentRoot {{ directory_root }}
     <Directory {{ directory_root }}>

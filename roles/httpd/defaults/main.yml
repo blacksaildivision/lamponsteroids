@@ -120,7 +120,8 @@ httpd_websites_directory: /var/www
 #  extra_config: [] list of extra lines to be included in VirtualHost file # optional field
 #  php: { # optinal field
 #    port: port number for PHP-FPM daemon
-#  }
+#  },
+#  redirect: "http(s)://redirect.domain.com" # Optional parameter. It will redirect everything to different domain. Protocol is required, trailing slash must be omitted.
 # }
 httpd_virtualhosts:
  - {
