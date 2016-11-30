@@ -30,11 +30,11 @@ Full example with all available options:
 ```
 httpd_virtualhosts:
  - {
-    server_name: example.com
-    server_alias: dev.example.com
-    directory_owner: developer
-    directory_group: "{{ httpd_group }}"
-    subdirectory: wp
+    server_name: example.com,
+    server_alias: dev.example.com,
+    directory_owner: developer,
+    directory_group: "{{ httpd_group }}",
+    subdirectory: wp,
     extra_config: [
         'Alias /wp-content /var/www/example.com/htdocs/content',
         '<Directory "/var/www/example.com/htdocs/content">',
@@ -43,6 +43,19 @@ httpd_virtualhosts:
       ],
     php:{
         port: 9000
-    } 
+    }
+ }
+```
+
+Alternative host with redirect to different domain
+```
+httpd_virtualhosts:
+ - {
+    server_name: example.com,
+    directory_owner: developer,
+    directory_group: "{{ httpd_group }}",
+    redirect: "https://google.com",
+    htdocs: no,
+    logs: no
  }
 ```
