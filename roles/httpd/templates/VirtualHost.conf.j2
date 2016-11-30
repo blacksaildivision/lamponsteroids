@@ -17,6 +17,7 @@
     RewriteRule ^/(.*)$ {{ item.redirect }}/$1 [L,R=301]
 {% endif %}
 
+{% if item.htdocs is not defined or item.htdocs == true %}
     # Directory settings
     DocumentRoot {{ directory_root }}
     <Directory {{ directory_root }}>
@@ -24,6 +25,7 @@
         Require all granted
         Options +FollowSymLinks -Indexes -Includes
     </Directory>
+{% endif %}
 
 {% if item.extra_config is defined %}
     # Extra config

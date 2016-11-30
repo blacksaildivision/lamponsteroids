@@ -38,6 +38,7 @@
     owner: "{{ item.directory_owner }}"
     group: "{{ item.directory_group }}"
   with_items: "{{ httpd_virtualhosts }}"
+  when: "item.htdocs is not defined or item.htdocs == true"
   tags: [httpd, virtualhosts]
 
 - name: Make sure that website logs directory exists
