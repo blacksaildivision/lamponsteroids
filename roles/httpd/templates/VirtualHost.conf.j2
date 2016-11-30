@@ -37,9 +37,15 @@
     ProxyPassMatch "^/(.*\.php(/.*)?)$" "fcgi://127.0.0.1:{{ item.php.port }}{{ directory_root }}"
 {% endif %}
 
+{% if item.logs is not defined or item.logs == true %}
     # Logging
     ErrorLog "{{ httpd_websites_directory }}/{{ item.server_name }}/logs/httpd-error.log"
     CustomLog "{{ httpd_websites_directory }}/{{ item.server_name }}/logs/httpd-access.log" common
+{% else%}
+    # Turn off logging
+    ErrorLog /dev/null
+    CustomLog /dev/null common
+{% endif %}
 
 </VirtualHost>
 

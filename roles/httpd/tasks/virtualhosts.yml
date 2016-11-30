@@ -47,6 +47,7 @@
     mode: "2775"
     owner: "{{ item.directory_owner }}"
     group: "{{ item.directory_group }}"
+  when: "item.logs is not defined or item.logs == true"
   with_items: "{{ httpd_virtualhosts }}"
   tags: [httpd, virtualhosts]
 
