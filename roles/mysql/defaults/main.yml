@@ -71,6 +71,8 @@ mysql_slow_query_log_file: /var/lib/mysql/localhost-slow-query.log
 # Enable new behaviour of TIMESTAMP field handling
 mysql_explicit_defaults_for_timestamp: 1
 
+# Turn off resolving host name
+mysql_skip_name_resolve: 1
 
 
 
