@@ -79,3 +79,10 @@
     state: started
     enabled: yes
   tags: [mysql, healthcheck]
+
+
+
+# Install MySQLTuner tool
+#
+- include: mysqltuner.yml
+  when: "mysql_install_mysqltuner == true"

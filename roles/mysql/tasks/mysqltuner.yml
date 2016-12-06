@@ -1,0 +1,20 @@
+# Make sure that required Perl packages for MySQL tuner are installed
+#
+- name: Install required tools for MySQL Tuner
+  yum:
+    name: perl-Data-Dumper
+    state: latest
+  tags: [mysql, mysqltuner]
+
+
+
+# Download MySQL tuner script and make it executable
+#
+- name: Download MySQL tuner script
+  get_url:
+    dest: "/usr/bin/mysqltuner"
+    url: "http://mysqltuner.pl/"
+    owner: root
+    group: root
+    mode: 0715
+  tags: [mysql, mysqltuner]
