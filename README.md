@@ -56,7 +56,7 @@ It also take cares of groups and users. Enable sudo. Configure secure SSH. Set u
 
 **datadog** - Install and configure datadog agent.
 
-**mysql** - Install and configure MySQL community server. Create databases and users. 
+**mysql** - Install and configure MySQL community server. Create databases and users. Install MySQLTuner
 
 **awscli** - Install and configure AWS CLI command line tool
 
