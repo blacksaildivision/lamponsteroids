@@ -111,6 +111,21 @@
 
 
 
+# Turning off skip name resolve can speed up connecting to local version of MySQL
+# If you plan to use anything else than localhost|127.0.0.1 as user host, don't turn it on
+#
+- name: Configure skip_name_resolve
+  lineinfile:
+    dest: "{{ mysql_config_file }}"
+    line: "skip-name-resolve={{ mysql_skip_name_resolve }}"
+    state: present
+    insertbefore: EOF
+    regexp: '^#?skip-name-resolve'
+  notify: restart mysqld
+  tags: [mysql, configure]
+
+
+
 # Add users to mysql group so they will be able to read log files wihout using sudo
 #
 - name: Add users to mysql group
