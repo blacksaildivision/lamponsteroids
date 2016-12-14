@@ -1,27 +1,47 @@
-php_install_path: /usr/local/php
+####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
 
-php_version: "7.1.0"
-
-php_force_install: no
-
+# Should this role use install tasks to install desired version of PHP?
 php_manage_installation: yes
 
+# Should this role use configure tasks to configure php.ini?
+php_manage_configuration: yes
+
+# Should this role use fpm tasks to configure PHP-FPM and setup FPM Pools?
+php_manage_fpm: yes
+
+# Should this role use extensions tasks to install PECL extensions?
+php_manage_extensions: yes
+
+# Should this role use composer tasks to install composer?
+php_manage_composer: yes
+
+
+
+
+
+####### INSTALL TASKS CONFIGURATION #######
+
+# Version of PHP to install
+php_version: "7.1.0"
+
+# Location for PHP installation
+php_install_path: /usr/local/php
+
+# Force install (skip all conditions)
+php_force_install: no
+
+# Location for PHP sources
 php_sources_location: /usr/src
 
+# User that should compile PHP
 php_build_user: developer
 
-php_build_group: www
+# Group of the user that should compile PHP
+php_build_group: developer
 
-php_installation_path: /usr/local/php
-
-php_ini_file_path: "{{ php_installation_path }}/lib/php.ini"
-
-php_fpm_conf_file_path: "{{ php_installation_path }}/etc/php-fpm.conf"
-
-# ./configure --prefix=/usr/local/php --enable-fpm --disable-short-tags --with-openssl --with-pcre-regex --with-pcre-jit --with-zlib --enable-bcmath \
-#--with-bz2 --enable-calendar --with-curl --enable-exif --with-gd --enable-gd-native-ttf --enable-intl --enable-mbstring --with-mcrypt
+# List of configuration options
 php_configure_options:
- - "--prefix={{ php_installation_path }}"
+ - "--prefix={{ php_install_path }}"
  - --enable-fpm
  - --disable-short-tags
  - --with-openssl
@@ -46,46 +66,73 @@ php_configure_options:
  - --with-xmlrpc
  - --enable-zip
 
+# Should this role delete downloaded and uncompressed files after installation?
 php_cleanup_after_install: yes
 
-php_manage_configuration: yes
 
+
+
+
+####### CONFIGURE TASKS CONFIGURATION #######
+
+# Path to php.ini file
+php_ini_file_path: "{{ php_install_path }}/lib/php.ini"
+
+# Should short open tags be enabled ("On") or disabled ("Off")
 php_short_open_tag: "Off"
 
+# Should php version be present in headers?
 php_expose_php: "Off"
 
+# Maximum execution time for PHP scripts
 php_max_execution_time: 30
 
+# Maximum input time for PHP requests
 php_max_input_time: 60
 
+# Maximum memory limit for PHP scripts
 php_memory_limit: 128M
 
+# Level of error reporting
 php_error_reporting: E_ALL
 
+# Configure displaying errors
 php_display_errors: "Off"
 
+# Configure displaying startup errors
 php_display_startup_errors: "Off"
 
+# Should errors be logged or not?
 php_log_errors: "On"
 
+# Maximum size of POST data
 php_post_max_size: 8M
 
+# Maximum size of uploaded data
 php_upload_max_filesize: 2M
 
+# Allow opening files by url
 php_allow_url_fopen: "On"
 
+# Configure PHP Date Timezone
 php_date_timezone: UTC
 
-php_manage_fpm: yes
+# Configure MySQL socket path
+php_mysql_socket: /var/lib/mysql/mysql.sock
 
+
+
+
+
+####### FPM TASKS CONFIGURATION #######
+
+# Path to PHP-FPM configuration
+php_fpm_conf_file_path: "{{ php_install_path }}/etc/php-fpm.conf"
+
+# Pid location for PHP-FPM
 php_pid_location: run/php-fpm.pid
 
-# Possible additional options
-#  --with-webp-dir=DIR      GD: Set the path to libwebp install prefix
-#  --with-jpeg-dir=DIR     GD: Set the path to libjpeg install prefix
-#  --with-png-dir=DIR      GD: Set the path to libpng install prefix
-#  --with-libdir=NAME      Look for libraries in .../NAME rather than .../lib
-
+# Pools for PHP-FPM
 php_fpm_pools:
  - {
   name: www,
@@ -108,16 +155,16 @@ php_fpm_pools:
       { key: error_log, value: /var/log/fpm-php.www.log },
       { key: open_basedir, value: /var },
       { key: disable_functions, value: "exec,passthru,shell_exec,system" }
-    ],
+    ]
  }
 
-php_manage_extensions: yes
 
+
+
+
+####### EXTENSION TASKS CONFIGURATION #######
+
+# List of PECL extensions that should be installed
 php_extensions:
   - mongodb
-#  - mongo
   - redis
-
-php_manage_composer: yes
-
-php_mysql_socket: /var/lib/mysql/mysql.sock

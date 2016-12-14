@@ -10,6 +10,7 @@
 
 
 # Update PHP with installed extensions
+#
 - name: Enable installed PECL extensions
   lineinfile:
     dest: "{{ php_ini_file_path }}"

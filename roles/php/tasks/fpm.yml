@@ -44,7 +44,7 @@
 
 
 
-# Add created FPM pools to php-fpm.conf
+# Add created FPM pools to php-fpm.conf and remove all others
 #
 - name: Add FPM pools to php-fpm.conf
   lineinfile:
