@@ -86,3 +86,17 @@
     - "{{ php_sources_location }}/php-src-php-{{ php_version }}"
   when: "php_cleanup_after_install == true"
   tags: [php, install]
+
+
+
+# Add PHP executables to PATH
+# It'll be easier to execute some commands without typing full path
+#
+- name: Add PHP executables to PATH
+  template:
+    src: php.sh.j2
+    dest: /etc/profile.d/php.sh
+    owner: root
+    group: root
+    mode: 0644
+  tags: [php, install]
