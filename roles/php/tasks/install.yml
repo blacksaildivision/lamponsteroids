@@ -1,0 +1,88 @@
+# Install required software for compiling PHP from source
+#
+- name: Install required tools for compiling PHP
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - autoconf # Dependencies: m4 perl perl-Carp perl-Data-Dumper perl-Encode perl-Exporter perl-File-Path perl-File-Temp perl-Filter perl-Getopt-Long perl-HTTP-Tiny perl-PathTools perl-Pod-Escapes perl-Pod-Perldoc perl-Pod-Simple perl-Pod-Usage perl-Scalar-List-Utils perl-Socket perl-Storable perl-Text-ParseWords perl-Time-HiRes perl-Time-Local perl-constant perl-libs perl-macros perl-parent perl-podlators perl-threads perl-threads-shared
+    - libtool # Dependencies: autoconf automake cpp gcc glibc-devel glibc-headers kernel-headers libmpc m4 mpfr perl perl-Carp perl-Data-Dumper perl-Encode perl-Exporter perl-File-Path perl-File-Temp perl-Filter perl-Getopt-Long perl-HTTP-Tiny perl-PathTools perl-Pod-Escapes perl-Pod-Perldoc perl-Pod-Simple perl-Pod-Usage perl-Scalar-List-Utils perl-Socket perl-Storable perl-Test-Harness perl-Text-ParseWords perl-Thread-Queue perl-Time-HiRes perl-Time-Local perl-constant perl-libs perl-macros perl-parent perl-podlators perl-threads perl-threads-shared
+    - epel-release # Provides re2 package
+    - re2c
+    - bison
+    - libxml2-devel
+    - openssl-devel
+    - bzip2-devel
+    - libcurl-devel
+    - libpng-devel
+    - libicu-devel
+    - gcc-c++
+    - libmcrypt-devel
+  tags: [php, install]
+
+
+
+# Download PHP source code. Easiest way is to obtain desired version from GitHub
+#
+- name: Download required source files
+  get_url:
+    dest: "{{ php_sources_location }}"
+    url: "https://github.com/php/php-src/archive/php-{{ php_version }}.tar.gz"
+  tags: [php, install]
+
+
+
+# Unpack downloaded PHP sources
+#
+- name: Unpack downloaded PHP sources
+  unarchive:
+    src: "{{ php_sources_location }}/php-src-php-{{ php_version }}.tar.gz"
+    dest: "{{ php_sources_location }}"
+    owner: "{{ php_build_user }}"
+    group: "{{ php_build_group }}"
+    copy: no
+    creates: "{{ php_sources_location }}/php-src-php-{{ php_version }}"
+  tags: [php, install]
+
+
+
+# Compile PHP
+# It will be compiled by using different user than root.
+#
+- name: Compile PHP
+  command: "{{ item }}"
+  args:
+    chdir: "{{ php_sources_location }}/php-src-php-{{ php_version }}"
+  with_items:
+    - ./buildconf --force
+    - "./configure {{ php_configure_options | join(' ') }}"
+    - make clean
+    - make
+  become: true
+  become_user: "{{ php_build_user }}"
+  tags: [php, install]
+
+
+
+# Install compiled PHP
+# This operation must be executed as sudo user
+#
+- name: Install compiled PHP
+  command: make install
+  args:
+    chdir: "{{ php_sources_location }}/php-src-php-{{ php_version }}"
+  tags: [php, install]
+
+
+
+# Remove downloaded sources after installation
+#
+- name: Cleanup downloaded sources
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ php_sources_location }}/php-src-php-{{ php_version }}.tar.gz"
+    - "{{ php_sources_location }}/php-src-php-{{ php_version }}"
+  when: "php_cleanup_after_install == true"
+  tags: [php, install]

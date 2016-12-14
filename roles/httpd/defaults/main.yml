@@ -43,6 +43,9 @@ httpd_configure_options:
   - --with-included-apr
   - "--prefix={{ httpd_install_path }}"
 
+# Remove downloaded sources after installation
+httpd_cleanup_after_install: yes
+
 
 
 

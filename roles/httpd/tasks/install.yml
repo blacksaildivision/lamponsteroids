@@ -128,7 +128,7 @@
     - "{{ httpd_sources_location }}/httpd-{{ httpd_version }}"
     - "{{ httpd_sources_location }}/apr-{{ httpd_apr_version }}.tar.gz"
     - "{{ httpd_sources_location }}/apr-util-{{ httpd_apr_util_version }}.tar.gz"
-  when: "git_cleanup_after_install == true"
+  when: "httpd_cleanup_after_install == true"
   tags: [httpd, install]
 
 

@@ -3,3 +3,50 @@ php_install_path: /usr/local/php
 php_version: "7.1.0"
 
 php_manage_installation: yes
+
+php_sources_location: /usr/src
+
+php_build_user: vagrant
+
+php_build_group: vagrant
+
+php_installation_path: /usr/local/php
+
+
+# ./configure --prefix=/usr/local/php --enable-fpm --disable-short-tags --with-openssl --with-pcre-regex --with-pcre-jit --with-zlib --enable-bcmath \
+#--with-bz2 --enable-calendar --with-curl --enable-exif --with-gd --enable-gd-native-ttf --enable-intl --enable-mbstring --with-mcrypt
+php_configure_options:
+ - "--prefix={{ php_installation_path }}"
+ - --enable-fpm
+ - --disable-short-tags
+ - --with-openssl
+ - --with-pcre-regex
+ - --with-pcre-jit
+ - --with-zlib
+ - --enable-bcmath
+ - --with-bz2
+ - --enable-calendar
+ - --with-curl
+ - --enable-exif
+ - --with-gd
+ - --enable-gd-native-ttf
+ - --enable-intl
+ - --enable-mbstring
+ - --with-mcrypt
+ - --with-mysqli
+ - --enable-pcntl
+ - --with-pdo-mysql
+ - --enable-soap
+ - --enable-sockets
+ - --with-xmlrpc
+ - --enable-zip
+
+php_cleanup_after_install: yes
+
+
+# Possible additional options
+#  --with-webp-dir=DIR      GD: Set the path to libwebp install prefix
+#  --with-jpeg-dir=DIR     GD: Set the path to libjpeg install prefix
+#  --with-png-dir=DIR      GD: Set the path to libpng install prefix
+#  --with-libdir=NAME      Look for libraries in .../NAME rather than .../lib
+
