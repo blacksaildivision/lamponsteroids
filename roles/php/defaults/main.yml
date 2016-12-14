@@ -14,6 +14,8 @@ php_installation_path: /usr/local/php
 
 php_ini_file_path: "{{ php_installation_path }}/lib/php.ini"
 
+php_fpm_conf_file_path: "{{ php_installation_path }}/etc/php-fpm.conf"
+
 # ./configure --prefix=/usr/local/php --enable-fpm --disable-short-tags --with-openssl --with-pcre-regex --with-pcre-jit --with-zlib --enable-bcmath \
 #--with-bz2 --enable-calendar --with-curl --enable-exif --with-gd --enable-gd-native-ttf --enable-intl --enable-mbstring --with-mcrypt
 php_configure_options:
@@ -72,9 +74,37 @@ php_allow_url_fopen: "Off"
 
 php_date_timezone: UTC
 
+php_manage_fpm: yes
+
+php_pid_location: run/php-fpm.pid
+
 # Possible additional options
 #  --with-webp-dir=DIR      GD: Set the path to libwebp install prefix
 #  --with-jpeg-dir=DIR     GD: Set the path to libjpeg install prefix
 #  --with-png-dir=DIR      GD: Set the path to libpng install prefix
 #  --with-libdir=NAME      Look for libraries in .../NAME rather than .../lib
 
+php_fpm_pools:
+ - {
+  name: www,
+  user: vagrant,
+  group: vagrant,
+  port: 9000,
+  process_manager: {
+    pm: dynamic,
+    max_children: 5,
+    start_servers: 2,
+    min_spare_servers: 1,
+    max_spare_servers: 3
+  },
+  slow_log: "var/log/$pool.log.slow",
+  slow_log_timeout: 30s,
+  php_admin_flags: [
+    { key: log_errors, value: "On" }
+  ],
+  php_admin_values: [
+      { key: error_log, value: /var/log/fpm-php.www.log },
+      { key: open_basedir, value: /var },
+      { key: disable_functions, value: "exec,passthru,shell_exec,system" }
+    ],
+ }

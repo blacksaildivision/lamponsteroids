@@ -47,3 +47,11 @@
 #
 - include: configure.yml
   when: "php_manage_configuration == true"
+
+
+
+# Configure PHP-FPM and Pools
+#
+- include: fpm.yml
+  when: "php_manage_fpm == true"
+

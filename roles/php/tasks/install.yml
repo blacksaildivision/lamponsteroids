@@ -1,5 +1,12 @@
 # Install required software for compiling PHP from source
+# Task is slitted into two parts, because Ansible can't resolve dependencies of re2c without epel
 #
+- name: Make sure that epel repository is present
+  yum:
+    name: epel-release
+    state: latest
+  tags: [php, install]
+
 - name: Install required tools for compiling PHP
   yum:
     name: "{{ item }}"
@@ -83,6 +90,7 @@
     src: "{{ php_sources_location }}/php-src-php-{{ php_version }}/php.ini-production"
     dest: "{{ php_ini_file_path }}"
     remote_src: yes
+    force: no
     owner: root
     group: root
     mode: 0644
