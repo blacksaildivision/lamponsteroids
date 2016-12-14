@@ -24,7 +24,7 @@
 
 # Download PHP source code. Easiest way is to obtain desired version from GitHub
 #
-- name: Download required source files
+- name: Download PHP source files
   get_url:
     dest: "{{ php_sources_location }}"
     url: "https://github.com/php/php-src/archive/php-{{ php_version }}.tar.gz"
@@ -96,6 +96,20 @@
   template:
     src: php.sh.j2
     dest: /etc/profile.d/php.sh
+    owner: root
+    group: root
+    mode: 0644
+  tags: [php, install]
+
+
+
+# Create PHP systemctl entry
+# It will allow PHP to be manage by systemctl (ie. sudo systemctl start php-fpm).
+#
+- name: Add Systemd entry for PHP-FPM
+  template:
+    src: php-fpm.service.j2
+    dest: /etc/systemd/system/php-fpm.service
     owner: root
     group: root
     mode: 0644
