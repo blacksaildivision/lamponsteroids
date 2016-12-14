@@ -5,7 +5,7 @@ After=syslog.target network.target
 [Service]
 Type=forking
 PIDFile={{ php_install_path }}/var/{{ php_pid_location }}
-ExecStart={{ php_install_path }}/sbin/php-fpm --nodaemonize --fpm-config {{ php_fpm_conf_file_path }}
+ExecStart={{ php_install_path }}/sbin/php-fpm --fpm-config {{ php_fpm_conf_file_path }}
 ExecReload=/bin/kill -USR2 $MAINPID
 PrivateTmp=true
 
