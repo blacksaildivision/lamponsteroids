@@ -180,3 +180,28 @@
     insertafter: "[Date]"
   notify: restart php-fpm
   tags: [php, configure]
+
+
+
+# Set path to MySQL socket in order to get connection to MySQL
+# Socket is set both for PDO and MySQLi (used by WordPress)
+#
+- name: Configure MySQL socket for PDO
+  lineinfile:
+    dest: "{{ php_ini_file_path }}"
+    line: "pdo_mysql.default_socket = {{ php_mysql_socket }}"
+    state: present
+    regexp: '^;?pdo_mysql\.default_socket'
+    insertafter: "[Pdo_mysql]"
+  notify: restart php-fpm
+  tags: [php, configure]
+
+- name: Configure MySQL socket for MySQLi
+  lineinfile:
+    dest: "{{ php_ini_file_path }}"
+    line: "mysqli.default_socket = {{ php_mysql_socket }}"
+    state: present
+    regexp: '^;?mysqli\.default_socket'
+    insertafter: "[MySQLi]"
+  notify: restart php-fpm
+  tags: [php, configure]

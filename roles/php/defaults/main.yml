@@ -2,7 +2,7 @@ php_install_path: /usr/local/php
 
 php_version: "7.1.0"
 
-php_force_install: yes
+php_force_install: no
 
 php_manage_installation: yes
 
@@ -119,3 +119,5 @@ php_extensions:
   - redis
 
 php_manage_composer: yes
+
+php_mysql_socket: /var/lib/mysql/mysql.sock
