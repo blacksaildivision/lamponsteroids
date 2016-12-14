@@ -70,7 +70,7 @@ php_post_max_size: 8M
 
 php_upload_max_filesize: 2M
 
-php_allow_url_fopen: "Off"
+php_allow_url_fopen: "On"
 
 php_date_timezone: UTC
 
@@ -108,3 +108,12 @@ php_fpm_pools:
       { key: disable_functions, value: "exec,passthru,shell_exec,system" }
     ],
  }
+
+php_manage_extensions: yes
+
+php_extensions:
+  - mongodb
+#  - mongo
+  - redis
+
+php_manage_composer: yes

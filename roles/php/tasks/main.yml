@@ -55,3 +55,16 @@
 - include: fpm.yml
   when: "php_manage_fpm == true"
 
+
+
+# Install PHP extensions
+#
+- include: extensions.yml
+  when: "php_manage_extensions == true"
+
+
+
+# Install Composer
+#
+- include: composer.yml
+  when: "php_manage_composer == true"

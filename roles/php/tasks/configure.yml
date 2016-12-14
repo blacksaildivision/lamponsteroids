@@ -154,6 +154,7 @@
 
 # Set opening external files
 # file_get_contents can open external files. Due to security issues it should be disabled
+# However if you are using Composer, leave it enabled and disable it in FPM pool
 #
 - name: Configure opening external files
   lineinfile:
