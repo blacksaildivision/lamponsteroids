@@ -128,7 +128,7 @@
     - "{{ httpd_sources_location }}/httpd-{{ httpd_version }}"
     - "{{ httpd_sources_location }}/apr-{{ httpd_apr_version }}.tar.gz"
     - "{{ httpd_sources_location }}/apr-util-{{ httpd_apr_util_version }}.tar.gz"
-  when: "git_cleanup_after_install == true"
+  when: "httpd_cleanup_after_install == true"
   tags: [httpd, install]
 
 
@@ -150,7 +150,7 @@
 # Create Apache httpd systemctl entry
 # It will allow httpd to be manage by systemctl (ie. sudo systemctl start httpd).
 #
-- name: Add Apache httpd executables to PATH
+- name: Add systemd entry for Apache httpd
   template:
     src: httpd.service.j2
     dest: /etc/systemd/system/httpd.service

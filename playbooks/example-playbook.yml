@@ -13,6 +13,7 @@
     - ../roles/nodejs
     - ../roles/awscli
     - ../roles/mysql
+    - ../roles/php
     - ../roles/datadog
 
   vars_files:
