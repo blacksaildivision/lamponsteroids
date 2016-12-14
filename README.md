@@ -60,6 +60,8 @@ It also take cares of groups and users. Enable sudo. Configure secure SSH. Set u
 
 **awscli** - Install and configure AWS CLI command line tool
 
+**php** - Install and configure PHP, PHP-FPM, PHP Pecl extensions and Composer
+
 Changelog
 ---------
 
