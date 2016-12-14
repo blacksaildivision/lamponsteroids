@@ -68,3 +68,14 @@
 #
 - include: composer.yml
   when: "php_manage_composer == true"
+
+
+
+# Make sure that PHP-FPM service is started and enabled on boot
+#
+- name: Start and enable PHP-FPM service
+  service:
+    name: php-fpm
+    state: started
+    enabled: yes
+  tags: [php, healthcheck]
