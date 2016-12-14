@@ -12,6 +12,7 @@ php_build_group: vagrant
 
 php_installation_path: /usr/local/php
 
+php_ini_file_path: "{{ php_installation_path }}/lib/php.ini"
 
 # ./configure --prefix=/usr/local/php --enable-fpm --disable-short-tags --with-openssl --with-pcre-regex --with-pcre-jit --with-zlib --enable-bcmath \
 #--with-bz2 --enable-calendar --with-curl --enable-exif --with-gd --enable-gd-native-ttf --enable-intl --enable-mbstring --with-mcrypt
@@ -43,6 +44,33 @@ php_configure_options:
 
 php_cleanup_after_install: yes
 
+php_manage_configuration: yes
+
+php_short_open_tag: "Off"
+
+php_expose_php: "Off"
+
+php_max_execution_time: 30
+
+php_max_input_time: 60
+
+php_memory_limit: 128M
+
+php_error_reporting: E_ALL
+
+php_display_errors: "Off"
+
+php_display_startup_errors: "Off"
+
+php_log_errors: "On"
+
+php_post_max_size: 8M
+
+php_upload_max_filesize: 2M
+
+php_allow_url_fopen: "Off"
+
+php_date_timezone: UTC
 
 # Possible additional options
 #  --with-webp-dir=DIR      GD: Set the path to libwebp install prefix

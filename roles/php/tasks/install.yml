@@ -75,6 +75,21 @@
 
 
 
+# Copy php.ini file to installation path. By default php.ini is not present.
+# We can use boilerplate from source codes
+#
+- name: Copy php.ini file to installation path
+  copy:
+    src: "{{ php_sources_location }}/php-src-php-{{ php_version }}/php.ini-production"
+    dest: "{{ php_ini_file_path }}"
+    remote_src: yes
+    owner: root
+    group: root
+    mode: 0644
+  tags: [php, install]
+
+
+
 # Remove downloaded sources after installation
 #
 - name: Cleanup downloaded sources

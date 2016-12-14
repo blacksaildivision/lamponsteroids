@@ -23,12 +23,12 @@
 
 - set_fact:
     php_install_new_version: true
-  when: ( php_is_installed == true ) and ( php_is_installed_test.stdout_lines[0] | regex_replace('[^0-9.]','') != php_version )
+  when: ( php_is_installed == true ) and ( php_is_installed_test.stdout_lines[0].split('cli')[0] | regex_replace('[^0-9.]','') != php_version )
   tags: [php]
 
 - set_fact:
     php_install_new_version: false
-  when: ( php_is_installed == true ) and ( php_is_installed_test.stdout_lines[0] | regex_replace('[^0-9.]','') == php_version )
+  when: ( php_is_installed == true ) and ( php_is_installed_test.stdout_lines[0].split('cli')[0] | regex_replace('[^0-9.]','') == php_version )
   tags: [php]
 
 
@@ -40,3 +40,10 @@
 #
 - include: install.yml
   when: "php_install_new_version == true and php_manage_installation == true"
+
+
+
+# Configure PHP
+#
+- include: configure.yml
+  when: "php_manage_configuration == true"

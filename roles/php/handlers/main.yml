@@ -1,0 +1,7 @@
+# Restart php-fpm service
+# This handler is executed on changes in php.ini file, php-fpm.conf file or php-fpm pools files
+#
+- name: restart php-fpm
+  service:
+    name: php-fpm
+    state: restarted
