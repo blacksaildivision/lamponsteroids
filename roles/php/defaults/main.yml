@@ -2,13 +2,15 @@ php_install_path: /usr/local/php
 
 php_version: "7.1.0"
 
+php_force_install: yes
+
 php_manage_installation: yes
 
 php_sources_location: /usr/src
 
-php_build_user: vagrant
+php_build_user: developer
 
-php_build_group: vagrant
+php_build_group: www
 
 php_installation_path: /usr/local/php
 
@@ -87,8 +89,8 @@ php_pid_location: run/php-fpm.pid
 php_fpm_pools:
  - {
   name: www,
-  user: vagrant,
-  group: vagrant,
+  user: developer,
+  group: www,
   port: 9000,
   process_manager: {
     pm: dynamic,

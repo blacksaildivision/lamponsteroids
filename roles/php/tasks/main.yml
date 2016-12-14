@@ -39,7 +39,7 @@
 #  2. PHP is installed but not in desired version
 #
 - include: install.yml
-  when: "php_install_new_version == true and php_manage_installation == true"
+  when: "( php_install_new_version == true and php_manage_installation == true) or php_force_install == true"
 
 
 
