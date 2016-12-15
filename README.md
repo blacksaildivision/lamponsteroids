@@ -44,11 +44,23 @@ Included roles
 --------------
 
 **centos** - Takes care of system settings. Configure yum, yum-cron, update and remove packages. 
-It also take cares of groups and users. Enable sudo. Configure secure SSH. Set up firewall based on iptables.
+It also take cares of groups and users. Enable sudo. Configure secure SSH. Set up firewall based on iptables. Disable Transparent Huge Pages.
 
 **ntp** - Takes care of system timezone and NTP server. It uses Chrony for using NTP.
 
 **git** - Install latest version of git. 
+
+**httpd** - Install and configure latest version of Apache httpd.
+
+**nodejs** - Install Node.js 7.* and NPM
+
+**datadog** - Install and configure datadog agent.
+
+**mysql** - Install and configure MySQL community server. Create databases and users. Install MySQLTuner
+
+**awscli** - Install and configure AWS CLI command line tool
+
+**php** - Install and configure PHP, PHP-FPM, PHP Pecl extensions and Composer
 
 Changelog
 ---------

@@ -72,7 +72,7 @@
 
 
 
-# Remove downloaded soureces after installation
+# Remove downloaded sources after installation
 #
 - name: Cleanup downloaded sources
   file:

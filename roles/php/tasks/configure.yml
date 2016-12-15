@@ -1,0 +1,207 @@
+# Set using PHP short tags
+# It should be set to Off, and you should only use <?php ?> tags. Please note that it does not affects <?= tags.
+#
+- name: Configure PHP short tags
+  lineinfile:
+    dest: "{{ php_ini_file_path }}"
+    line: "short_open_tag = {{ php_short_open_tag }}"
+    state: present
+    regexp: '^;?short_open_tag'
+    insertafter: "[PHP]"
+  notify: restart php-fpm
+  tags: [php, configure]
+
+
+
+# Set exposing PHP
+# It should be set to off. You should never expose version of PHP that you are running.
+#
+- name: Configure PHP version exposing
+  lineinfile:
+    dest: "{{ php_ini_file_path }}"
+    line: "expose_php = {{ php_expose_php }}"
+    state: present
+    regexp: '^;?expose_php'
+    insertafter: "[PHP]"
+  notify: restart php-fpm
+  tags: [php, configure]
+
+
+
+# Set maximum execution time for scripts
+#
+- name: Configure maximum execution time
+  lineinfile:
+    dest: "{{ php_ini_file_path }}"
+    line: "max_execution_time = {{ php_max_execution_time }}"
+    state: present
+    regexp: '^;?max_execution_time'
+    insertafter: "[PHP]"
+  notify: restart php-fpm
+  tags: [php, configure]
+
+
+
+# Set maximum time for parsing input data
+# It is maximum amount of time each script may spend parsing request data
+#
+- name: Configure maximum time for parsing data
+  lineinfile:
+    dest: "{{ php_ini_file_path }}"
+    line: "max_input_time = {{ php_max_input_time }}"
+    state: present
+    regexp: '^;?max_input_time'
+    insertafter: "[PHP]"
+  notify: restart php-fpm
+  tags: [php, configure]
+
+
+
+# Set memory limit
+# It is maximum amount of RAM that script can consume
+#
+- name: Configure memory limit
+  lineinfile:
+    dest: "{{ php_ini_file_path }}"
+    line: "memory_limit = {{ php_memory_limit }}"
+    state: present
+    regexp: '^;?memory_limit'
+    insertafter: "[PHP]"
+  notify: restart php-fpm
+  tags: [php, configure]
+
+
+
+# Set error reporting level
+#
+- name: Configure error reporting level
+  lineinfile:
+    dest: "{{ php_ini_file_path }}"
+    line: "error_reporting = {{ php_error_reporting }}"
+    state: present
+    regexp: '^;?error_reporting'
+    insertafter: "[PHP]"
+  notify: restart php-fpm
+  tags: [php, configure]
+
+
+
+# Set displaying and logging errors
+# Everything should be disabled except of development environments
+# All logs will be logged to file
+#
+- name: Configure displaying errors
+  lineinfile:
+    dest: "{{ php_ini_file_path }}"
+    line: "display_errors = {{ php_display_errors }}"
+    state: present
+    regexp: '^;?display_errors'
+    insertafter: "[PHP]"
+  notify: restart php-fpm
+  tags: [php, configure]
+
+- name: Configure displaying startup errors
+  lineinfile:
+    dest: "{{ php_ini_file_path }}"
+    line: "display_startup_errors = {{ php_display_startup_errors }}"
+    state: present
+    regexp: '^;?display_startup_errors'
+    insertafter: "[PHP]"
+  notify: restart php-fpm
+  tags: [php, configure]
+
+- name: Configure logging errors
+  lineinfile:
+    dest: "{{ php_ini_file_path }}"
+    line: "log_errors = {{ php_log_errors }}"
+    state: present
+    regexp: '^;?log_errors'
+    insertafter: "[PHP]"
+  notify: restart php-fpm
+  tags: [php, configure]
+
+
+
+# Set maximum post data size
+# Note that it also affects uploading files
+#
+- name: Configure maximum size of POST data
+  lineinfile:
+    dest: "{{ php_ini_file_path }}"
+    line: "post_max_size = {{ php_post_max_size }}"
+    state: present
+    regexp: '^;?post_max_size'
+    insertafter: "[PHP]"
+  notify: restart php-fpm
+  tags: [php, configure]
+
+
+
+# Set maximum size of uploaded file
+# Note that it can't be lower than post_max_size in order to work properly
+#
+- name: Configure maximum size of uploaded file
+  lineinfile:
+    dest: "{{ php_ini_file_path }}"
+    line: "upload_max_filesize = {{ php_upload_max_filesize }}"
+    state: present
+    regexp: '^;?upload_max_filesize'
+    insertafter: "[PHP]"
+  notify: restart php-fpm
+  tags: [php, configure]
+
+
+
+# Set opening external files
+# file_get_contents can open external files. Due to security issues it should be disabled
+# However if you are using Composer, leave it enabled and disable it in FPM pool
+#
+- name: Configure opening external files
+  lineinfile:
+    dest: "{{ php_ini_file_path }}"
+    line: "allow_url_fopen = {{ php_allow_url_fopen }}"
+    state: present
+    regexp: '^;?allow_url_fopen'
+    insertafter: "[PHP]"
+  notify: restart php-fpm
+  tags: [php, configure]
+
+
+
+# Set system Date
+# Highly recommended is to use UTC instead of region/timezone
+#
+- name: Configure date time
+  lineinfile:
+    dest: "{{ php_ini_file_path }}"
+    line: "date.timezone = {{ php_date_timezone }}"
+    state: present
+    regexp: '^;?date\.timezone'
+    insertafter: "[Date]"
+  notify: restart php-fpm
+  tags: [php, configure]
+
+
+
+# Set path to MySQL socket in order to get connection to MySQL
+# Socket is set both for PDO and MySQLi (used by WordPress)
+#
+- name: Configure MySQL socket for PDO
+  lineinfile:
+    dest: "{{ php_ini_file_path }}"
+    line: "pdo_mysql.default_socket = {{ php_mysql_socket }}"
+    state: present
+    regexp: '^;?pdo_mysql\.default_socket'
+    insertafter: "[Pdo_mysql]"
+  notify: restart php-fpm
+  tags: [php, configure]
+
+- name: Configure MySQL socket for MySQLi
+  lineinfile:
+    dest: "{{ php_ini_file_path }}"
+    line: "mysqli.default_socket = {{ php_mysql_socket }}"
+    state: present
+    regexp: '^;?mysqli\.default_socket'
+    insertafter: "[MySQLi]"
+  notify: restart php-fpm
+  tags: [php, configure]

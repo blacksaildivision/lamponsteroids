@@ -1,0 +1,170 @@
+####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
+
+# Should this role use install tasks to install desired version of PHP?
+php_manage_installation: yes
+
+# Should this role use configure tasks to configure php.ini?
+php_manage_configuration: yes
+
+# Should this role use fpm tasks to configure PHP-FPM and setup FPM Pools?
+php_manage_fpm: yes
+
+# Should this role use extensions tasks to install PECL extensions?
+php_manage_extensions: yes
+
+# Should this role use composer tasks to install composer?
+php_manage_composer: yes
+
+
+
+
+
+####### INSTALL TASKS CONFIGURATION #######
+
+# Version of PHP to install
+php_version: "7.1.0"
+
+# Location for PHP installation
+php_install_path: /usr/local/php
+
+# Force install (skip all conditions)
+php_force_install: no
+
+# Location for PHP sources
+php_sources_location: /usr/src
+
+# User that should compile PHP
+php_build_user: developer
+
+# Group of the user that should compile PHP
+php_build_group: developer
+
+# List of configuration options
+php_configure_options:
+ - "--prefix={{ php_install_path }}"
+ - --enable-fpm
+ - --disable-short-tags
+ - --with-openssl
+ - --with-pcre-regex
+ - --with-pcre-jit
+ - --with-zlib
+ - --enable-bcmath
+ - --with-bz2
+ - --enable-calendar
+ - --with-curl
+ - --enable-exif
+ - --with-gd
+ - --enable-gd-native-ttf
+ - --enable-intl
+ - --enable-mbstring
+ - --with-mcrypt
+ - --with-mysqli
+ - --enable-pcntl
+ - --with-pdo-mysql
+ - --enable-soap
+ - --enable-sockets
+ - --with-xmlrpc
+ - --enable-zip
+
+# Should this role delete downloaded and uncompressed files after installation?
+php_cleanup_after_install: yes
+
+
+
+
+
+####### CONFIGURE TASKS CONFIGURATION #######
+
+# Path to php.ini file
+php_ini_file_path: "{{ php_install_path }}/lib/php.ini"
+
+# Should short open tags be enabled ("On") or disabled ("Off")
+php_short_open_tag: "Off"
+
+# Should php version be present in headers?
+php_expose_php: "Off"
+
+# Maximum execution time for PHP scripts
+php_max_execution_time: 30
+
+# Maximum input time for PHP requests
+php_max_input_time: 60
+
+# Maximum memory limit for PHP scripts
+php_memory_limit: 128M
+
+# Level of error reporting
+php_error_reporting: E_ALL
+
+# Configure displaying errors
+php_display_errors: "Off"
+
+# Configure displaying startup errors
+php_display_startup_errors: "Off"
+
+# Should errors be logged or not?
+php_log_errors: "On"
+
+# Maximum size of POST data
+php_post_max_size: 8M
+
+# Maximum size of uploaded data
+php_upload_max_filesize: 2M
+
+# Allow opening files by url
+php_allow_url_fopen: "On"
+
+# Configure PHP Date Timezone
+php_date_timezone: UTC
+
+# Configure MySQL socket path
+php_mysql_socket: /var/lib/mysql/mysql.sock
+
+
+
+
+
+####### FPM TASKS CONFIGURATION #######
+
+# Path to PHP-FPM configuration
+php_fpm_conf_file_path: "{{ php_install_path }}/etc/php-fpm.conf"
+
+# Pid location for PHP-FPM
+php_pid_location: run/php-fpm.pid
+
+# Pools for PHP-FPM
+php_fpm_pools:
+ - {
+  name: www,
+  user: developer,
+  group: www,
+  port: 9000,
+  process_manager: {
+    pm: dynamic,
+    max_children: 5,
+    start_servers: 2,
+    min_spare_servers: 1,
+    max_spare_servers: 3
+  },
+  slow_log: "var/log/$pool.log.slow",
+  slow_log_timeout: 30s,
+  php_admin_flags: [
+    { key: log_errors, value: "On" }
+  ],
+  php_admin_values: [
+      { key: error_log, value: /var/log/fpm-php.www.log },
+      { key: open_basedir, value: /var },
+      { key: disable_functions, value: "exec,passthru,shell_exec,system" }
+    ]
+ }
+
+
+
+
+
+####### EXTENSION TASKS CONFIGURATION #######
+
+# List of PECL extensions that should be installed
+php_extensions:
+  - mongodb
+  - redis

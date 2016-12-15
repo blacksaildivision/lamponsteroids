@@ -1,0 +1,22 @@
+# Install PECL extensions
+#
+- name: Install PECL extensions
+  command: "{{ php_install_path }}/bin/pecl upgrade {{ item }}"
+  with_items: "{{ php_extensions }}"
+  register: php_extensions_upgrade
+  changed_when: "php_extensions_upgrade.stdout != 'Nothing to upgrade'"
+  tags: [php, extensions]
+
+
+
+# Update PHP with installed extensions
+#
+- name: Enable installed PECL extensions
+  lineinfile:
+    dest: "{{ php_ini_file_path }}"
+    line: "extension = {{ item }}.so"
+    state: present
+    insertafter: "[PHP]"
+  with_items: "{{ php_extensions }}"
+  notify: restart php-fpm
+  tags: [php, extensions]

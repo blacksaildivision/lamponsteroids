@@ -1,0 +1,137 @@
+####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
+
+# Should this role use install tasks for compiling Apache httpd?
+httpd_manage_installation: yes
+
+# Should this role use configure tasks for configuring Apache httpd?
+httpd_manage_configuration: yes
+
+# Should this role use virtualhosts tasks for setting up virtualhosts?
+httpd_manage_virtualhosts: yes
+
+
+
+
+####### INSTALL TASKS CONFIGURATION #######
+
+# Version of Apache httpd that should be present in the system
+httpd_version: "2.4.23"
+
+# Version of APR library required for compiling Apache httpd
+httpd_apr_version: "1.5.2"
+
+# Version fo APR-util requried for compiling Apache httpd
+httpd_apr_util_version: "1.5.4"
+
+# Location of files for Apache httpd sources
+httpd_sources_location: /usr/src
+
+# User that will build httpd. Please never use root account for compiling software. It can lead to serious security issues
+httpd_build_user: developer
+
+# Group of the build user.
+httpd_build_group: developer
+
+# Path where Apache httpd will be installed. NO trailing slash at the end!
+httpd_install_path: /usr/local/apache2
+
+# List of configuration options for Apache httpd. APR and APR-Util paths are added automatically, you don't need to include them here.
+httpd_configure_options:
+  - --enable-ssl
+  - --enable-so
+  - --with-mpm=event
+  - --with-included-apr
+  - "--prefix={{ httpd_install_path }}"
+
+# Remove downloaded sources after installation
+httpd_cleanup_after_install: yes
+
+
+
+
+
+####### CONFIGURE TASKS CONFIGURATION #######
+
+# User for Apache httpd daemon(s)
+httpd_user: httpd
+
+# Group for Apache httpd daemon(s)
+httpd_group: httpd
+
+# Apache httpd config file
+httpd_config_file: "{{ httpd_install_path }}/conf/httpd.conf"
+
+# Apache httpd server name
+httpd_server_name: localhost
+
+# Apache httpd port
+httpd_port: 80
+
+# Apache modules
+# Modules disabled by default: authn_dbm authn_anon authn_dbd authn_socache authz_dbm authz_owner auth_form auth_digest allowmethods file_cache cache cache_disk cache_socache socache_shmcb socache_dbm socache_memcache watchdog  macro dbd dumpio buffer ratelimit ext_filter request include substitute sed deflate log_debug logio expires unique_id remoteip proxy proxy_connect proxy_ftp proxy_http proxy_fcgi proxy_scgi proxy_wstunnel proxy_ajp proxy_balancer proxy_express proxy_hcheck session session_cookie session_dbd slotmem_shm ssl lbmethod_byrequests lbmethod_bytraffic lbmethod_bybusyness lbmethod_heartbeat dav info cgid dav_fs vhost_alias negotiation actions speling userdir rewrite
+# Modules enabled by default: authn_file authn_core authz_host authz_groupfile authz_user authz_core access_compat auth_basic reqtimeout filter mime log_config env headers setenvif version unixd status autoindex dir alias
+httpd_active_modules:
+ - access_compat
+ - alias
+ - authz_core
+ - dir
+ - log_config
+ - mime
+ - proxy
+ - proxy_fcgi
+ - rewrite
+ - unixd
+
+# DirectoryIndex - which file should be loaded by default
+httpd_directory_index: index.php index.html
+
+# Server tokens mode available in response headers
+httpd_server_tokens: Prod
+
+# Server signature in footer of Apache files
+httpd_server_signature: "off"
+
+# ETag mode for files
+httpd_file_etag: none
+
+# MPM configuration
+httpd_mpm_config:
+  - { key: "StartServers", value: 5 }
+  - { key: "MinSpareThreads", value: 75 }
+  - { key: "MaxSpareThreads", value: 250 }
+  - { key: "ThreadsPerChild", value: 25 }
+  - { key: "MaxRequestWorkers", value: 400 }
+  - { key: "MaxConnectionsPerChild", value: 0 }
+
+
+
+
+
+####### VIRTUALHOSTS TASKS CONFIGURATION #######
+
+# Root directory for hosting all VirtualHosts
+httpd_websites_directory: /var/www
+
+# List of virtualhosts that should be enabled.
+# Here is full entry with all available options"
+# - {
+#  server_name: your.domain.here # mandatory field
+#  server_alias: optional.domain.alias.here # optional field
+#  directory_owner: existing system user # mandatory field
+#  directory_group: existing group # mandatory field
+#  subdirectory: path to subdirectory. By default DocumentDirectory is set to htdocs. # optinal field
+#  extra_config: [] list of extra lines to be included in VirtualHost file # optional field
+#  php: { # optinal field
+#    port: port number for PHP-FPM daemon
+#  },
+#  redirect: "http(s)://redirect.domain.com" # Optional parameter. It will redirect everything to different domain. Protocol is required, trailing slash must be omitted.
+#  logs: no # Turn off access and error log. Default is set to yes, it means that both access and error log will be active
+#  htdocs: no # Turn off crating directory for htdocs. Default is set to yes, which means that directory will be created
+# }
+httpd_virtualhosts:
+ - {
+  server_name: testtest.com,
+  server_alias: dev.testtest.com,
+  directory_owner: "{{ httpd_user }}",
+  directory_group: "{{ httpd_group }}"
+ }

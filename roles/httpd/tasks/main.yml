@@ -1,0 +1,67 @@
+# Check if Apache HTTPD is installed or not and if it should be updated or not
+# Setting PATH is required, because sometimes Ansible doesn't use /etc/profile.d data;/
+#
+- name: Check if Apache httpd is installed
+  command: httpd -v warn=no
+  register: httpd_is_installed_test
+  ignore_errors: yes
+  changed_when: false
+  environment:
+    PATH: "{{ ansible_env.PATH }}:{{ httpd_install_path }}/bin"
+  tags: [httpd]
+
+- set_fact:
+    httpd_is_installed: true
+  when: httpd_is_installed_test.rc != 2
+  tags: [httpd]
+
+- set_fact:
+    httpd_is_installed: false
+    httpd_install_new_version: true
+  when: httpd_is_installed_test.rc == 2
+  tags: [httpd]
+
+- set_fact:
+    httpd_install_new_version: true
+  when: ( httpd_is_installed == true ) and ( httpd_is_installed_test.stdout_lines[0] | regex_replace('[^0-9.]','') != httpd_version )
+  tags: [httpd]
+
+- set_fact:
+    httpd_install_new_version: false
+  when: ( httpd_is_installed == true ) and ( httpd_is_installed_test.stdout_lines[0] | regex_replace('[^0-9.]','') == httpd_version )
+  tags: [httpd]
+
+
+
+# Install/Update Apache httpd to desired version
+# These tasks will be executed when
+#  1. Apache httpd is not installed
+#  2. Apache httpd is installed but not in desired version
+#
+- include: install.yml
+  when: "httpd_install_new_version == true and httpd_manage_installation == true"
+
+
+
+# Configure Apache httpd
+#
+- include: configure.yml
+  when: "httpd_manage_configuration == true"
+
+
+
+# Configure Apache httpd VirtualHosts
+#
+- include: virtualhosts.yml
+  when: "httpd_manage_virtualhosts == true"
+
+
+
+# Make sure that Apache httpd service is started and enabled on boot
+#
+- name: Start and enable Apache httpd service
+  service:
+    name: httpd
+    state: started
+    enabled: yes
+  tags: [httpd, healthcheck]

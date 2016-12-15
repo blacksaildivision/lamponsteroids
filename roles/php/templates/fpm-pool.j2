@@ -1,0 +1,28 @@
+[{{ item.name }}]
+
+user = {{ item.user }}
+group = {{ item.group }}
+
+listen = 127.0.0.1:{{ item.port }}
+
+pm = {{ item.process_manager.pm }}
+pm.max_children = {{ item.process_manager.max_children }}
+pm.start_servers = {{ item.process_manager.start_servers }}
+pm.min_spare_servers = {{ item.process_manager.min_spare_servers }}
+pm.max_spare_servers = {{ item.process_manager.max_spare_servers }}
+
+slowlog = {{ item.slow_log }}
+request_slowlog_timeout = {{ item.slow_log_timeout }}
+catch_workers_output = yes
+
+{% if item.php_admin_flags is defined %}
+{% for config in item.php_admin_flags %}
+  php_flag[{{ config.key }}] = {{ config.value }}
+{% endfor %}
+{% endif %}
+
+{% if item.php_admin_values is defined %}
+{% for config in item.php_admin_values %}
+  php_admin_value[{{ config.key }}] = {{ config.value }}
+{% endfor %}
+{% endif %}

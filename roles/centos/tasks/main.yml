@@ -29,6 +29,14 @@
 - include: ssh.yml
   when: "centos_manage_ssh == true"
 
+
+
 # Manage iptables
 - include: iptables.yml
   when: "centos_manage_iptables == true"
+
+
+
+# Disable Transparent Huge Pages
+- include: thp.yml
+  when: "centos_disable_thp == true"
