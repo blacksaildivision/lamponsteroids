@@ -14,9 +14,24 @@
 
 # Make sure that script is stated and will start on boot
 #
+- name: Check the status of current THP
+  shell: cat /sys/kernel/mm/transparent_hugepage/enabled | grep "\[never\]"
+  changed_when: false
+  failed_when: false
+  register: centos_thp_enabled_status
+  tags: [centos, thp]
+
+- name: Check the status of current defrag THP
+  shell: cat /sys/kernel/mm/transparent_hugepage/defrag | grep "\[never\]"
+  changed_when: false
+  failed_when: false
+  register: centos_thp_defrag_status
+  tags: [centos, thp]
+
 - name: Start and enable script for disabling THP
   service:
     name: disable-thp
     state: started
     enabled: yes
+  changed_when: "centos_thp_enabled_status.stdout == '' or centos_thp_defrag_status.stdout == ''"
   tags: [centos, thp]
