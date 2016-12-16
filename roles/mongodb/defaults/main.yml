@@ -1,1 +1,9 @@
-mongodb_version: 3.4.0
+mongodb_version: "3.4.0"
+
+mongodb_manage_installation: yes
+
+mongodb_manage_configuration: yes
+
+mongodb_config_flie: /etc/mongod.conf
+
+mongod_pid_directory: /var/run/mongodb

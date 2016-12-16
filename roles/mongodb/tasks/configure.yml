@@ -1,0 +1,10 @@
+# Set correct directory for PID file
+#
+- name: Configure PID file directory
+  lineinfile:
+    dest: "{{ mongodb_config_flie }}"
+    line: "  pidFilePath: {{ mongod_pid_directory }}/mongod.pid"
+    state: present
+    regexp: '^[ \t]+pidFilePath'
+  notify: restart mongod
+  tags: [mongodb, configure]

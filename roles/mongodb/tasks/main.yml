@@ -25,7 +25,7 @@
 
 - set_fact:
     mongodb_install_new_version: false
-  when: ( mongodb_is_installed == true ) and ( mongodb_is_installed_test.stdout_lines[0] | replace('db version v ','') == mongodb_version )
+  when: ( mongodb_is_installed == true ) and ( mongodb_is_installed_test.stdout_lines[0] | replace('db version v','') == mongodb_version )
   tags: [mongodb]
 
 
@@ -36,7 +36,14 @@
 #  2. MongoDB is installed but not in desired version
 #
 - include: install.yml
-  when: "mongodb_is_installed == false"
+  when: "mongodb_install_new_version == true and mongodb_manage_installation == true"
+
+
+
+# Configure MongoDB
+#
+- include: configure.yml
+  when: "mongodb_manage_configuration == true"
 
 
 
