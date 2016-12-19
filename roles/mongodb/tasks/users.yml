@@ -56,3 +56,20 @@
     state: restarted
   when: mongodb_admin_current_password_test|failed
   tags: [mongodb, users]
+
+
+
+# Create databases with users
+# Each database should have separate user
+#
+- name: Create databases and users
+  mongodb_user:
+    database: "{{ item.database }}"
+    login_user: admin
+    login_password: "{{ mongodb_admin_password }}"
+    name: "{{ item.user }}"
+    password: "{{ item.password }}"
+    roles: "{{ item.roles }}"
+    update_password: on_create
+  with_items: "{{ mongodb_databases }}"
+  tags: [mongodb, users]

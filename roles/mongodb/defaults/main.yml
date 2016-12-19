@@ -13,3 +13,11 @@ mongodb_pid_directory: /var/lib/mongo
 mongodb_authorization: enabled
 
 mongodb_admin_password: "alamakota"
+
+mongodb_databases:
+ - {
+    user: example,
+    password: example,
+    database: example,
+    roles: "readWrite,dbAdmin"
+ }
