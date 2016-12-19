@@ -6,4 +6,8 @@ mongodb_manage_configuration: yes
 
 mongodb_config_flie: /etc/mongod.conf
 
-mongod_pid_directory: /var/run/mongodb
+mongodb_process_fork: "false"
+
+mongodb_pid_directory: /var/lib/mongo
+
+mongodb_authorization: enabled

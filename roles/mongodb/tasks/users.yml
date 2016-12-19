@@ -1,0 +1,8 @@
+
+- name: Create database admin
+  mongodb_user:
+    database: admin
+    name: admin2
+    password: 12345
+    state: present
+  tags: [mongodb]

@@ -1,10 +1,51 @@
+# Configure forking
+#
+- name: Configure forking
+  lineinfile:
+    dest: "{{ mongodb_config_flie }}"
+    line: "  fork: {{ mongodb_process_fork }}"
+    state: present
+    regexp: '^[ \t]+fork'
+    insertafter: "processManagement:"
+  notify: restart mongod
+  tags: [mongodb, configure]
+
 # Set correct directory for PID file
+# Make sure that PID file location is write-able.
+# On CentOS7 sometimes it happens that after reboot directory that should contain PID is missing.
 #
 - name: Configure PID file directory
   lineinfile:
     dest: "{{ mongodb_config_flie }}"
-    line: "  pidFilePath: {{ mongod_pid_directory }}/mongod.pid"
+    line: "  pidFilePath: {{ mongodb_pid_directory }}/mongod.pid"
     state: present
     regexp: '^[ \t]+pidFilePath'
+  notify: restart mongod
+  tags: [mongodb, configure]
+
+
+
+# Make sure that security section is not commented out
+#
+- name: Enable security section
+  lineinfile:
+    dest: "{{ mongodb_config_flie }}"
+    line: "security:"
+    state: present
+    regexp: '^#?security'
+  notify: restart mongod
+  tags: [mongodb, configure]
+
+
+
+# Configure authentication
+#
+- name: Configure PID file directory
+  lineinfile:
+    dest: "{{ mongodb_config_flie }}"
+    line: "  authorization: {{ mongodb_authorization }}"
+    state: present
+    regexp: '^[ \t]+authorization'
+    insertafter: "security:"
   notify: restart mongod
   tags: [mongodb, configure]

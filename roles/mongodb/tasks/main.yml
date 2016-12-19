@@ -1,3 +1,32 @@
+# Make sure that all requirements for this role are installed
+# libselinux-python is required for templates
+# epel-release provides pip command
+# pip provides pymongo
+# pymongo will help creating users and roles with MongoDB (it's required package for Ansible module mongodb_user
+#
+- name: Install required tools for Ansible
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - libselinux-python
+    - epel-release
+  tags: [mongodb]
+
+- name: Install pip command
+  yum:
+    name: python-pip
+    state: latest
+  tags: [mongodb]
+
+- name: Install PyMongo
+  pip:
+    name: pymongo
+    state: latest
+  tags: [mongodb]
+
+
+
 # Check if MongoDB is installed or not and if it should be updated or not
 #
 - name: Check if MongoDB is installed
@@ -55,3 +84,5 @@
     state: started
     enabled: yes
   tags: [mongodb, healthcheck]
+
+- include: users.yml

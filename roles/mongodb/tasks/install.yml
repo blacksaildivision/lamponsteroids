@@ -20,17 +20,3 @@
     name: "mongodb-org-{{ mongodb_version }}"
     state: latest
   tags: [mongodb, install]
-
-
-
-# Make sure that PID file location is write-able.
-# On CentOS7 sometimes it happens that after reboot directory that should contain PID is missing.
-#
-- name: Make sure that PID directory is created
-  file:
-    path: "{{ mongod_pid_directory }}"
-    state: directory
-    mode: 0755
-    owner: mongod
-    group: mongod
-  tags: [mongodb, install]
