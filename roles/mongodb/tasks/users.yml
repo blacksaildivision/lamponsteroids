@@ -1,8 +1,58 @@
-
-- name: Create database admin
+# Set admin password if current one doesn't work
+# Keep in mind that this operation requires turning authentication off and restarting mongod service twice
+#
+- name: Check if current admin password works
   mongodb_user:
     database: admin
-    name: admin2
-    password: 12345
+    login_user: admin
+    login_password: "{{ mongodb_admin_password }}"
+    name: admin
+    password: "{{ mongodb_admin_password }}"
+    roles: "readWriteAnyDatabase,userAdminAnyDatabase,dbAdminAnyDatabase"
+    update_password: on_create
+  ignore_errors: yes
+  register: mongodb_admin_current_password_test
+  tags: [mongodb, users]
+
+- name: Turn off authentication for reseting admin password
+  lineinfile:
+    dest: "{{ mongodb_config_flie }}"
+    line: "  authorization: disabled"
     state: present
-  tags: [mongodb]
+    regexp: '^[ \t]+authorization'
+    insertafter: "security:"
+  when: mongodb_admin_current_password_test|failed
+  tags: [mongodb, users]
+
+- name: Restart mongod service for applying disabled authorization
+  service:
+    name: mongod
+    state: restarted
+  when: mongodb_admin_current_password_test|failed
+  tags: [mongodb, users]
+
+- name: Set new password for admin
+  mongodb_user:
+    database: admin
+    name: admin
+    password: "{{ mongodb_admin_password }}"
+    roles: "readWriteAnyDatabase,userAdminAnyDatabase,dbAdminAnyDatabase"
+  when: mongodb_admin_current_password_test|failed
+  tags: [mongodb, users]
+
+- name: Revert changes in authorization config
+  lineinfile:
+    dest: "{{ mongodb_config_flie }}"
+    line: "  authorization: {{ mongodb_authorization }}"
+    state: present
+    regexp: '^[ \t]+authorization'
+    insertafter: "security:"
+  when: mongodb_admin_current_password_test|failed
+  tags: [mongodb, users]
+
+- name: Restart mongod service to apply authorization revert
+  service:
+    name: mongod
+    state: restarted
+  when: mongodb_admin_current_password_test|failed
+  tags: [mongodb, users]

@@ -11,3 +11,5 @@ mongodb_process_fork: "false"
 mongodb_pid_directory: /var/lib/mongo
 
 mongodb_authorization: enabled
+
+mongodb_admin_password: "alamakota"
