@@ -10,6 +10,8 @@
   notify: restart mongod
   tags: [mongodb, configure]
 
+
+
 # Set correct directory for PID file
 # Make sure that PID file location is write-able.
 # On CentOS7 sometimes it happens that after reboot directory that should contain PID is missing.

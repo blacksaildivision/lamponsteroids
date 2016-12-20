@@ -85,4 +85,9 @@
     enabled: yes
   tags: [mongodb, healthcheck]
 
+
+
+# Setup admin password and users
+#
 - include: users.yml
+  when: "mongodb_manage_users == true"
