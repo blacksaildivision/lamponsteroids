@@ -15,6 +15,7 @@
     - ../roles/mysql
     - ../roles/php
     - ../roles/datadog
+    - ../roles/mongodb
 
   vars_files:
     - ../vars/example-vars.yml

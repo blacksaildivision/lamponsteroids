@@ -1,0 +1,52 @@
+####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
+
+# Should this role use install tasks for installing MongoDB?
+mongodb_manage_installation: yes
+
+# Should this role use configure tasks for configuring /etc/mongod.conf?
+mongodb_manage_configuration: yes
+
+# Should this role manage admins and users?
+mongodb_manage_users: yes
+
+
+
+
+
+####### INSTALL TASKS CONFIGURATION #######
+
+# Version of MongoDB
+mongodb_version: "3.4.0"
+
+
+
+
+####### CONFIGURE TASKS CONFIGURATION #######
+
+# Path to MongoDB main config file
+mongodb_config_flie: /etc/mongod.conf
+
+# Should MongoDb use forking? (Values: "true" | "false" )
+mongodb_process_fork: "false"
+
+# MongoDb PID directory
+mongodb_pid_directory: /var/lib/mongo
+
+# Should user authorization be turned on or off? (Values: enabled | disabled )
+mongodb_authorization: enabled
+
+
+
+####### USERS TASKS CONFIGURATION #######
+
+# MongoDB admin user password
+mongodb_admin_password: "S/6o5Aea5o.JwrLloAWrxdrBUDvV31VItl2Wd"
+
+# List of databases with associated users
+mongodb_databases:
+ - {
+    user: example,
+    password: O14inEDG948dEEg2zcREZB,
+    database: example,
+    roles: "readWrite,dbAdmin"
+ }

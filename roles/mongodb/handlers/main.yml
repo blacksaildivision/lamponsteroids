@@ -1,0 +1,7 @@
+# Restart MongoDB mongod service
+# This handler is executed on changes in MongoDB configuration file
+#
+- name: restart mongod
+  service:
+    name: mongod
+    state: restarted
