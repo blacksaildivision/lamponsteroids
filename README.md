@@ -62,6 +62,8 @@ It also take cares of groups and users. Enable sudo. Configure secure SSH. Set u
 
 **php** - Install and configure PHP, PHP-FPM, PHP Pecl extensions and Composer
 
+**mongodb** - Install and configure MongoDB with authentication
+
 Changelog
 ---------
 
