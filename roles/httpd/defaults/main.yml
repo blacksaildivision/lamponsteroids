@@ -15,7 +15,7 @@ httpd_manage_virtualhosts: yes
 ####### INSTALL TASKS CONFIGURATION #######
 
 # Version of Apache httpd that should be present in the system
-httpd_version: "2.4.23"
+httpd_version: "2.4.25"
 
 # Version of APR library required for compiling Apache httpd
 httpd_apr_version: "1.5.2"
@@ -75,11 +75,14 @@ httpd_active_modules:
  - alias
  - authz_core
  - dir
+ - deflate
+ - filter
  - log_config
  - mime
  - proxy
  - proxy_fcgi
  - rewrite
+ - setenvif
  - unixd
 
 # DirectoryIndex - which file should be loaded by default
@@ -102,6 +105,21 @@ httpd_mpm_config:
   - { key: "ThreadsPerChild", value: 25 }
   - { key: "MaxRequestWorkers", value: 400 }
   - { key: "MaxConnectionsPerChild", value: 0 }
+
+# Enable GZIP compression
+httpd_enable_gzip_compression: yes
+
+# Types of files that should have GZIP compression enabled
+httpd_gzip_mime_types:
+ - application/ecmascript
+ - application/javascript
+ - application/rss+xml
+ - application/xml
+ - application/x-javascript
+ - text/css
+ - text/html
+ - text/plain
+ - text/xml
 
 
 

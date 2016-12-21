@@ -1,0 +1,7 @@
+<IfModule mod_deflate.c>
+  <IfModule mod_filter.c>
+  {% for mime in httpd_gzip_mime_types %}
+    AddOutputFilterByType DEFLATE {{ mime }}
+  {% endfor %}
+  </IfModule>
+</IfModule>
