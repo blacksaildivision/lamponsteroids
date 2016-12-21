@@ -106,7 +106,19 @@ httpd_mpm_config:
   - { key: "MaxConnectionsPerChild", value: 0 }
 
 # Enable GZIP compression
-httpd_enable_gzip_compression: no
+httpd_enable_gzip_compression: yes
+
+# Types of files that should have GZIP compression enabled
+httpd_gzip_mime_types:
+ - application/ecmascript
+ - application/javascript
+ - application/rss+xml
+ - application/xml
+ - application/x-javascript
+ - text/css
+ - text/html
+ - text/plain
+ - text/xml
 
 
 

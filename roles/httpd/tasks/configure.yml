@@ -197,7 +197,7 @@
     group: root
     mode: 0644
   when: "httpd_enable_gzip_compression == true"
-  tags: [httpd, configure]
+  tags: [httpd, configure, t2]
 
 - name: Make sure that gzip compression is enabled
   lineinfile:
