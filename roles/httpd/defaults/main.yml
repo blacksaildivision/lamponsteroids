@@ -82,6 +82,7 @@ httpd_active_modules:
  - proxy
  - proxy_fcgi
  - rewrite
+ - setenvif
  - unixd
 
 # DirectoryIndex - which file should be loaded by default
