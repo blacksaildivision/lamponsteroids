@@ -75,6 +75,8 @@ httpd_active_modules:
  - alias
  - authz_core
  - dir
+ - deflate
+ - filter
  - log_config
  - mime
  - proxy
@@ -102,6 +104,9 @@ httpd_mpm_config:
   - { key: "ThreadsPerChild", value: 25 }
   - { key: "MaxRequestWorkers", value: 400 }
   - { key: "MaxConnectionsPerChild", value: 0 }
+
+# Enable GZIP compression
+httpd_enable_gzip_compression: no
 
 
 

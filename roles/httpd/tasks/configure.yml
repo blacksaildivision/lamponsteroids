@@ -182,3 +182,39 @@
   notify: restart httpd
   with_items: "{{ httpd_mpm_config }}"
   tags: [httpd, configure]
+
+
+
+# Configure mod_deflate
+# Mod_deflate is handling GZIP compression of static files. It's highly recommended to turn that ON.
+# It will make files much more smaller
+#
+- name: Add separate config file with deflate configuration
+  template:
+    src: httpd-deflate.conf.j2
+    dest: "{{ httpd_install_path }}/conf/extra/httpd-deflate.conf"
+    owner: root
+    group: root
+    mode: 0644
+  when: "httpd_enable_gzip_compression == true"
+  tags: [httpd, configure]
+
+- name: Make sure that gzip compression is enabled
+  lineinfile:
+    dest: "{{ httpd_config_file }}"
+    line: "Include conf/extra/httpd-deflate.conf"
+    state: present
+    regexp: '^#?Include\ conf\/extra/\httpd-deflate'
+  notify: restart httpd
+  when: "httpd_enable_gzip_compression == true"
+  tags: [httpd, configure]
+
+- name: Make sure that gzip compression is disabled
+  lineinfile:
+    dest: "{{ httpd_config_file }}"
+    line: "#Include conf/extra/httpd-deflate.conf"
+    state: present
+    regexp: '^#?Include\ conf\/extra/\httpd-deflate'
+  notify: restart httpd
+  when: "httpd_enable_gzip_compression == false"
+  tags: [httpd, configure]
