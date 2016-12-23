@@ -1,3 +1,13 @@
+# Make sure that libselinux-python is installed (required for Ansible templates)
+#
+- name: Make sure that libselinux-python is installed
+  yum:
+    name: libselinux-python
+    state: latest
+  tags: [httpd]
+
+
+
 # Check if Apache HTTPD is installed or not and if it should be updated or not
 # Setting PATH is required, because sometimes Ansible doesn't use /etc/profile.d data;/
 #
