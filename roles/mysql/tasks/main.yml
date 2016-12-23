@@ -1,9 +1,13 @@
 # Make sure that MySQL-python libs is installed. Ansible rely on this package for mysql connections
+# Also libselinux-python is required for using templates
 #
 - name: Install MySQL-python for Ansible
   yum:
-    name: MySQL-python
+    name: "{{ item }}"
     state: latest
+  with_items:
+    - MySQL-python
+    - libselinux-python
   tags: [mysql]
 
 

@@ -1,3 +1,13 @@
+# Make sure that libselinux-python is installed (required for Ansible templates)
+#
+- name: Make sure that libselinux-python is installed
+  yum:
+    name: libselinux-python
+    state: latest
+  tags: [datadog]
+
+
+
 # Datadog comes with it's own repository. Add repo file to Yum here
 #
 - name: Make sure that DataDog repository is available
