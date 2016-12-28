@@ -64,6 +64,8 @@ It also take cares of groups and users. Enable sudo. Configure secure SSH. Set u
 
 **mongodb** - Install and configure MongoDB with authentication
 
+**letsencrypt** - Install Certbot and obtain certificates from Let's Encrypt
+
 Changelog
 ---------
 
