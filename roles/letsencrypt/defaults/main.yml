@@ -1,0 +1,15 @@
+# Domains for certificates to obtain
+letsencrypt_domains:
+ - {
+  webroot_path: /var/www/example.com,
+  domains: example.com,
+  email_address: admin@example.com
+ }
+
+letsencrypt_certbot_certonly_arguments:
+  - --agree-tos
+  - --quiet
+  - --keep-until-expiring
+  - --expand
+
+#sudo certbot certonly --webroot --webroot-path /var/html --domain mojagruzja.pl -m krystian.zwak@gmail.com --agree-tos --quiet --keep-until-expiring

@@ -1,0 +1,35 @@
+# Make sure that EPEL release is available.
+# It provides latest version of Certbot for obtaining certificates
+#
+- name: Install EPEL repository
+  yum:
+    name: epel-release
+    state: latest
+  tags: [letsencrypt]
+
+
+
+# Install Certbot for obtaining certificates
+#
+- name: Install Certbot
+  yum:
+    name: certbot # Dependencies: dialog pyOpenSSL python-cffi python-enum34 python-idna python-ipaddress python-ndg_httpsclientpython-parsedatetime python-ply python-psutil python-pycparser python-requests python-six python-urllib3 python-zope-component python-zope-event python-zope-interface python2-acme python2-certbot python2-configargparsepython2-cryptography python2-dialog python2-mock python2-pyasn1 python2-pyrfc3339 pytz
+    state: latest
+  tags: [letsencrypt]
+
+
+
+# Obtain certificates from Let's Encrypt
+#
+- name: Obtain certificates
+  command: "certbot certonly --webroot --webroot-path {{ item.webroot_path }} --domains {{ item.domains }} --email {{ item.email_address }} {{ letsencrypt_certbot_certonly_arguments | join(' ') }}"
+  args:
+    creates: "/etc/letsencrypt/live/{{ item.domains }}"
+  with_items: "{{ letsencrypt_domains }}"
+  tags: [letsencrypt, t2]
+#udo certbot certonly --webroot -w /var/html -d mojagruzja.pl -d www.mojagruzja.pl -m krystian.zwak@gmail.com --agree-tos --quiet --keep-until-expiring
+  #args:
+  #  chdir: "{{ httpd_sources_location }}/httpd-{{ httpd_version }}/srclib"
+  #  creates: "{{ httpd_sources_location }}/httpd-{{ httpd_version }}/srclib/apr"
+#  args:
+#    creates: "/etc/letsencrypt/"
