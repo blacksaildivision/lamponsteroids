@@ -21,7 +21,7 @@ mysql_install_mysqltuner: yes
 ####### INSTALL TASKS CONFIGURATION #######
 
 # MySQL version. Tested only on version 5.7.x. This role won't work for 5.6.* MySQL version
-mysql_version: "5.7.16"
+mysql_version: "5.7.17"
 
 
 
