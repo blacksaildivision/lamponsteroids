@@ -32,6 +32,7 @@ centos_yum_initial_package_list_path: /etc/yum/initial-packages-list
 
 # List of packages that should be removed from the server
 centos_yum_unnecessary_packages:
+ - btrfs-progs # leave it if you are using btrfs file system
  - gssproxy # leave it if you are using GSSAPI
  - libgudev1 # allow to connect to WiFi, not necessary on the server
  - mariadb-libs # leave it if you plan to use MariaDB instead of MySQL
@@ -44,21 +45,37 @@ centos_yum_unnecessary_packages:
 # List of core packages that should be updated to latest versions
 centos_yum_core_packages:
  - bash
+ - binutils
+ - ca-certificates
+ - centos-release
  - chkconfig
+ - coreutils
+ - cryptsetup-libs
+ - curl # dependencies: libcurl
  - dbus
  - dbus-libs # dependencies: dbus
  - dracut
+ - elfutils-libelf # dependencies: elfutils-libs
+ - expat
+ - filesystem
+ - glib2
  - glibc
  - glibc-common # dependencies: glibc
+ - gnupg2
  - kmod
  - kmod-libs
  - kpartx
  - krb5-libs
  - libblkid
+ - libgcrypt
  - libmount # dependencies: libblkid
+ - libffi
+ - libgcc
  - libuuid # dependencies: libblkid
+ - libstdc++
  - libssh2
  - libxml2
+ - lua
  - nspr
  - nss
  - nss-softokn
@@ -68,46 +85,88 @@ centos_yum_core_packages:
  - nss-util
  - openldap
  - openssl-libs
+ - pam
  - pcre
+ - pinentry
+ - procps-ng
  - python
  - python-libs # dependencies: python
+ - python-pycurl
+ - rpm # dependencies rpm-build-libs rpm-libs rpm-python
+ - setup
+ - shadow-utils
  - systemd
  - systemd-libs # dependencies: systemd
  - systemd-sysv # dependencies: systemd
  - util-linux # dependencies: libblkid
+ - tar
  - tzdata
+ - xz # dependencies: xz-libs
+ - yum # dependencies: python-urlgrabber
+ - yum-plugin-fastestmirror
+ - zlib
 
 # List of other packages that should be updated to latest versions
 centos_yum_other_packages:
+ - audit # Dependencies: audit-libs
  - authconfig # dependencies: openssl
  - bind-libs-lite
  - bind-license # dependencies: bind-libs-lite, dhclient, dracut-network, kexec-tools
+ - biosdevname
  - cronie
  - cronie-anacron # dependencies: cronie
  - crontabs # dependencies: cronie
  - device-mapper-persistent-data
  - dhclient # depenencies: bind-libs-lite
+ - dmidecode
  - dracut-network # dependencies: dracut, iproute, dhclient, bind-libs-lite
  - dracut-config-rescue # dependencies: dracut
+ - e2fsprogs # dependencies: e2fsprogs-libs libcom_err libss
  - epel-release
+ - ethtool
+ - file # dependencies: file-libs
+ - freetype
+ - grub2 # dependencies: grub2-tools
+ - grubby
+ - hwdata
  - iproute
+ - iprutils
+ - iputils
  - initscripts
+ - irqbalance
  - kbd # dependencies: iproute
  - kernel
  - kernel-tools
  - kernel-tools-libs # dependencies: kernel-tools
  - kexec-tools # dependencies: dhclient, bind-libs-lite
+ - libdrm
+ - libgomp
+ - logrotate
+ - lsscsi
  - lvm2 # dependencies: device-mapper-persistent-data
+ - make
  - microcode_ctl
+ - mozjs17
  - openssh # dependencies: openssh-clients, openssh-server
  - openssh-clients
  - openssh-server
  - openssl
+ - os-prober
+ - parted
+ - pciutils-libs
+ - plymouth # dependencies plymouth-core-libs
+ - plymouth-scripts
+ - polkit
  - python-perf
+ - rdma
+ - rsyslog
  - selinux-policy
  - selinux-policy-targeted # depenency of selinux-policy
- - sudo
+ - sudo # dependencies: vim-minimal
  - tuned # dependencies: python-perf
+ - vim-minimal
+ - virt-what
+ - yum-utils
 
 # List of additional tools that are missing from CentOS minimal installation but are super useful
 centos_yum_additional_tools:
