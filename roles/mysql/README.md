@@ -2,7 +2,7 @@ MySQL role
 ==========
 
 This role will install MySQL Community server on CentOS 7.
-MySQL will be installed in latest version (5.7.16). 
+MySQL will be installed in latest version (5.7.17). 
 
 What you should know?
 ---------------------

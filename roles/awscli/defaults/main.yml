@@ -1,6 +1,6 @@
 # List of users to give access to CLI:
 awscli_users:
-  - vagrant
+  - developer
 
 # AWS Access Key ID
 awscli_aws_access_key_id: AKIAI44QH8DHBEXAMPLE

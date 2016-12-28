@@ -15,6 +15,11 @@
 #
 - name: Install MySQL community server
   yum:
-    name: "mysql-community-server-{{ mysql_version }}" # Dependencies: mysql-community-libs mysql-community-libs-compat mysql-community-client mysql-community-common net-tools perl perl-Carp perl-Encode perl-Exporter perl-File-Path perl-File-Temp perl-Filter perl-Getopt-Long perl-HTTP-Tiny perl-PathTools perl-Pod-Escapes perl-Pod-Perldoc perl-Pod-Simple perl-Pod-Usage perl-Scalar-List-Utils perl-Socket perl-Storable perl-Text-ParseWords perl-Time-HiRes perl-Time-Local perl-constant perl-libs perl-macros perl-parent perl-podlators perl-threads perl-threads-shared
+    name: "{{ item }}"
     state: latest
+  with_items:
+    - "mysql-community-server-{{ mysql_version }}" # Dependencies: mysql-community-libs mysql-community-libs-compat mysql-community-client mysql-community-common net-tools perl perl-Carp perl-Encode perl-Exporter perl-File-Path perl-File-Temp perl-Filter perl-Getopt-Long perl-HTTP-Tiny perl-PathTools perl-Pod-Escapes perl-Pod-Perldoc perl-Pod-Simple perl-Pod-Usage perl-Scalar-List-Utils perl-Socket perl-Storable perl-Text-ParseWords perl-Time-HiRes perl-Time-Local perl-constant perl-libs perl-macros perl-parent perl-podlators perl-threads perl-threads-shared
+    - "mysql-community-client-{{ mysql_version }}"
+    - "mysql-community-libs-{{ mysql_version }}"
+    - "mysql-community-libs-compat-{{ mysql_version }}"
   tags: [mysql, install]

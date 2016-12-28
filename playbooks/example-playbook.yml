@@ -16,6 +16,7 @@
     - ../roles/php
     - ../roles/datadog
     - ../roles/mongodb
+    - ../roles/letsencrypt
 
   vars_files:
     - ../vars/example-vars.yml
