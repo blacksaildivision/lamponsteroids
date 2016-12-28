@@ -6,10 +6,9 @@ letsencrypt_domains:
   email_address: admin@example.com
  }
 
+# List of default arguments for certbot certonly command
 letsencrypt_certbot_certonly_arguments:
   - --agree-tos
   - --quiet
   - --keep-until-expiring
   - --expand
-
-#sudo certbot certonly --webroot --webroot-path /var/html --domain mojagruzja.pl -m krystian.zwak@gmail.com --agree-tos --quiet --keep-until-expiring

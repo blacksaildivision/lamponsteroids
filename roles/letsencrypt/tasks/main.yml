@@ -26,10 +26,17 @@
   args:
     creates: "/etc/letsencrypt/live/{{ item.domains }}"
   with_items: "{{ letsencrypt_domains }}"
-  tags: [letsencrypt, t2]
-#udo certbot certonly --webroot -w /var/html -d mojagruzja.pl -d www.mojagruzja.pl -m krystian.zwak@gmail.com --agree-tos --quiet --keep-until-expiring
-  #args:
-  #  chdir: "{{ httpd_sources_location }}/httpd-{{ httpd_version }}/srclib"
-  #  creates: "{{ httpd_sources_location }}/httpd-{{ httpd_version }}/srclib/apr"
-#  args:
-#    creates: "/etc/letsencrypt/"
+  tags: [letsencrypt]
+
+
+
+# Setup crontab for renewal process
+# Certbot will check the certificates and will renew them whenever it's possible
+#
+- name: Setup crontab for certificates renewal
+  cron:
+    name: certbot renew
+    minute: 1
+    hour: 1
+    job: "certbot renew --quiet"
+  tags: [letsencrypt]
