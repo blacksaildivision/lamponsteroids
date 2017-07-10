@@ -40,3 +40,9 @@
 # Disable Transparent Huge Pages
 - include: thp.yml
   when: "centos_disable_thp == true"
+
+
+
+# Manage logrotate scripts
+- include: logrotate.yml
+  when: "centos_manage_logrotate == true"

@@ -1,0 +1,7 @@
+# Make sure that logrotate is installed in latest version
+#
+- name: Install logrotate
+  yum:
+    name: logrotate
+    state: latest
+  tags: [centos, logrotate]

@@ -21,6 +21,9 @@ centos_manage_iptables: yes
 # Should this role disable Transparent Huge Pages? ( Should be set to yes on hosts with databaes like MySQL, Oracle, MariaDb, MongoDB etc)
 centos_disable_thp: yes
 
+# Should this role manage logrotate scripts?
+centos_manage_logrotate: yes
+
 
 
 
@@ -359,3 +362,10 @@ centos_iptables_incoming_tcp_ports:
 
 # Additional iptables rules (each rule is one line in firewall file)
 centos_iptables_extra_rules: []
+
+
+
+
+
+####### LOGROTATE TASKS CONFIGURATION #######
+centos_logrotate_scripts: []
