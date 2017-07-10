@@ -45,6 +45,7 @@ Included roles
 
 **centos** - Takes care of system settings. Configure yum, yum-cron, update and remove packages. 
 It also take cares of groups and users. Enable sudo. Configure secure SSH. Set up firewall based on iptables. Disable Transparent Huge Pages.
+You can setup logrotate scripts with this role as well.
 
 **ntp** - Takes care of system timezone and NTP server. It uses Chrony for using NTP.
 
