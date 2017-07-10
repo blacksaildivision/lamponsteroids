@@ -89,22 +89,11 @@
 
 
 
-# CentOS minimal installation sometimes is missing nice tools. We should install them on the server
-#
-- name: Install additional packages
-  yum:
-    name: "{{ item }}"
-    state: latest
-  with_items: "{{ centos_yum_additional_tools }}"
-  tags: [centos, yum]
-
-
-
 # Remove unused packages with autoremove
 # Package libselinux-python is required for Ansible templating and it should not be autoremoved
 #
 - name: Remove unused packages
-  shell: yum autoremove --exclude="libselinux-python" -y | grep "Erasing" | awk '{print $3}' warn=no
+  shell: yum --exclude="libselinux-python*" autoremove -y | grep "Erasing" | awk '{print $3}' warn=no
   register: centos_yum_autoremove
   changed_when: "centos_yum_autoremove.stdout != ''"
   environment:
@@ -119,6 +108,17 @@
 - debug:
     msg: "{{ centos_yum_autoremove.stdout_lines }}"
   when: "centos_yum_autoremove.stdout != ''"
+  tags: [centos, yum]
+
+
+
+# CentOS minimal installation sometimes is missing nice tools. We should install them on the server
+#
+- name: Install additional packages
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ centos_yum_additional_tools }}"
   tags: [centos, yum]
 
 

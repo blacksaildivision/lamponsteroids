@@ -21,6 +21,9 @@ centos_manage_iptables: yes
 # Should this role disable Transparent Huge Pages? ( Should be set to yes on hosts with databaes like MySQL, Oracle, MariaDb, MongoDB etc)
 centos_disable_thp: yes
 
+# Should this role manage logrotate scripts?
+centos_manage_logrotate: yes
+
 
 
 
@@ -58,6 +61,7 @@ centos_yum_core_packages:
  - elfutils-libelf # dependencies: elfutils-libs
  - expat
  - filesystem
+ - gawk
  - glib2
  - glibc
  - glibc-common # dependencies: glibc
@@ -74,6 +78,7 @@ centos_yum_core_packages:
  - libuuid # dependencies: libblkid
  - libstdc++
  - libssh2
+ - libtasn1
  - libxml2
  - lua
  - nspr
@@ -141,7 +146,8 @@ centos_yum_other_packages:
  - kexec-tools # dependencies: dhclient, bind-libs-lite
  - libdrm
  - libgomp
- - logrotate
+ - libnetfilter_conntrack # dependencies: dhclient dracut-network firewalld initscripts iproute iptables kbd kexec-tools plymout plymouth-scripts
+ - libpciaccess # dependencies: libdrm plymouth plymouth-scripts
  - lsscsi
  - lvm2 # dependencies: device-mapper-persistent-data
  - make
@@ -355,3 +361,31 @@ centos_iptables_incoming_tcp_ports:
 
 # Additional iptables rules (each rule is one line in firewall file)
 centos_iptables_extra_rules: []
+
+
+
+
+
+####### LOGROTATE TASKS CONFIGURATION #######
+# By default the list is empty, as there are no important directories that should be logrotated apart from scripts that are already installed by CentOS
+# Here is simple example how such list can look like:
+#   - name: atest
+#     path: /var/www/*/logs/*.log
+#     options:
+#       - rotate 30
+#       - daily
+#       - compress
+#       - delaycompress
+#       - sharedscripts
+#       - missingok
+#       - notifempty
+#
+#
+# Name is the name of the file
+# Path is path to directory/file that should be logrotated
+# Options are logrotate options for given path
+centos_logrotate_available_scripts: []
+
+# List of logrotate scripts that should be removed
+# Item should be name parameter from {{ centos_logrotate_available_scripts }}
+centos_logrotate_remove_scripts: []
