@@ -148,7 +148,6 @@ centos_yum_other_packages:
  - libgomp
  - libnetfilter_conntrack # dependencies: dhclient dracut-network firewalld initscripts iproute iptables kbd kexec-tools plymout plymouth-scripts
  - libpciaccess # dependencies: libdrm plymouth plymouth-scripts
- - logrotate
  - lsscsi
  - lvm2 # dependencies: device-mapper-persistent-data
  - make
@@ -368,4 +367,21 @@ centos_iptables_extra_rules: []
 
 
 ####### LOGROTATE TASKS CONFIGURATION #######
+# By default the list is empty, as there are no important directories that should be logrotated apart from scripts that are already installed by CentOS
+# Here is simple example how such list can look like:
+#   - name: atest
+#     path: /var/www/*/logs/*.log
+#     options:
+#       - rotate 30
+#       - daily
+#       - compress
+#       - delaycompress
+#       - sharedscripts
+#       - missingok
+#       - notifempty
+#
+#
+# Name is the name of the file
+# Path is path to directory/file that should be logrotated
+# Options are logrotate options for given path
 centos_logrotate_scripts: []
