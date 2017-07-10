@@ -58,6 +58,7 @@ centos_yum_core_packages:
  - elfutils-libelf # dependencies: elfutils-libs
  - expat
  - filesystem
+ - gawk
  - glib2
  - glibc
  - glibc-common # dependencies: glibc
@@ -74,6 +75,7 @@ centos_yum_core_packages:
  - libuuid # dependencies: libblkid
  - libstdc++
  - libssh2
+ - libtasn1
  - libxml2
  - lua
  - nspr
@@ -141,6 +143,8 @@ centos_yum_other_packages:
  - kexec-tools # dependencies: dhclient, bind-libs-lite
  - libdrm
  - libgomp
+ - libnetfilter_conntrack # dependencies: dhclient dracut-network firewalld initscripts iproute iptables kbd kexec-tools plymout plymouth-scripts
+ - libpciaccess # dependencies: libdrm plymouth plymouth-scripts
  - logrotate
  - lsscsi
  - lvm2 # dependencies: device-mapper-persistent-data
