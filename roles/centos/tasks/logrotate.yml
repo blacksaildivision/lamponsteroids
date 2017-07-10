@@ -18,6 +18,18 @@
     owner: root
     group: root
     mode: 0644
-  with_items: "{{ centos_logrotate_scripts }}"
-  when: centos_logrotate_scripts is defined
+  with_items: "{{ centos_logrotate_available_scripts }}"
+  when: centos_logrotate_available_scripts is defined
+  tags: [centos, logrotate]
+
+
+
+# Remove unused logrotate scripts
+#
+- name: Remove unused logrotate scripts
+  file:
+    path: "/etc/logrotate.d/{{ item }}"
+    state: absent
+  with_items: "{{ centos_logrotate_remove_scripts }}"
+  when: centos_logrotate_remove_scripts is defined
   tags: [centos, logrotate]

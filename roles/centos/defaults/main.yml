@@ -384,4 +384,8 @@ centos_iptables_extra_rules: []
 # Name is the name of the file
 # Path is path to directory/file that should be logrotated
 # Options are logrotate options for given path
-centos_logrotate_scripts: []
+centos_logrotate_available_scripts: []
+
+# List of logrotate scripts that should be removed
+# Item should be name parameter from {{ centos_logrotate_available_scripts }}
+centos_logrotate_remove_scripts: []
