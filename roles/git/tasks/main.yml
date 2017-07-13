@@ -6,7 +6,7 @@
   ignore_errors: yes
   changed_when: false
   environment:
-    PATH: "{{ ansible_env.PATH }}:{{ git_install_path }}"
+    PATH: "{{ git_install_path }}/bin:{{ ansible_env.PATH }}"
   tags: [git]
 
 - set_fact:
