@@ -12,6 +12,3 @@ git_build_group: developer
 
 # Should downloaded source files be deleted after installation?
 git_cleanup_after_install: yes
-
-# Should git package be disabled in yum?
-git_disable_in_yum: yes
