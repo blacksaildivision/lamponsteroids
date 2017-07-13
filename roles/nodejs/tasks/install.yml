@@ -13,7 +13,7 @@
 - name: Make sure that Node.js repository is available
   template:
     src: nodesource-el7.repo.j2
-    dest: /etc/yum.repos.d/datadog.repo
+    dest: /etc/yum.repos.d/nodejs.repo
     owner: root
     group: root
     mode: 0644
