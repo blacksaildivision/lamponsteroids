@@ -10,5 +10,8 @@ git_build_user: developer
 # Group of the build user.
 git_build_group: developer
 
+# Installation path for GIT
+git_install_path: /usr/local
+
 # Should downloaded source files be deleted after installation?
 git_cleanup_after_install: yes

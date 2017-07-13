@@ -5,6 +5,8 @@
   register: git_is_installed_test
   ignore_errors: yes
   changed_when: false
+  environment:
+    PATH: "{{ ansible_env.PATH }}:{{ git_install_path }}"
   tags: [git]
 
 - set_fact:
