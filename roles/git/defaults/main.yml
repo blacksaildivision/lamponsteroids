@@ -1,5 +1,5 @@
 # Version of git that should be present in the system
-git_version: "2.11.0"
+git_version: "2.13.3"
 
 # Location of files for git sources
 git_sources_location: /usr/src
@@ -10,8 +10,8 @@ git_build_user: developer
 # Group of the build user.
 git_build_group: developer
 
+# Installation path for GIT
+git_install_path: /usr/local
+
 # Should downloaded source files be deleted after installation?
 git_cleanup_after_install: yes
-
-# Should git package be disabled in yum?
-git_disable_in_yum: yes

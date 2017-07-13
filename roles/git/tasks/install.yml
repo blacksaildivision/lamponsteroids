@@ -53,7 +53,7 @@
   with_items:
     - make clean
     - make configure
-    - ./configure --prefix=/usr
+    - "./configure --prefix={{ git_install_path }}"
     - make
   become: true
   become_user: "{{ git_build_user }}"
@@ -86,15 +86,14 @@
 
 
 
-# Disable updating git with yum
-# It will prevent yum update git and yum install git commands
-# If you will not override it, after new version of git will be available in CentOS repository, it will replace your compiled version
+# Add new GIT executables to PATH
+# It will fix the issue when git compiled from source can be overridden by git installed with yum
 #
-- name: Disable git package in yum
-  lineinfile:
-    dest: /etc/yum.conf
-    line: "exclude=git*"
-    insertafter: "^gpgcheck"
-    state: present
-  when: "git_disable_in_yum == true"
+- name: Add GIT executables to PATH
+  template:
+    src: git.sh.j2
+    dest: /etc/profile.d/git.sh
+    owner: root
+    group: root
+    mode: 0644
   tags: [git, install]
