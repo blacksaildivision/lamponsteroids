@@ -83,6 +83,8 @@ httpd_active_modules:
  - proxy_fcgi
  - rewrite
  - setenvif
+ - socache_shmcb
+ - ssl
  - unixd
 
 # DirectoryIndex - which file should be loaded by default
@@ -120,6 +122,9 @@ httpd_gzip_mime_types:
  - text/html
  - text/plain
  - text/xml
+
+# Enable SSL encryption
+httpd_enable_ssl: yes
 
 
 

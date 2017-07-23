@@ -218,3 +218,29 @@
   notify: restart httpd
   when: "httpd_enable_gzip_compression == false"
   tags: [httpd, configure]
+
+
+
+# Make sure that SSL configuration is enabled
+# It is required for setting up HTTPS for VirtualHosts
+# File with SSL configuration contains by default VirtualHost for localhost
+# This declaration should be removed and specified in separate VirutalHost file
+#
+- name: Make sure that SSL config is enabled
+  lineinfile:
+    dest: "{{ httpd_config_file }}"
+    line: "Include conf/extra/httpd-ssl.conf"
+    state: present
+    regexp: '^#?Include\ conf\/extra/\httpd-ssl'
+  notify: restart httpd
+  when: "httpd_enable_ssl == true"
+  tags: [httpd, configure]
+
+- name: Remove default host configuration in httpd-ssl.conf file
+  replace:
+    path: "{{ httpd_install_path }}/conf/extra/httpd-ssl.conf"
+    replace: ""
+    regexp: '(?s)##\s##\sSSL.+</VirtualHost>'
+  notify: restart httpd
+  when: "httpd_enable_ssl == true"
+  tags: [httpd, configure]
