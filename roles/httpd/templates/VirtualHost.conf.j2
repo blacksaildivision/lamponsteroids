@@ -1,3 +1,6 @@
+{% if item.https is defined and item.https == true %}
+<IfModule mod_ssl.c>
+{% endif %}
 <VirtualHost *:{{ '443' if item.https is defined and item.https == true else httpd_port }}>
 {% if item.subdirectory is defined %}
   {% set directory_root = httpd_websites_directory + "/" + item.server_name + "/htdocs/" + item.subdirectory %}
@@ -54,7 +57,15 @@
     SSLEngine on
     SSLCertificateFile "{{ item.cert_file_path }}"
     SSLCertificateKeyFile "{{ item.cert_key_file_path }}"
-    Protocols h2 h2c http/1.1
+{% if item.cert_chain_file is defined %}
+    SSLCertificateChainFile "{{ item.cert_chain_file }}"
+{% endif %}
+    <IfModule mod_http2.c>
+        Protocols h2 h2c http/1.1
+    </IfModule>
 {% endif %}
 
 </VirtualHost>
+{% if item.https is defined and item.https == true %}
+</IfModule>
+{% endif %}
