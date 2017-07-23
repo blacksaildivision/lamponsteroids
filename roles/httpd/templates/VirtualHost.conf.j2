@@ -54,6 +54,7 @@
     SSLEngine on
     SSLCertificateFile "{{ item.cert_file_path }}"
     SSLCertificateKeyFile "{{ item.cert_key_file_path }}"
+    Protocols h2 h2c http/1.1
 {% endif %}
 
 </VirtualHost>
