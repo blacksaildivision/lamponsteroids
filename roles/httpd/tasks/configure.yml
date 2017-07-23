@@ -244,3 +244,13 @@
   notify: restart httpd
   when: "httpd_enable_ssl == true"
   tags: [httpd, configure]
+
+- name: Make sure that SSL config is disabled
+  lineinfile:
+    dest: "{{ httpd_config_file }}"
+    line: "#Include conf/extra/httpd-ssl.conf"
+    state: present
+    regexp: '^#?Include\ conf\/extra/\httpd-ssl'
+  notify: restart httpd
+  when: "httpd_enable_ssl == false"
+  tags: [httpd, configure]
