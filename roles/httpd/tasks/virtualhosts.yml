@@ -60,7 +60,7 @@
 - name: Add VirtualHosts files
   template:
     src: VirtualHost.conf.j2
-    dest: "{{ httpd_install_path }}/conf/extra/httpd-vhost-{{ item.server_name }}.conf"
+    dest: "{{ httpd_install_path }}/conf/extra/httpd-vhost-{{ item.server_name }}{{ '-ssl' if item.https is defined and item.https == true else '' }}.conf"
     owner: root
     group: root
     mode: 0644
@@ -75,7 +75,7 @@
 - name: Add VirtualHost entries to httpd.conf file
   lineinfile:
     dest: "{{ httpd_config_file }}"
-    line: "Include conf/extra/httpd-vhost-{{ item.server_name }}.conf"
+    line: "Include conf/extra/httpd-vhost-{{ item.server_name }}{{ '-ssl' if item.https is defined and item.https == true else '' }}.conf"
     state: present
     insertafter: EOF
   with_items: "{{ httpd_virtualhosts }}"
