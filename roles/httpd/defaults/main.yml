@@ -166,11 +166,13 @@ httpd_403_for_localhost: yes
 #  cert_file_path: /path/to/certfile.cert # If https is enabled this is the path to server certificate file
 #  cert_key_file_path: /path/to/certkeyfile.key # If https is enabled this is the path to private key file
 #  cert_chain_file: /path/to/cert.crt # Path to server certificate chain if applicable
+#  logrotate: yes # Enables or disables logrotate for httpd logs
 # }
 httpd_virtualhosts:
  - {
   server_name: testtest.com,
   server_alias: dev.testtest.com,
   directory_owner: "{{ httpd_user }}",
-  directory_group: "{{ httpd_group }}"
+  directory_group: "{{ httpd_group }}",
+  logrotate: yes
  }

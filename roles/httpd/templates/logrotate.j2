@@ -1,0 +1,16 @@
+{% for item in httpd_virtualhosts_with_logrotate %}
+{{ httpd_websites_directory }}/{{ item.server_name }}/logs/httpd-*.log
+{% endfor %}
+{
+  rotate 30
+  daily
+  compress
+  delaycompress
+  sharedscripts
+  missingok
+  notifempty
+  su root {{ httpd_group }}
+  postrotate
+    /bin/systemctl reload httpd.service > /dev/null 2>/dev/null || true
+  endscript
+}
