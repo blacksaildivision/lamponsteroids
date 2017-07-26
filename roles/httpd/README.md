@@ -32,7 +32,7 @@ Full example with all available options:
 httpd_virtualhosts:
  - {
     server_name: example.com,
-    server_alias: dev.example.com,
+    server_aliases: [dev.example.com],
     directory_owner: developer,
     directory_group: "{{ httpd_group }}",
     subdirectory: wp,
@@ -46,6 +46,7 @@ httpd_virtualhosts:
         port: 9000
     },
     redirect: "https://example2.com",
+    redirect_www_to_non_www: yes,
     logs: yes,
     htdocs: yes,
     https: yes,
@@ -57,14 +58,14 @@ httpd_virtualhosts:
  }
 ```
 
-Alternative host with redirect to different domain. HTTPS option is also supported here
+Alternative host with redirect to different domain. HTTPS option is also supported here. Remember to add "/" at the end of redirect option
 ```
 httpd_virtualhosts:
  - {
     server_name: example.com,
     directory_owner: developer,
     directory_group: "{{ httpd_group }}",
-    redirect: "https://google.com",
+    redirect: "https://google.com/",
     htdocs: no,
     logs: no
  }

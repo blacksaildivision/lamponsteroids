@@ -9,15 +9,20 @@
 {% endif %}
 
     ServerName {{ item.server_name }}
-{% if item.server_alias is defined %}
-    ServerAlias {{ item.server_alias }}
+{% if item.server_aliases is defined %}
+{% for alias in item.server_aliases %}
+    ServerAlias {{ alias }}
+{% endfor %}
 {% endif %}
 
 {% if item.redirect is defined %}
     # Redirect everything permanently to {{ item.redirect }}
-    RewriteEngine on
-    RewriteCond %{HTTP_HOST} {{ item.server_name }}
-    RewriteRule ^/(.*)$ {{ item.redirect }}/$1 [L,R=301]
+    Redirect permanent "/" "{{ item.redirect }}"
+{% endif %}
+
+{% if item.redirect_www_to_non_www is defined and item.redirect_www_to_non_www == true %}
+    # Redirect www to non-www
+    RedirectMatch permanent "^www\.(.*)$" "{{ 'https://' if item.https is defined and item.https == true else 'http://' }}{{ item.server_name }}/"
 {% endif %}
 
 {% if item.htdocs is not defined or item.htdocs == true %}

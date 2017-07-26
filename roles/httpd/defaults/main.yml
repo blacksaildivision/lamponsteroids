@@ -156,7 +156,7 @@ httpd_403_for_localhost: yes
 # Here is full entry with all available options"
 # - {
 #  server_name: your.domain.here # mandatory field
-#  server_alias: optional.domain.alias.here # optional field
+#  server_aliases: [optional.domain.alias.com] # optional field with list of server aliases
 #  directory_owner: existing system user # mandatory field
 #  directory_group: existing group # mandatory field
 #  subdirectory: path to subdirectory. By default DocumentDirectory is set to htdocs. # optinal field
@@ -176,7 +176,7 @@ httpd_403_for_localhost: yes
 httpd_virtualhosts:
  - {
   server_name: testtest.com,
-  server_alias: dev.testtest.com,
+  server_aliases: [dev.testtest.com],
   directory_owner: "{{ httpd_user }}",
   directory_group: "{{ httpd_group }}",
   logrotate: yes
