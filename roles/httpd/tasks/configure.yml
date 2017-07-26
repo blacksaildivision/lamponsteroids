@@ -254,3 +254,40 @@
   notify: restart httpd
   when: "httpd_enable_ssl == false"
   tags: [httpd, configure]
+
+
+
+# Enable Let's Encrypt integration
+# This is all about setting certbot to use certonly option with webroot authentication.
+# Sometimes it happens that on various redirects from http to https it does not see .well-known directory
+# Easiest fix is to use letsencrypt directory for .well-known
+#
+- name: Add Let's encrypt integartion file
+  template:
+    src: httpd-acme.conf.j2
+    dest: "{{ httpd_install_path }}/conf/extra/httpd-acme.conf"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart httpd
+  tags: [httpd, configure]
+
+- name: Enable acme challange in configuration
+  lineinfile:
+    dest: "{{ httpd_config_file }}"
+    line: "Include conf/extra/httpd-acme.conf"
+    state: present
+    regexp: '^#?Include\ conf\/extra/\httpd-acme'
+  notify: restart httpd
+  when: "httpd_letsencrypt_integration == true"
+  tags: [httpd, configure]
+
+- name: Disable acme challange in configuration
+  lineinfile:
+    dest: "{{ httpd_config_file }}"
+    line: "#Include conf/extra/httpd-acme.conf"
+    state: present
+    regexp: '^#?Include\ conf\/extra/\httpd-acme'
+  notify: restart httpd
+  when: "httpd_letsencrypt_integration == false"
+  tags: [httpd, configure]

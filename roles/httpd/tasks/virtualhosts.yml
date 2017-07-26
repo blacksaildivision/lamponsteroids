@@ -80,7 +80,7 @@
     insertafter: EOF
   with_items: "{{ httpd_virtualhosts }}"
   notify: restart httpd
-  tags: [httpd, virtualhosts]
+  tags: [httpd, virtualhosts, virtualhosts-update]
 
 - name: Remove all unused VirtualHosts from httpd.conf file
   lineinfile:
@@ -88,4 +88,4 @@
     regexp: "httpd-vhost-(?!{{ httpd_virtualhosts | map(attribute='server_name') | join('|') }})"
     state: absent
   notify: restart httpd
-  tags: [httpd, virtualhosts]
+  tags: [httpd, virtualhosts, virtualhosts-update]
