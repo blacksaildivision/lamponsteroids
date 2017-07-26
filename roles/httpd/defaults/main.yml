@@ -38,6 +38,7 @@ httpd_install_path: /usr/local/apache2
 # List of configuration options for Apache httpd. APR and APR-Util paths are added automatically, you don't need to include them here.
 httpd_configure_options:
   - --enable-ssl
+  - --enable-http2
   - --enable-so
   - --with-mpm=event
   - --with-included-apr
@@ -77,10 +78,12 @@ httpd_active_modules:
  - dir
  - deflate
  - filter
+ - http2
  - log_config
  - mime
  - proxy
  - proxy_fcgi
+ - remoteip
  - rewrite
  - setenvif
  - socache_shmcb
@@ -126,6 +129,12 @@ httpd_gzip_mime_types:
 # Enable SSL encryption
 httpd_enable_ssl: yes
 
+# Enable Let's Encrypt integration
+httpd_letsencrypt_integration: yes
+
+# Enable recording real IP if Apache is running with reverse_proxy
+httpd_real_ip_recording: no
+
 
 
 
@@ -134,6 +143,9 @@ httpd_enable_ssl: yes
 
 # Root directory for hosting all VirtualHosts
 httpd_websites_directory: /var/www
+
+# Should server return 403 on accessing by server IP(s)
+httpd_403_for_localhost: yes
 
 # List of virtualhosts that should be enabled.
 # Here is full entry with all available options"
@@ -150,6 +162,10 @@ httpd_websites_directory: /var/www
 #  redirect: "http(s)://redirect.domain.com" # Optional parameter. It will redirect everything to different domain. Protocol is required, trailing slash must be omitted.
 #  logs: no # Turn off access and error log. Default is set to yes, it means that both access and error log will be active
 #  htdocs: no # Turn off crating directory for htdocs. Default is set to yes, which means that directory will be created
+#  https: yes # Turn on HTTPS/SSL for given domain
+#  cert_file_path: /path/to/certfile.cert # If https is enabled this is the path to server certificate file
+#  cert_key_file_path: /path/to/certkeyfile.key # If https is enabled this is the path to private key file
+#  cert_chain_file: /path/to/cert.crt # Path to server certificate chain if applicable
 # }
 httpd_virtualhosts:
  - {

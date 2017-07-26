@@ -291,3 +291,27 @@
   notify: restart httpd
   when: "httpd_letsencrypt_integration == false"
   tags: [httpd, configure]
+
+
+
+# Enable recording real IP address when apache is running with reverse_proxy like Varnish/nginx
+#
+- name: Enable recording real IP address
+  blockinfile:
+    path: "{{ httpd_config_file }}"
+    block: |
+      # Get real IP address
+      <IfModule remoteip_module>
+          RemoteIPHeader X-Forwarded-For
+      </IfModule>
+  when: "httpd_real_ip_recording == true"
+  tags: [httpd, configure]
+
+- name: Update common log format to log real IP address
+  replace:
+    path: "{{ httpd_config_file }}"
+    replace: '    LogFormat "%a %l %u %t \"%r\" %>s %b" common'
+    regexp: '^[ \t]+LogFormat.+?common$'
+  notify: restart httpd
+  when: "httpd_real_ip_recording == true"
+  tags: [httpd, configure]
