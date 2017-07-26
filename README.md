@@ -51,7 +51,7 @@ You can setup logrotate scripts with this role as well.
 
 **git** - Install latest version of git (2.13.3) 
 
-**httpd** - Install and configure latest version of Apache httpd.
+**httpd** - Install and configure latest version of Apache httpd (2.4.27)
 
 **nodejs** - Install Node.js 7.* and NPM
 

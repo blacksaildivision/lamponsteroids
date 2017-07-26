@@ -121,7 +121,6 @@
 # Setup logrotate for given VirtualHosts
 # Each item must have logrotate set up. File will not be used if all have logrotate to false or logs to false
 #
-
 - set_fact:
     httpd_virtualhosts_with_logrotate: "{{ httpd_virtualhosts | rejectattr('logrotate', 'even') | list }}"
   tags: [httpd, virtualhosts]
