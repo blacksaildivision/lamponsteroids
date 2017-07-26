@@ -2,7 +2,7 @@ HTTPD role
 ==========
 
 This role will install Apache httpd https://httpd.apache.org/ server on CentOS.
-Apache httpd will be installed in latest version (2.4.25) and will be compiled from source.
+Apache httpd will be installed in latest version (2.4.27) and will be compiled from source.
 
 What you should know?
 ---------------------
@@ -21,7 +21,8 @@ There is new user created for Apache httpd daemon. If you want to change that, m
  - `httpd_user`
  - `httpd_group`
  
-Apache httpd will be configured with minimal number of modules. Please review and update `httpd_active_modules` variable if you need anything more enabled.
+Apache httpd will be configured with minimal number of modules required for basic functioning + SSL + decoding IP when running with reverse proxy. Please review and update `httpd_active_modules` variable if you need anything more enabled.
+By default `httpd_real_ip_recording` is set to `no`. Change it to yes only if it's running behind varnish/nginx/etc.
 
 **VirtualHosts**
 You need to define list of VirtualHosts that should be present in the system
@@ -31,7 +32,7 @@ Full example with all available options:
 httpd_virtualhosts:
  - {
     server_name: example.com,
-    server_alias: dev.example.com,
+    server_aliases: [dev.example.com],
     directory_owner: developer,
     directory_group: "{{ httpd_group }}",
     subdirectory: wp,
@@ -43,18 +44,28 @@ httpd_virtualhosts:
       ],
     php:{
         port: 9000
-    }
+    },
+    redirect: "https://example2.com",
+    redirect_www_to_non_www: yes,
+    logs: yes,
+    htdocs: yes,
+    https: yes,
+    cert_file_path: /etc/letsencrypt/live/example.com/cert.pem,
+    cert_key_file_path: /etc/letsencrypt/live/example.com/privkey.pem,
+    cert_chain_file: /etc/letsencrypt/live/example.com/chain.pem,
+    logrotate: yes
+
  }
 ```
 
-Alternative host with redirect to different domain
+Alternative host with redirect to different domain. HTTPS option is also supported here. Remember to add "/" at the end of redirect option
 ```
 httpd_virtualhosts:
  - {
     server_name: example.com,
     directory_owner: developer,
     directory_group: "{{ httpd_group }}",
-    redirect: "https://google.com",
+    redirect: "https://google.com/",
     htdocs: no,
     logs: no
  }

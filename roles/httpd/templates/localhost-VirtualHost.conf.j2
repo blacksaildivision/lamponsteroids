@@ -1,0 +1,16 @@
+<VirtualHost *:{{ httpd_port }}>
+    ServerName {{ httpd_localhost_ips[0] }}
+{% for ip in httpd_localhost_ips[1:] %}
+    ServerAlias {{ ip }}
+{% endfor %}
+
+    # Return 403 response on all URLs
+    <Location "/">
+        AllowOverride None
+        Require all denied
+    </Location>
+
+    # Turn off logging
+    ErrorLog /dev/null
+    CustomLog /dev/null common
+</VirtualHost>

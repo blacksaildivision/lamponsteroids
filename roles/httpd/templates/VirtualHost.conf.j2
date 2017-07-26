@@ -1,4 +1,7 @@
-<VirtualHost *:{{ httpd_port }}>
+{% if item.https is defined and item.https == true %}
+<IfModule mod_ssl.c>
+{% endif %}
+<VirtualHost *:{{ '443' if item.https is defined and item.https == true else httpd_port }}>
 {% if item.subdirectory is defined %}
   {% set directory_root = httpd_websites_directory + "/" + item.server_name + "/htdocs/" + item.subdirectory %}
 {% else %}
@@ -6,15 +9,20 @@
 {% endif %}
 
     ServerName {{ item.server_name }}
-{% if item.server_alias is defined %}
-    ServerAlias {{ item.server_alias }}
+{% if item.server_aliases is defined %}
+{% for alias in item.server_aliases %}
+    ServerAlias {{ alias }}
+{% endfor %}
 {% endif %}
 
 {% if item.redirect is defined %}
     # Redirect everything permanently to {{ item.redirect }}
-    RewriteEngine on
-    RewriteCond %{HTTP_HOST} {{ item.server_name }}
-    RewriteRule ^/(.*)$ {{ item.redirect }}/$1 [L,R=301]
+    Redirect permanent "/" "{{ item.redirect }}"
+{% endif %}
+
+{% if item.redirect_www_to_non_www is defined and item.redirect_www_to_non_www == true %}
+    # Redirect www to non-www
+    RedirectMatch permanent "^www\.(.*)$" "{{ 'https://' if item.https is defined and item.https == true else 'http://' }}{{ item.server_name }}/"
 {% endif %}
 
 {% if item.htdocs is not defined or item.htdocs == true %}
@@ -43,11 +51,26 @@
     # Logging
     ErrorLog "{{ httpd_websites_directory }}/{{ item.server_name }}/logs/httpd-error.log"
     CustomLog "{{ httpd_websites_directory }}/{{ item.server_name }}/logs/httpd-access.log" common
-{% else%}
+{% else %}
     # Turn off logging
     ErrorLog /dev/null
     CustomLog /dev/null common
 {% endif %}
 
-</VirtualHost>
+{% if item.https is defined and item.https == true %}
+    # SSL configuration
+    SSLEngine on
+    SSLCertificateFile "{{ item.cert_file_path }}"
+    SSLCertificateKeyFile "{{ item.cert_key_file_path }}"
+{% if item.cert_chain_file is defined %}
+    SSLCertificateChainFile "{{ item.cert_chain_file }}"
+{% endif %}
+    <IfModule mod_http2.c>
+        Protocols h2 h2c http/1.1
+    </IfModule>
+{% endif %}
 
+</VirtualHost>
+{% if item.https is defined and item.https == true %}
+</IfModule>
+{% endif %}

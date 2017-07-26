@@ -218,3 +218,100 @@
   notify: restart httpd
   when: "httpd_enable_gzip_compression == false"
   tags: [httpd, configure]
+
+
+
+# Make sure that SSL configuration is enabled
+# It is required for setting up HTTPS for VirtualHosts
+# File with SSL configuration contains by default VirtualHost for localhost
+# This declaration should be removed and specified in separate VirutalHost file
+#
+- name: Make sure that SSL config is enabled
+  lineinfile:
+    dest: "{{ httpd_config_file }}"
+    line: "Include conf/extra/httpd-ssl.conf"
+    state: present
+    regexp: '^#?Include\ conf\/extra/\httpd-ssl'
+  notify: restart httpd
+  when: "httpd_enable_ssl == true"
+  tags: [httpd, configure]
+
+- name: Remove default host configuration in httpd-ssl.conf file
+  replace:
+    path: "{{ httpd_install_path }}/conf/extra/httpd-ssl.conf"
+    replace: ""
+    regexp: '(?s)##\s##\sSSL.+</VirtualHost>'
+  notify: restart httpd
+  when: "httpd_enable_ssl == true"
+  tags: [httpd, configure]
+
+- name: Make sure that SSL config is disabled
+  lineinfile:
+    dest: "{{ httpd_config_file }}"
+    line: "#Include conf/extra/httpd-ssl.conf"
+    state: present
+    regexp: '^#?Include\ conf\/extra/\httpd-ssl'
+  notify: restart httpd
+  when: "httpd_enable_ssl == false"
+  tags: [httpd, configure]
+
+
+
+# Enable Let's Encrypt integration
+# This is all about setting certbot to use certonly option with webroot authentication.
+# Sometimes it happens that on various redirects from http to https it does not see .well-known directory
+# Easiest fix is to use letsencrypt directory for .well-known
+#
+- name: Add Let's encrypt integartion file
+  template:
+    src: httpd-acme.conf.j2
+    dest: "{{ httpd_install_path }}/conf/extra/httpd-acme.conf"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart httpd
+  tags: [httpd, configure]
+
+- name: Enable acme challange in configuration
+  lineinfile:
+    dest: "{{ httpd_config_file }}"
+    line: "Include conf/extra/httpd-acme.conf"
+    state: present
+    regexp: '^#?Include\ conf\/extra/\httpd-acme'
+  notify: restart httpd
+  when: "httpd_letsencrypt_integration == true"
+  tags: [httpd, configure]
+
+- name: Disable acme challange in configuration
+  lineinfile:
+    dest: "{{ httpd_config_file }}"
+    line: "#Include conf/extra/httpd-acme.conf"
+    state: present
+    regexp: '^#?Include\ conf\/extra/\httpd-acme'
+  notify: restart httpd
+  when: "httpd_letsencrypt_integration == false"
+  tags: [httpd, configure]
+
+
+
+# Enable recording real IP address when apache is running with reverse_proxy like Varnish/nginx
+#
+- name: Enable recording real IP address
+  blockinfile:
+    path: "{{ httpd_config_file }}"
+    block: |
+      # Get real IP address
+      <IfModule remoteip_module>
+          RemoteIPHeader X-Forwarded-For
+      </IfModule>
+  when: "httpd_real_ip_recording == true"
+  tags: [httpd, configure]
+
+- name: Update common log format to log real IP address
+  replace:
+    path: "{{ httpd_config_file }}"
+    replace: '    LogFormat "%a %l %u %t \"%r\" %>s %b" common'
+    regexp: '^[ \t]+LogFormat.+?common$'
+  notify: restart httpd
+  when: "httpd_real_ip_recording == true"
+  tags: [httpd, configure]

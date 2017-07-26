@@ -15,13 +15,13 @@ httpd_manage_virtualhosts: yes
 ####### INSTALL TASKS CONFIGURATION #######
 
 # Version of Apache httpd that should be present in the system
-httpd_version: "2.4.25"
+httpd_version: "2.4.27"
 
 # Version of APR library required for compiling Apache httpd
-httpd_apr_version: "1.5.2"
+httpd_apr_version: "1.6.2"
 
 # Version fo APR-util requried for compiling Apache httpd
-httpd_apr_util_version: "1.5.4"
+httpd_apr_util_version: "1.6.0"
 
 # Location of files for Apache httpd sources
 httpd_sources_location: /usr/src
@@ -38,6 +38,7 @@ httpd_install_path: /usr/local/apache2
 # List of configuration options for Apache httpd. APR and APR-Util paths are added automatically, you don't need to include them here.
 httpd_configure_options:
   - --enable-ssl
+  - --enable-http2
   - --enable-so
   - --with-mpm=event
   - --with-included-apr
@@ -77,12 +78,16 @@ httpd_active_modules:
  - dir
  - deflate
  - filter
+ - http2
  - log_config
  - mime
  - proxy
  - proxy_fcgi
+ - remoteip
  - rewrite
  - setenvif
+ - socache_shmcb
+ - ssl
  - unixd
 
 # DirectoryIndex - which file should be loaded by default
@@ -121,6 +126,15 @@ httpd_gzip_mime_types:
  - text/plain
  - text/xml
 
+# Enable SSL encryption
+httpd_enable_ssl: yes
+
+# Enable Let's Encrypt integration
+httpd_letsencrypt_integration: yes
+
+# Enable recording real IP if Apache is running with reverse_proxy
+httpd_real_ip_recording: no
+
 
 
 
@@ -130,11 +144,19 @@ httpd_gzip_mime_types:
 # Root directory for hosting all VirtualHosts
 httpd_websites_directory: /var/www
 
+# Should server return 403 on accessing by server IP(s)
+# By default ip address for the server is downloaded from ansible_all_ipv4_addresses variable. But on some hosts, IP address is different.
+# If you need to specify list of additional server IPs, create variable httpd_server_ips. Example:
+# httpd_server_ips:
+#  - 83.23.13.63
+#  - 83.23.13.64
+httpd_403_for_localhost: yes
+
 # List of virtualhosts that should be enabled.
 # Here is full entry with all available options"
 # - {
 #  server_name: your.domain.here # mandatory field
-#  server_alias: optional.domain.alias.here # optional field
+#  server_aliases: [optional.domain.alias.com] # optional field with list of server aliases
 #  directory_owner: existing system user # mandatory field
 #  directory_group: existing group # mandatory field
 #  subdirectory: path to subdirectory. By default DocumentDirectory is set to htdocs. # optinal field
@@ -145,11 +167,17 @@ httpd_websites_directory: /var/www
 #  redirect: "http(s)://redirect.domain.com" # Optional parameter. It will redirect everything to different domain. Protocol is required, trailing slash must be omitted.
 #  logs: no # Turn off access and error log. Default is set to yes, it means that both access and error log will be active
 #  htdocs: no # Turn off crating directory for htdocs. Default is set to yes, which means that directory will be created
+#  https: yes # Turn on HTTPS/SSL for given domain
+#  cert_file_path: /path/to/certfile.cert # If https is enabled this is the path to server certificate file
+#  cert_key_file_path: /path/to/certkeyfile.key # If https is enabled this is the path to private key file
+#  cert_chain_file: /path/to/cert.crt # Path to server certificate chain if applicable
+#  logrotate: yes # Enables or disables logrotate for httpd logs
 # }
 httpd_virtualhosts:
  - {
   server_name: testtest.com,
-  server_alias: dev.testtest.com,
+  server_aliases: [dev.testtest.com],
   directory_owner: "{{ httpd_user }}",
-  directory_group: "{{ httpd_group }}"
+  directory_group: "{{ httpd_group }}",
+  logrotate: yes
  }
