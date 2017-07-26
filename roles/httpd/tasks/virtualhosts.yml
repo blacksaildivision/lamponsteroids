@@ -89,3 +89,29 @@
     state: absent
   notify: restart httpd
   tags: [httpd, virtualhosts, virtualhosts-update]
+
+
+
+# Block access to server when accessing via Server IP
+# When server IP address is called display 403 error
+#
+- name: Add 403 on accessing localhost
+  template:
+    src: localhost-VirtualHost.conf.j2
+    dest: "{{ httpd_install_path }}/conf/extra/httpd-localhost.conf"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart httpd
+  when: "httpd_403_for_localhost == true"
+  tags: [httpd, virtualhosts, virtualhosts-update]
+
+- name: Add localhost VirtualHost entries to httpd.conf file
+  lineinfile:
+    dest: "{{ httpd_config_file }}"
+    line: "Include conf/extra/httpd-localhost.conf"
+    state: present
+    insertafter: EOF
+  notify: restart httpd
+  when: "httpd_403_for_localhost == true"
+  tags: [httpd, virtualhosts, virtualhosts-update]

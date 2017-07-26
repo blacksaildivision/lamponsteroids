@@ -1,0 +1,15 @@
+<VirtualHost *:{{ httpd_port }}>
+    ServerName {{ ansible_all_ipv4_addresses[0] }}
+{% for ip in ansible_all_ipv4_addresses[1:] %}
+    ServerAlias {{ ip }}
+{% endfor %}
+
+    <Location "/">
+        AllowOverride None
+        Require all denied
+    </Location>
+
+    # Turn off logging
+    ErrorLog /dev/null
+    CustomLog /dev/null common
+</VirtualHost>
