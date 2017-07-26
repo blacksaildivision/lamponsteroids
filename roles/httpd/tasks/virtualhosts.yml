@@ -95,6 +95,11 @@
 # Block access to server when accessing via Server IP
 # When server IP address is called display 403 error
 #
+- set_fact:
+    httpd_localhost_ips: "{{ httpd_server_ips | default(ansible_all_ipv4_addresses) }}"
+  when: "httpd_403_for_localhost == true"
+  tags: [httpd, virtualhosts, virtualhosts-update]
+
 - name: Add 403 on accessing localhost
   template:
     src: localhost-VirtualHost.conf.j2

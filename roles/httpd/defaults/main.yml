@@ -145,6 +145,11 @@ httpd_real_ip_recording: no
 httpd_websites_directory: /var/www
 
 # Should server return 403 on accessing by server IP(s)
+# By default ip address for the server is downloaded from ansible_all_ipv4_addresses variable. But on some hosts, IP address is different.
+# If you need to specify list of additional server IPs, create variable httpd_server_ips. Example:
+# httpd_server_ips:
+#  - 83.23.13.63
+#  - 83.23.13.64
 httpd_403_for_localhost: yes
 
 # List of virtualhosts that should be enabled.
