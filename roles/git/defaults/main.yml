@@ -1,5 +1,5 @@
 # Version of git that should be present in the system
-git_version: "2.13.3"
+git_version: "2.13.4"
 
 # Location of files for git sources
 git_sources_location: /usr/src
