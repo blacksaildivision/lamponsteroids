@@ -49,7 +49,7 @@ You can setup logrotate scripts with this role as well.
 
 **ntp** - Takes care of system timezone and NTP server. It uses Chrony for using NTP.
 
-**git** - Install latest version of git (2.13.3) 
+**git** - Install latest version of git (2.13.4) 
 
 **httpd** - Install and configure latest version of Apache httpd (2.4.27)
 
