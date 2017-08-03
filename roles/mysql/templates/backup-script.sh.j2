@@ -1,0 +1,35 @@
+#!/bin/bash
+
+##### CONFIGURATION PART ######
+databaseName="{{ item.database }}"
+backupDirectory="{{ item.backup_directory }}"
+compressBackup=true
+uploadToS3={{ 'true' if item.s3_bucket is defined else 'false' }}
+s3BucketName="{{ item.s3_bucket if item.s3_bucket is defined else '' }}"
+backupsRotate=true
+rotate={{ item.rotate }}
+
+##### EXECUTION PART #####
+backupFileName="$databaseName.$(date +'%Y-%m-%d_%H-%M').sql"
+backupFilePath="$backupDirectory/$backupFileName"
+echo "Backup of \"$databaseName\" database started at $(date +'%d/%m/%Y %T')"
+
+echo "Dumping database..."
+mysqldump --single-transaction --quick "$databaseName" > "$backupFilePath"
+
+if [ "$compressBackup" = true ] ; then
+    echo "Compressing backup file..."
+    gzip -f "$backupFilePath"
+    backupFilePath="$backupFilePath.gz"
+fi
+
+if [ "$uploadToS3" = true ] ; then
+    echo "Uploading to S3 bucket..."
+    aws s3 cp --storage-class STANDARD_IA "$backupFilePath" s3://"$s3BucketName"
+fi
+
+if [ "$backupsRotate" = true ] ; then
+    echo "Removing old backup files..."
+    ls --reverse "$backupDirectory/$databaseName".* | sed -n "$(( rotate + 1 )),\$p" | xargs rm
+fi
+echo "Backup of \"$databaseName\" database finished at $(date +'%d/%m/%Y %T')"

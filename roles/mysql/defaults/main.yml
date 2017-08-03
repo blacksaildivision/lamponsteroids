@@ -15,6 +15,8 @@ mysql_manage_databases_and_users: yes
 # Should this role install MySQLTuner?
 mysql_install_mysqltuner: yes
 
+# Should this role perform databases backups?
+mysql_manage_backup: yes
 
 
 
@@ -89,4 +91,39 @@ mysql_databases:
   database: example,
   user: example,
   password: "+;GPS,uP6%MXYTFo2k8bpo57v"
+ }
+
+
+
+
+
+####### BACKUP TASKS CONFIGURATION #######
+
+# Name of the user that will perform backups
+mysql_backup_user: backup
+
+# Password for mysql backup user
+mysql_backup_user_password: "J2AW9oRZT?wO@C^S1!Qxsq03d8r"
+
+# List of database to backup
+# Here is full example with all options:
+#
+# mysql_backup_databases:
+#  - {
+#    database: example, # database name to backup
+#    backup_directory: /var/www/example.com/db, # directory for storing backups
+#    backup_directory_owner: developer, # directory owner
+#    backup_directory_group: developer, # directory group
+#    rotate: 30, # number of files to rotate
+#    backup_frequency: daily, # how often should backups be performed (daily, weekly, etc)
+#    s3_bucket: mysql-backup # name of the s3 bucket that backup should be pushed through. it requires having awscli up and running
+# }
+mysql_backup_databases:
+ - {
+    database: example,
+    backup_directory: /var/db,
+    backup_directory_owner: root,
+    backup_directory_group: root,
+    rotate: 30,
+    backup_frequency: daily
  }

@@ -22,3 +22,43 @@
     group: root
     mode: 0600
   tags: [mysql, backup]
+
+
+
+# Make sure that backup directory exists
+#
+- name: Make sure that backup directory exists
+  file:
+    path: "{{ item.backup_directory }}"
+    state: directory
+    mode: "2775"
+    owner: "{{ item.backup_directory_owner }}"
+    group: "{{ item.backup_directory_group }}"
+  with_items: "{{ mysql_backup_databases }}"
+  tags: [mysql, backup]
+
+
+
+# Place backup script in place for each database
+#
+- name: Setup backup scripts
+  template:
+    src: backup-script.sh.j2
+    dest: "{{ item.backup_directory }}/{{ item.database }}-backup.sh"
+    owner: "{{ item.backup_directory_owner }}"
+    group: "{{ item.backup_directory_group }}"
+    mode: 0700
+  with_items: "{{ mysql_backup_databases }}"
+  tags: [mysql, backup]
+
+
+
+# Setup cronjob for backups
+#
+- name: Setup crontab for periodical backups
+  cron:
+    name: "{{ item.database }} backup"
+    special_time: "{{ item.backup_frequency }}"
+    job: "bash {{ item.backup_directory }}/{{ item.database }}-backup.sh >> {{ item.backup_directory }}/{{ item.database }}-backup.log 2>&1"
+  with_items: "{{ mysql_backup_databases }}"
+  tags: [mysql, backup]
