@@ -53,11 +53,11 @@ You can setup logrotate scripts with this role as well.
 
 **httpd** - Install and configure latest version of Apache httpd (2.4.27)
 
-**nodejs** - Install Node.js 7.* and NPM
+**nodejs** - Install latest version of Node.js (8.2.1) and NPM
 
 **datadog** - Install and configure datadog agent.
 
-**mysql** - Install and configure MySQL community server. Create databases and users. Install MySQLTuner
+**mysql** - Install and configure MySQL community server (5.7.19). Create databases and users. Install MySQLTuner
 
 **awscli** - Install and configure AWS CLI command line tool
 
