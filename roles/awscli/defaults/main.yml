@@ -2,6 +2,9 @@
 awscli_users:
   - developer
 
+# Should credential files and defaults be also set up for root account?
+awscli_users_root: yes
+
 # AWS Access Key ID
 awscli_aws_access_key_id: AKIAI44QH8DHBEXAMPLE
 

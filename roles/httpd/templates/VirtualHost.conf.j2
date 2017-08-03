@@ -44,7 +44,11 @@
 
 {% if item.php is defined %}
     # PHP-FPM settings
-    ProxyPassMatch "^/(.*\.php(/.*)?)$" "fcgi://127.0.0.1:{{ item.php.port }}{{ directory_root }}"
+    <FilesMatch "\.php$">
+        <If "-f %{SCRIPT_FILENAME}">
+            SetHandler "proxy:fcgi://127.0.0.1:{{ item.php.port }}"
+        </If>
+    </FilesMatch>
 {% endif %}
 
 {% if item.logs is not defined or item.logs == true %}

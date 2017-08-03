@@ -90,3 +90,10 @@
 #
 - include: mysqltuner.yml
   when: "mysql_install_mysqltuner == true"
+
+
+
+# Setup backup script
+#
+- include: backup.yml
+  when: "mysql_manage_backup == true"

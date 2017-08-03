@@ -36,6 +36,16 @@
   with_items: "{{ awscli_users }}"
   tags: [awscli]
 
+- name: Create AWS config directory for root
+  file:
+    path: /root/.aws
+    state: directory
+    owner: root
+    group: root
+    mode: 0775
+  when: "awscli_users_root == true"
+  tags: [awscli]
+
 
 
 # Setup credentials file with Access Key and Secret
@@ -50,6 +60,15 @@
   with_items: "{{ awscli_users }}"
   tags: [awscli]
 
+- name: Add AWS credentials file for root
+  template:
+    src: credentials.j2
+    dest: /root/.aws/credentials
+    owner: root
+    group: root
+    mode: 0600
+  when: "awscli_users_root == true"
+  tags: [awscli]
 
 
 # Setup config file with default region and output
@@ -62,4 +81,14 @@
     group: "{{ item }}"
     mode: 0600
   with_items: "{{ awscli_users }}"
+  tags: [awscli]
+
+- name: Add AWS config file for root
+  template:
+    src: config.j2
+    dest: /root/.aws/config"
+    owner: root
+    group: root
+    mode: 0600
+  when: "awscli_users_root == true"
   tags: [awscli]

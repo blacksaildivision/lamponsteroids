@@ -49,15 +49,15 @@ You can setup logrotate scripts with this role as well.
 
 **ntp** - Takes care of system timezone and NTP server. It uses Chrony for using NTP.
 
-**git** - Install latest version of git (2.13.3) 
+**git** - Install latest version of git (2.13.4) 
 
 **httpd** - Install and configure latest version of Apache httpd (2.4.27)
 
-**nodejs** - Install Node.js 7.* and NPM
+**nodejs** - Install latest version of Node.js (8.2.1) and NPM
 
 **datadog** - Install and configure datadog agent.
 
-**mysql** - Install and configure MySQL community server. Create databases and users. Install MySQLTuner
+**mysql** - Install and configure MySQL community server (5.7.19). Create databases and users. Install MySQLTuner
 
 **awscli** - Install and configure AWS CLI command line tool
 
