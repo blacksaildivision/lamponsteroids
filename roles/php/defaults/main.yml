@@ -15,6 +15,9 @@ php_manage_extensions: yes
 # Should this role use composer tasks to install composer?
 php_manage_composer: yes
 
+# Should this role configure and enable OPcache?
+php_manage_opcache: yes
+
 
 
 
@@ -22,7 +25,7 @@ php_manage_composer: yes
 ####### INSTALL TASKS CONFIGURATION #######
 
 # Version of PHP to install
-php_version: "7.1.0"
+php_version: "7.1.8"
 
 # Location for PHP installation
 php_install_path: /usr/local/php
@@ -120,6 +123,12 @@ php_date_timezone: UTC
 # Configure MySQL socket path
 php_mysql_socket: /var/lib/mysql/mysql.sock
 
+# Configure realpath cache size
+php_realpath_cache_size: 4096k
+
+# Configure realpath cache TTL
+php_realpath_cache_ttl: 600
+
 
 
 
@@ -168,3 +177,24 @@ php_fpm_pools:
 php_extensions:
   - mongodb
   - redis
+
+
+
+
+
+####### OPCACHE TASKS CONFIGURATION #######
+
+# Enable OPcache
+php_opcache_enable: "1"
+
+# OPcache memory consumption (in MB)
+php_opcache_memory_consumption: "128"
+
+# Memory size for interned string (in MB)
+php_opcache_interned_strings_buffer: "8"
+
+# Number of accelerated files
+php_opcache_accelerated_files: "20000"
+
+# Validate files timestamp (for dev environment recommended value is 1)
+php_opcache_validated_timestamps: "0"
