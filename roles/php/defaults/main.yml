@@ -22,7 +22,7 @@ php_manage_composer: yes
 ####### INSTALL TASKS CONFIGURATION #######
 
 # Version of PHP to install
-php_version: "7.1.0"
+php_version: "7.1.8"
 
 # Location for PHP installation
 php_install_path: /usr/local/php

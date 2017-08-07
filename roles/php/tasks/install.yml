@@ -29,7 +29,8 @@
 
 
 
-# Download PHP source code. Easiest way is to obtain desired version from GitHub
+# Download PHP source code. Easiest way is to obtain desired version from GitHub:
+# https://github.com/php/php-src/releases
 #
 - name: Download PHP source files
   get_url:
