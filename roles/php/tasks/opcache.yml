@@ -1,3 +1,16 @@
+# Enable OPcache extension
+#
+- name: Enable OPcache extension
+  lineinfile:
+    dest: "{{ php_ini_file_path }}"
+    line: "zend_extension = opcache.so"
+    state: present
+    insertafter: "[PHP]"
+  notify: restart php-fpm
+  tags: [php, opcache]
+
+
+
 # Make sure that OPcache is enabled
 #
 - name: Enable OPcache
