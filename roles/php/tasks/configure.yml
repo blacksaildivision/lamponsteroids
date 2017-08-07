@@ -183,6 +183,30 @@
 
 
 
+# Set realpath cache size and TTL
+#
+- name: Configure realpath cache size
+  lineinfile:
+    dest: "{{ php_ini_file_path }}"
+    line: "realpath_cache_size = {{ php_realpath_cache_size }}"
+    state: present
+    regexp: '^;?realpath_cache_size'
+    insertafter: "[PHP]"
+  notify: restart php-fpm
+  tags: [php, configure]
+
+- name: Configure realpath cache TTL
+  lineinfile:
+    dest: "{{ php_ini_file_path }}"
+    line: "realpath_cache_ttl = {{ php_realpath_cache_ttl }}"
+    state: present
+    regexp: '^;?realpath_cache_ttl'
+    insertafter: "[PHP]"
+  notify: restart php-fpm
+  tags: [php, configure]
+
+
+
 # Set path to MySQL socket in order to get connection to MySQL
 # Socket is set both for PDO and MySQLi (used by WordPress)
 #

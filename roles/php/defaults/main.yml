@@ -123,6 +123,12 @@ php_date_timezone: UTC
 # Configure MySQL socket path
 php_mysql_socket: /var/lib/mysql/mysql.sock
 
+# Configure realpath cache size
+php_realpath_cache_size: 4096k
+
+# Configure realpath cache TTL
+php_realpath_cache_ttl: 600
+
 
 
 
