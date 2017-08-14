@@ -63,7 +63,7 @@ You can setup logrotate scripts with this role as well.
 
 **php** - Install and configure PHP (7.1.8), PHP-FPM, PHP Pecl extensions and Composer. Opcache is enabled as well.
 
-**mongodb** - Install and configure MongoDB with authentication
+**mongodb** - Install and configure MongoDB (3.4.7) with authentication
 
 **letsencrypt** - Install Certbot and obtain certificates from Let's Encrypt
 

@@ -16,7 +16,7 @@ mongodb_manage_users: yes
 ####### INSTALL TASKS CONFIGURATION #######
 
 # Version of MongoDB
-mongodb_version: "3.4.0"
+mongodb_version: "3.4.7"
 
 
 
