@@ -36,16 +36,16 @@
     group: "{{ item.backup_directory_group }}"
     mode: 0700
   with_items: "{{ mongodb_backup_databases }}"
-  tags: [mongodb, backup3]
+  tags: [mongodb, backup]
 
 
 
 # Setup cronjob for backups
 #
-#- name: Setup crontab for periodical backups
-#  cron:
-#    name: "{{ item.database }} backup"
-#    special_time: "{{ item.backup_frequency }}"
-#    job: "bash {{ item.backup_directory }}/{{ item.database }}-mongodb-backup.sh >> {{ item.backup_directory }}/{{ item.database }}-backup.log 2>&1"
-#  with_items: "{{ mysql_backup_databases }}"
-#  tags: [mysql, backup]
+- name: Setup crontab for periodical backups
+  cron:
+    name: "{{ item.database }} mongodb backup"
+    special_time: "{{ item.backup_frequency }}"
+    job: "bash {{ item.backup_directory }}/{{ item.database }}-mongodb-backup.sh >> {{ item.backup_directory }}/{{ item.database }}-backup.log 2>&1"
+  with_items: "{{ mongodb_backup_databases }}"
+  tags: [mongodb, backup]
