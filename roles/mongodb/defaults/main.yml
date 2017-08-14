@@ -9,6 +9,9 @@ mongodb_manage_configuration: yes
 # Should this role manage admins and users?
 mongodb_manage_users: yes
 
+# Should this role perform databases backups?
+mongodb_manage_backup: yes
+
 
 
 
@@ -16,7 +19,7 @@ mongodb_manage_users: yes
 ####### INSTALL TASKS CONFIGURATION #######
 
 # Version of MongoDB
-mongodb_version: "3.4.0"
+mongodb_version: "3.4.7"
 
 
 
@@ -50,3 +53,39 @@ mongodb_databases:
     database: example,
     roles: "readWrite,dbAdmin"
  }
+
+
+
+
+
+####### BACKUP TASKS CONFIGURATION #######
+
+# Name of the user that will perform backups
+mongodb_backup_user: backup
+
+# Password for backup user
+mongodb_backup_user_password: "r8xO;ki55zSoNeZSl7tTv67sYTJ"
+
+# List of database to backup
+# Here is full example with all options:
+#
+# mongodb_backup_databases:
+#  - {
+#    database: example, # database name to backup
+#    backup_directory: /var/www/example.com/db, # directory for storing backups
+#    backup_directory_owner: developer, # directory owner
+#    backup_directory_group: developer, # directory group
+#    rotate: 30, # number of files to rotate
+#    backup_frequency: daily, # how often should backups be performed (daily, weekly, etc)
+#    s3_bucket: mongodb-backup # name of the s3 bucket that backup should be pushed through. it requires having awscli up and running
+# }
+mongodb_backup_databases:
+ - {
+    database: example,
+    backup_directory: /var/db,
+    backup_directory_owner: root,
+    backup_directory_group: root,
+    rotate: 30,
+    backup_frequency: daily
+ }
+

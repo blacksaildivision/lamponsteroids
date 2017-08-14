@@ -1,0 +1,51 @@
+# Create user for backups
+#
+- name: Create dedicated user for backups
+  mongodb_user:
+    database: admin
+    login_user: admin
+    login_password: "{{ mongodb_admin_password }}"
+    name: "{{ mongodb_backup_user }}"
+    password: "{{ mongodb_backup_user_password }}"
+    roles: backup
+  tags: [mongodb, backup]
+
+
+
+# Make sure that backup directory exists
+#
+- name: Make sure that backup directory exists
+  file:
+    path: "{{ item.backup_directory }}"
+    state: directory
+    mode: "2775"
+    owner: "{{ item.backup_directory_owner }}"
+    group: "{{ item.backup_directory_group }}"
+  with_items: "{{ mongodb_backup_databases }}"
+  tags: [mongodb, backup]
+
+
+
+# Place backup script in place for each database
+#
+- name: Setup backup scripts
+  template:
+    src: backup-script.sh.j2
+    dest: "{{ item.backup_directory }}/{{ item.database }}-mongodb-backup.sh"
+    owner: "{{ item.backup_directory_owner }}"
+    group: "{{ item.backup_directory_group }}"
+    mode: 0700
+  with_items: "{{ mongodb_backup_databases }}"
+  tags: [mongodb, backup]
+
+
+
+# Setup cronjob for backups
+#
+- name: Setup crontab for periodical backups
+  cron:
+    name: "{{ item.database }} mongodb backup"
+    special_time: "{{ item.backup_frequency }}"
+    job: "bash {{ item.backup_directory }}/{{ item.database }}-mongodb-backup.sh >> {{ item.backup_directory }}/{{ item.database }}-backup.log 2>&1"
+  with_items: "{{ mongodb_backup_databases }}"
+  tags: [mongodb, backup]

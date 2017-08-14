@@ -49,11 +49,11 @@ You can setup logrotate scripts with this role as well.
 
 **ntp** - Takes care of system timezone and NTP server. It uses Chrony for using NTP.
 
-**git** - Install latest version of git (2.14.0) 
+**git** - Install latest version of git (2.14.1) 
 
 **httpd** - Install and configure latest version of Apache httpd (2.4.27)
 
-**nodejs** - Install latest version of Node.js (8.2.1) and NPM
+**nodejs** - Install latest version of Node.js (8.3.0) and NPM
 
 **datadog** - Install and configure datadog agent.
 
@@ -63,7 +63,7 @@ You can setup logrotate scripts with this role as well.
 
 **php** - Install and configure PHP (7.1.8), PHP-FPM, PHP Pecl extensions and Composer. Opcache is enabled as well.
 
-**mongodb** - Install and configure MongoDB with authentication
+**mongodb** - Install and configure MongoDB (3.4.7) with authentication
 
 **letsencrypt** - Install Certbot and obtain certificates from Let's Encrypt
 
