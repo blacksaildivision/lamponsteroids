@@ -53,7 +53,7 @@ You can setup logrotate scripts with this role as well.
 
 **httpd** - Install and configure latest version of Apache httpd (2.4.27)
 
-**nodejs** - Install latest version of Node.js (8.2.1) and NPM
+**nodejs** - Install latest version of Node.js (8.3.0) and NPM
 
 **datadog** - Install and configure datadog agent.
 
