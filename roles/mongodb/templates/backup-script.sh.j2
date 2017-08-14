@@ -1,0 +1,38 @@
+#!/bin/bash
+
+##### CONFIGURATION PART ######
+databaseName="{{ item.database }}"
+backupDirectory="{{ item.backup_directory }}"
+compressBackup=true
+uploadToS3={{ 'true' if item.s3_bucket is defined else 'false' }}
+s3BucketName="{{ item.s3_bucket if item.s3_bucket is defined else '' }}"
+backupsRotate=true
+rotate={{ item.rotate }}
+backupUser="{{ mongodb_backup_user }}"
+backupUserPassword="{{ mongodb_backup_user_password }}"
+
+##### EXECUTION PART #####
+backupFileName="$databaseName.$(date +'%Y-%m-%d_%H-%M').archive"
+backupFilePath="$backupDirectory/$backupFileName"
+echo "Backup of MongoDB \"$databaseName\" database started at $(date +'%d/%m/%Y %T')"
+
+echo "Backing up database..."
+mongodump --db "$databaseName" --username "$backupUser" --password "$backupUserPassword" --authenticationDatabase admin --archive="$backupFilePath"
+
+if [ "$compressBackup" = true ] ; then
+    echo "Compressing MongoDB backup file..."
+    gzip -f "$backupFilePath"
+    backupFilePath="$backupFilePath.gz"
+fi
+
+if [ "$uploadToS3" = true ] ; then
+    echo "Uploading to S3 bucket..."
+    aws s3 cp --storage-class STANDARD_IA "$backupFilePath" s3://"$s3BucketName"
+fi
+
+if [ "$backupsRotate" = true ] ; then
+    echo "Removing old backup files..."
+    ls --reverse "$backupDirectory/$databaseName".* | sed -n "$(( rotate + 1 )),\$p" | xargs rm -f
+fi
+
+echo "Backup of MongoDB \"$databaseName\" database finished at $(date +'%d/%m/%Y %T')"

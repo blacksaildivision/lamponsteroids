@@ -91,3 +91,10 @@
 #
 - include: users.yml
   when: "mongodb_manage_users == true"
+
+
+
+# Setup backup script
+#
+- include: backup.yml
+  when: "mongodb_manage_backup == true"
