@@ -30,6 +30,6 @@ fi
 
 if [ "$backupsRotate" = true ] ; then
     echo "Removing old backup files..."
-    ls --reverse "$backupDirectory/$databaseName".* | sed -n "$(( rotate + 1 )),\$p" | xargs rm
+    ls --reverse "$backupDirectory/$databaseName".* | sed -n "$(( rotate + 1 )),\$p" | xargs rm -f
 fi
 echo "Backup of \"$databaseName\" database finished at $(date +'%d/%m/%Y %T')"
