@@ -63,3 +63,17 @@
     state: absent
   notify: restart php-fpm
   tags: [php, fpm]
+
+
+
+# Setup logrotate for given FPM pools
+#
+- name: Setup logrotate for PHP-FPM
+  template:
+    src: logrotate.j2
+    dest: "/etc/logrotate.d/php-fpm"
+    owner: root
+    group: root
+    mode: 0644
+  when: "php_fpm_logrotate == true"
+  tags: [php, fpm, logrrr]

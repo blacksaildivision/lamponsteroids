@@ -167,6 +167,9 @@ php_fpm_pools:
     ]
  }
 
+# Should log rotate be set up?
+php_fpm_logrotate: yes
+
 
 
 
