@@ -18,7 +18,6 @@
     - re2c
     - bison
     - libxml2-devel
-    - openssl-devel
     - bzip2-devel
     - libcurl-devel
     - libpng-devel

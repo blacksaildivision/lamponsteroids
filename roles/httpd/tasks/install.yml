@@ -8,7 +8,6 @@
     - autoconf # Dependencies: m4 perl perl-Carp perl-Data-Dumper perl-Encode perl-Exporter perl-File-Path perl-File-Temp perl-Filter perl-Getopt-Long perl-HTTP-Tiny perl-PathTools perl-Pod-Escapes perl-Pod-Perldoc perl-Pod-Simple perl-Pod-Usage perl-Scalar-List-Utils perl-Socket perl-Storable perl-Text-ParseWords perl-Time-HiRes perl-Time-Local perl-constant perl-libs perl-macros perl-parent perl-podlators perl-threads perl-threads-shared
     - libtool # Dependencies: autoconf automake cpp gcc glibc-devel glibc-headers kernel-headers libmpc m4 mpfr perl perl-Carp perl-Data-Dumper perl-Encode perl-Exporter perl-File-Path perl-File-Temp perl-Filter perl-Getopt-Long perl-HTTP-Tiny perl-PathTools perl-Pod-Escapes perl-Pod-Perldoc perl-Pod-Simple perl-Pod-Usage perl-Scalar-List-Utils perl-Socket perl-Storable perl-Test-Harness perl-Text-ParseWords perl-Thread-Queue perl-Time-HiRes perl-Time-Local perl-constant perl-libs perl-macros perl-parent perl-podlators perl-threads perl-threads-shared
     - libnghttp2-devel # Dependencies: libnghttp2
-    - openssl-devel # Dependencies: keyutils-libs-devel krb5-devel libcom_err-devel libselinux-devel libsepol-devel libverto-devel pcre-devel zlib-devel
     - pcre-devel
   tags: [httpd, install]
 

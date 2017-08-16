@@ -8,6 +8,7 @@
   roles:
     - ../roles/centos
     - ../roles/ntp
+    - ../roles/openssl
     - ../roles/git
     - ../roles/httpd
     - ../roles/nodejs

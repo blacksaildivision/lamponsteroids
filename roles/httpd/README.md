@@ -70,3 +70,8 @@ httpd_virtualhosts:
     logs: no
  }
 ```
+
+OpenSSL
+-------
+
+This role requires `openssl` role installed. It will install latest version of OpenSSL and Apache HTTPD will be compiled with `--with-ssl` parameter pointing to location where latest version is compiled (/usr/local/openssl)

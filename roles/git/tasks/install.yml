@@ -11,7 +11,6 @@
     - gcc # Dependencies: cpp glibc-devel glibc-headers kernel-headers libmpc mpfr
     - gettext-devel # Dependencies: gettext-common-devel git libgnome-keyring perl perl-Carp perl-Encode perl-Error perl-Exporter perl-File-Path perl-File-Temp perl-Filter perl-Getopt-Long perl-Git perl-HTTP-Tiny perl-PathTools perl-Pod-Escapesperl-Pod-Perldoc perl-Pod-Simple perl-Pod-Usage perl-Scalar-List-Utils perl-Socket perl-Storable perl-TermReadKey perl-Text-ParseWords perl-Time-HiRes perl-Time-Local perl-constant perl-libs perl-macros perl-parent perl-podlators perl-threads perl-threads-shared
     - kernel-headers
-    - openssl-devel # Dependencies: keyutils-libs-devel krb5-devel libcom_err-devel libselinux-devel libsepol-devel libverto-devel pcre-devel zlib-devel
     - perl-devel # Dependencies: gdbm-devel glibc-devel glibc-headers kernel-headers libdb-devel perl perl-Carp perl-Encode perl-Exporter perl-ExtUtils-Install  perl-ExtUtils-MakeMaker perl-ExtUtils-Manifest perl-ExtUtils-ParseXS perl-File-Path perl-File-Temp perl-Filter perl-Getopt-Long perl-HTTP-Tiny perl-PathTools perl-Pod-Escapes perl-Pod-Perldoc perl-Pod-Simple perl-Pod-Usage perl-Scalar-List-Utils perl-Socket perl-Storable perl-Test-Harness perl-Text-ParseWords perl-Time-HiRes perl-Time-Local perl-constant perl-libs perl-macros perl-parent perl-podlators perl-threads perl-threads-shared pyparsing systemtap-sdt-devel
     - zlib-devel
   tags: [git, install]
@@ -53,7 +52,7 @@
   with_items:
     - make clean
     - make configure
-    - "./configure --prefix={{ git_install_path }}"
+    - "./configure --prefix={{ git_install_path }} --with-openssl=/usr/local/openssl"
     - make
   become: true
   become_user: "{{ git_build_user }}"

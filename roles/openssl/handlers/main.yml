@@ -1,0 +1,5 @@
+# Reload ldconfig
+# This handler is executed on changes in openssl library directory
+#
+- name: reload ldconfig
+  shell: ldconfig
