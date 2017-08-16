@@ -43,6 +43,7 @@ httpd_configure_options:
   - --with-mpm=event
   - --with-included-apr
   - "--prefix={{ httpd_install_path }}"
+  - --with-ssl=/usr/local/openssl
 
 # Remove downloaded sources after installation
 httpd_cleanup_after_install: yes
