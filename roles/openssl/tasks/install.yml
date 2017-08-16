@@ -46,7 +46,7 @@
   args:
     chdir: "{{ openssl_sources_location }}/openssl-OpenSSL_{{ openssl_version | replace( '.', '_' ) }}"
   with_items:
-    - "./config --prefix=/usr/local/openssl --openssldir=/etc/ssl shared zlib"
+    - "./config --prefix={{ openssl_install_path }} --openssldir=/etc/ssl shared zlib"
     - make
     - make test
   become: true
@@ -62,4 +62,31 @@
   command: make install
   args:
     chdir: "{{ openssl_sources_location }}/openssl-OpenSSL_{{ openssl_version | replace( '.', '_' ) }}"
+  tags: [openssl, install]
+
+
+
+# Remove downloaded sources after installation
+#
+- name: Cleanup downloaded sources
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ openssl_sources_location }}/openssl-OpenSSL_{{ openssl_version | replace( '.', '_' ) }}.tar.gz"
+    - "{{ openssl_sources_location }}/openssl-OpenSSL_{{ openssl_version | replace( '.', '_' ) }}"
+  tags: [openssl, install]
+
+
+
+# Link libraries
+#
+- name: Link libraries
+  template:
+    src: openssl.conf.j2
+    dest: "/etc/ld.so.conf.d/openssl-{{ openssl_version }}.conf"
+    owner: root
+    group: root
+    mode: 0644
+  notify: reload ldconfig
   tags: [openssl, install]

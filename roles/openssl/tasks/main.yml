@@ -6,6 +6,8 @@
   register: openssl_is_installed_test
   ignore_errors: yes
   changed_when: false
+  environment:
+    PATH: "{{ openssl_install_path }}/bin:{{ ansible_env.PATH }}"
   tags: [openssl]
 
 - set_fact:
@@ -21,12 +23,12 @@
 
 - set_fact:
     openssl_install_new_version: true
-  when: ( openssl_is_installed == true ) and ( openssl_is_installed_test.stdout_lines != openssl_version )
+  when: ( openssl_is_installed == true ) and ( openssl_is_installed_test.stdout.split(' ')[1] != openssl_version )
   tags: [openssl]
 
 - set_fact:
     openssl_install_new_version: false
-  when: ( openssl_is_installed == true ) and ( openssl_is_installed_test.stdout_lines == openssl_version )
+  when: ( openssl_is_installed == true ) and ( openssl_is_installed_test.stdout.split(' ')[1] == openssl_version )
   tags: [openssl]
 
 

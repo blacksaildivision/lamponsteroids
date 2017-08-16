@@ -20,3 +20,6 @@ openssl_build_user: vagrant
 
 # Group of the build user.
 openssl_build_group: vagrant
+
+# Path where OpenSSL will be installed. NO trailing slash at the end!
+openssl_install_path: /usr/local/openssl
