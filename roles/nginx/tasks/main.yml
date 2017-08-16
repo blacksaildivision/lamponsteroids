@@ -17,7 +17,7 @@
   ignore_errors: yes
   changed_when: false
   environment:
-    PATH: "{{ ansible_env.PATH }}:{{ nginx_install_path }}/bin"
+    PATH: "{{ ansible_env.PATH }}:{{ nginx_install_path }}/sbin"
   tags: [nginx]
 
 - set_fact:
@@ -33,12 +33,12 @@
 
 - set_fact:
     nginx_install_new_version: true
-  when: ( nginx_is_installed == true ) and ( nginx_is_installed_test.stdout_lines[0] | regex_replace('[^0-9.]','') != nginx_version )
+  when: ( nginx_is_installed == true ) and ( nginx_is_installed_test.stderr | regex_replace('[^0-9.]','') != nginx_version )
   tags: [nginx]
 
 - set_fact:
     nginx_install_new_version: false
-  when: ( nginx_is_installed == true ) and ( nginx_is_installed_test.stdout_lines[0] | regex_replace('[^0-9.]','') == nginx_version )
+  when: ( nginx_is_installed == true ) and ( nginx_is_installed_test.stderr | regex_replace('[^0-9.]','') == nginx_version )
   tags: [nginx]
 
 
