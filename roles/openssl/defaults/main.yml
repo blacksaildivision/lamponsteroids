@@ -11,3 +11,12 @@ openssl_manage_installation: yes
 
 # Version of OpenSSL that should be present in the system
 openssl_version: "1.1.0f"
+
+# Location of files for OpenSSL sources
+openssl_sources_location: /usr/src
+
+# User that will build OpenSSL. Please never use root account for compiling software. It can lead to serious security issues
+openssl_build_user: vagrant
+
+# Group of the build user.
+openssl_build_group: vagrant
