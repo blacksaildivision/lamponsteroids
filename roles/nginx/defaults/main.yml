@@ -14,3 +14,19 @@ nginx_version: "1.13.4"
 
 # Path where nginx will be installed. NO trailing slash at the end!
 nginx_install_path: /usr/local/nginx
+
+# Location of files for nginx sources
+nginx_sources_location: /usr/src
+
+# User that will build nginx. Please never use root account for compiling software. It can lead to serious security issues
+nginx_build_user: vagrant
+
+# Group of the build user.
+nginx_build_group: vagrant
+
+# List of configuration options for nginx
+nginx_configure_options:
+  - "--prefix={{ nginx_install_path }}"
+
+# Remove downloaded sources after installation
+nginx_cleanup_after_install: yes
