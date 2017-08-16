@@ -18,6 +18,7 @@
     - ../roles/datadog
     - ../roles/mongodb
     - ../roles/letsencrypt
+    - ../roles/nginx
 
   vars_files:
     - ../vars/example-vars.yml
