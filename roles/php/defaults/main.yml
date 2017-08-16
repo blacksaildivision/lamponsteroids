@@ -68,6 +68,7 @@ php_configure_options:
  - --enable-sockets
  - --with-xmlrpc
  - --enable-zip
+ - --with-openssl=/usr/local/openssl
 
 # Should this role delete downloaded and uncompressed files after installation?
 php_cleanup_after_install: yes

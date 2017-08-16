@@ -50,3 +50,8 @@ php_fpm_pools:
     ]
  }
 ```
+
+OpenSSL
+-------
+
+This role requires `openssl` role installed. It will install latest version of OpenSSL and PHP will be compiled with `--with-openssl` parameter pointing to location where latest version is compiled (/usr/local/openssl)
