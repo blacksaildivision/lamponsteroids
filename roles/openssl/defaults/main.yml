@@ -1,0 +1,13 @@
+####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
+
+# Should this role use install tasks for compiling OpenSSL?
+openssl_manage_installation: yes
+
+
+
+
+
+####### INSTALL TASKS CONFIGURATION #######
+
+# Version of OpenSSL that should be present in the system
+openssl_version: "1.1.0f"
