@@ -16,10 +16,10 @@ openssl_version: "1.1.0f"
 openssl_sources_location: /usr/src
 
 # User that will build OpenSSL. Please never use root account for compiling software. It can lead to serious security issues
-openssl_build_user: vagrant
+openssl_build_user: developer
 
 # Group of the build user.
-openssl_build_group: vagrant
+openssl_build_group: developer
 
 # Path where OpenSSL will be installed. NO trailing slash at the end!
 openssl_install_path: /usr/local/openssl
