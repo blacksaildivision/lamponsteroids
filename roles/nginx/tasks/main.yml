@@ -49,4 +49,22 @@
 #  2. nginx is installed but not in desired version
 #
 - include: install.yml
-  when: "nginx_install_new_version == true and nginx_manage_installation == true"
+  when: "nginx_install_new_version == false and nginx_manage_installation == true"
+
+
+
+# Configure nginx
+#
+- include: configure.yml
+  when: "nginx_manage_configuration == true"
+
+
+
+# Make sure that nginx service is started and enabled on boot
+#
+- name: Start and enable nginx service
+  service:
+    name: nginx
+    state: started
+    enabled: yes
+  tags: [nginx, healthcheck]

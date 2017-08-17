@@ -1,0 +1,11 @@
+# Setup nginx main configuration
+#
+- name: Setup nginx main configuration
+  template:
+    src: nginx.conf.j2
+    dest: "{{ nginx_conf_path }}"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart nginx
+  tags: [nginx, configure]
