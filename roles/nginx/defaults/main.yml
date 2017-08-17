@@ -74,3 +74,9 @@ nginx_worker_connections: 4096
 
 # Limit of the maximum number of open files for worker
 nginx_worker_rlimit_nofile: 4096
+
+# User for nginx daemon(s)
+nginx_user: nginx
+
+# Group for nginx daemon(s)
+nginx_group: nginx

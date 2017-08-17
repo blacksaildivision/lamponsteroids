@@ -1,3 +1,23 @@
+# Make sure that dedicated nginx daemon user and group exists
+# It's nice to create separate user for each service like httpd, nginx etc.
+#
+- name: Create dedicated nginx group
+  group:
+    name: "{{ nginx_group }}"
+    state: present
+  tags: [nginx, configure]
+
+- name: Create dedicated nginx user
+  user:
+    name: "{{ nginx_user }}"
+    createhome: no
+    group: "{{ nginx_group }}"
+    state: present
+    shell: /sbin/nologin
+  tags: [nginx, configure]
+
+
+
 # Setup nginx main configuration
 #
 - name: Setup nginx main configuration

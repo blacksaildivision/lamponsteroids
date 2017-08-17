@@ -49,7 +49,7 @@
 #  2. nginx is installed but not in desired version
 #
 - include: install.yml
-  when: "nginx_install_new_version == false and nginx_manage_installation == true"
+  when: "nginx_install_new_version == true and nginx_manage_installation == true"
 
 
 
