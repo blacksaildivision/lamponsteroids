@@ -60,6 +60,13 @@
 
 
 
+# Configure nginx servers
+#
+- include: servers.yml
+  when: "nginx_manage_servers == true"
+
+
+
 # Make sure that nginx service is started and enabled on boot
 #
 - name: Start and enable nginx service

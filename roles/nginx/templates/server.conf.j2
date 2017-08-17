@@ -1,0 +1,58 @@
+{% if item.upstream is defined %}
+upstream {{ item.server_name | replace('.', '_') }} {
+{% for upstream in item.upstream %}
+    server {{ upstream }};
+{% endfor %}
+}
+{% endif %}
+
+server {
+    listen {{ '443' if item.https is defined and item.https == true else nginx_port }};
+    server_name {{ item.server_name }} {{ item.server_aliases | join (' ') }};
+    root {{ nginx_websites_directory }}/{{ item.server_name }}/htdocs;
+
+    rewrite ^/wp-content/(.*)$ /content/$1 last;
+
+    location / {
+        try_files $uri /wp$uri {{ '@proxy' if item.proxy_pass is defined and item.proxy_pass == true else '=404' }};
+    }
+
+    location /wp-content {
+        alias {{ nginx_websites_directory }}/{{ item.server_name }}/htdocs/content;
+    }
+
+{% if item.proxy_pass is defined and item.proxy_pass == true %}
+    location @proxy {
+        proxy_pass http://{{ item.server_name | replace('.', '_') }};
+    }
+{% endif %}
+
+    # Deny .htaccess
+    location ~ /\.ht {
+        deny all;
+    }
+
+}
+
+    # HTTPS server
+    #
+    #server {
+    #    listen       443 ssl;
+    #    server_name  localhost;
+
+    #    ssl_certificate      cert.pem;
+    #    ssl_certificate_key  cert.key;
+
+    #    ssl_session_cache    shared:SSL:1m;
+    #    ssl_session_timeout  5m;
+
+    #    ssl_ciphers  HIGH:!aNULL:!MD5;
+    #    ssl_prefer_server_ciphers  on;
+
+    #    location / {
+    #        root   html;
+    #        index  index.html index.htm;
+    #    }
+    #}
+
+    #https://gist.github.com/kjprince/9496501
