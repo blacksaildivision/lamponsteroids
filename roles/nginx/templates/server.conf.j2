@@ -11,6 +11,16 @@ server {
     server_name {{ item.server_name }} {{ item.server_aliases | join (' ') }};
     root {{ nginx_websites_directory }}/{{ item.server_name }}/htdocs;
 
+{% if item.logs is not defined or item.logs == true %}
+    # Logging
+    error_log {{ nginx_websites_directory }}/{{ item.server_name }}/logs/nginx-error.log notice;
+    access_log {{ nginx_websites_directory }}/{{ item.server_name }}/logs/nginx-access.log main if=$loggable;
+{% else %}
+    # Turn off logging
+    error_log off;
+    access_log off;
+{% endif %}
+
 {% if item.rewrites is defined %}
     # Rewrite URLs
 {% for rewrite in item.rewrites %}
@@ -22,8 +32,16 @@ server {
         try_files $uri {{ '/'+item.subdirectory+'$uri' if item.subdirectory is defined  else '' }} {{ '@proxy' if item.proxy_pass is defined and item.proxy_pass == true else '=404' }};
     }
 
-    location /wp-content {
-        alias {{ nginx_websites_directory }}/{{ item.server_name }}/htdocs/content;
+{% if item.extra_config is defined %}
+    # Custom config
+    {{ item.extra_config }}
+{% endif %}
+
+    # Disable access to hidden files
+    location ~ /\. {
+        access_log off;
+        log_not_found off;
+        deny all;
     }
 
 {% if item.proxy_pass is defined and item.proxy_pass == true %}
@@ -31,12 +49,6 @@ server {
         proxy_pass http://{{ item.server_name | replace('.', '_') }};
     }
 {% endif %}
-
-    # Deny .htaccess
-    location ~ /\.ht {
-        deny all;
-    }
-
 }
 
     # HTTPS server
