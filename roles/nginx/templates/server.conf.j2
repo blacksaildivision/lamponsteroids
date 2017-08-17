@@ -19,7 +19,7 @@ server {
 {% endif %}
 
     location / {
-        try_files $uri /wp$uri {{ '@proxy' if item.proxy_pass is defined and item.proxy_pass == true else '=404' }};
+        try_files $uri {{ '/'+item.subdirectory+'$uri' if item.subdirectory is defined  else '' }} {{ '@proxy' if item.proxy_pass is defined and item.proxy_pass == true else '=404' }};
     }
 
     location /wp-content {
