@@ -11,7 +11,12 @@ server {
     server_name {{ item.server_name }} {{ item.server_aliases | join (' ') }};
     root {{ nginx_websites_directory }}/{{ item.server_name }}/htdocs;
 
-    rewrite ^/wp-content/(.*)$ /content/$1 last;
+{% if item.rewrites is defined %}
+    # Rewrite URLs
+{% for rewrite in item.rewrites %}
+    rewrite {{ rewrite.regex }} {{ rewrite.replacement }} last;
+{% endfor %}
+{% endif %}
 
     location / {
         try_files $uri /wp$uri {{ '@proxy' if item.proxy_pass is defined and item.proxy_pass == true else '=404' }};
