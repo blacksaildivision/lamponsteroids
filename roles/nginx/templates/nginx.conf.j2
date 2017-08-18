@@ -9,6 +9,7 @@ worker_rlimit_nofile {{ nginx_worker_rlimit_nofile }};
 events {
     multi_accept on;
     worker_connections {{ nginx_worker_connections }};
+    use epoll;
 }
 
 
