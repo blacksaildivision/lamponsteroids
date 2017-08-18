@@ -85,51 +85,20 @@
   tags: [nginx, servers, servers-update]
 
 
-# Block access to server when accessing via Server IP
-# When server IP address is called display 403 error
-#
-#- set_fact:
-#    httpd_localhost_ips: "{{ httpd_server_ips | default(ansible_all_ipv4_addresses) }}"
-#  when: "httpd_403_for_localhost == true"
-#  tags: [httpd, virtualhosts, virtualhosts-update]
-#
-#- name: Add 403 on accessing localhost
-#  template:
-#    src: localhost-VirtualHost.conf.j2
-#    dest: "{{ httpd_install_path }}/conf/extra/httpd-localhost.conf"
-#    owner: root
-#    group: root
-#    mode: 0644
-#  notify: restart httpd
-#  when: "httpd_403_for_localhost == true"
-#  tags: [httpd, virtualhosts, virtualhosts-update]
-#
-#- name: Add localhost VirtualHost entries to httpd.conf file
-#  lineinfile:
-#    dest: "{{ httpd_config_file }}"
-#    line: "Include conf/extra/httpd-localhost.conf"
-#    state: present
-#    insertafter: EOF
-#  notify: restart httpd
-#  when: "httpd_403_for_localhost == true"
-#  tags: [httpd, virtualhosts, virtualhosts-update]
 
-
-
-# Setup logrotate for given VirtualHosts
+# Setup logrotate for given servers
 # Each item must have logrotate set up. File will not be used if all have logrotate to false or logs to false
 #
-#- set_fact:
-#    httpd_virtualhosts_with_logrotate: "{{ httpd_virtualhosts | rejectattr('logrotate', 'even') | list }}"
-#  tags: [httpd, virtualhosts]
-#
-#- name: Setup logrotate for VirtualHosts
-#  template:
-#    src: logrotate.j2
-#    dest: "/etc/logrotate.d/httpd"
-#    owner: root
-#    group: root
-#    mode: 0644
-#  when: "httpd_virtualhosts_with_logrotate | length > 0"
-#  tags: [httpd, virtualhosts]
-#
+- set_fact:
+    nginx_servers_with_logrotate: "{{ nginx_servers | rejectattr('logrotate', 'even') | list }}"
+  tags: [nginx, servers]
+
+- name: Setup logrotate for servers
+  template:
+    src: logrotate.j2
+    dest: "/etc/logrotate.d/nginx"
+    owner: root
+    group: root
+    mode: 0644
+  when: "nginx_servers_with_logrotate | length > 0"
+  tags: [nginx, servers]
