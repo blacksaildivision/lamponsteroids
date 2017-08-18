@@ -83,6 +83,9 @@ nginx_user: nginx
 # Group for nginx daemon(s)
 nginx_group: nginx
 
+# Diffie-Hellman group file
+nginx_df_file_path: /etc/ssl/certs/dhparam.pem
+
 
 
 

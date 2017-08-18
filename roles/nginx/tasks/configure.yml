@@ -18,6 +18,17 @@
 
 
 
+# Create a strong Diffie-Hellman group for Forward Secrecy
+# It is used for improving SSL security
+#
+- name: Create Diffie-Hellman group
+  shell: "/usr/local/openssl/bin/openssl dhparam -out {{ nginx_df_file_path }} 2048"
+  args:
+    creates: "{{ nginx_df_file_path }}"
+  tags: [nginx, configure]
+
+
+
 # Setup nginx main configuration
 #
 - name: Setup nginx main configuration
