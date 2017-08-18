@@ -56,6 +56,13 @@ server {
     }
 {% endif %}
 
+{% if item.letsencrypt_integration is defined and item.letsencrypt_integration == true %}
+    # Let's encrypt integration
+    location /.well-known/ {
+        alias /var/www/letsencrypt/;
+    }
+{% endif %}
+
 {% if item.extra_config is defined %}
     # Custom config
     {{ item.extra_config }}
