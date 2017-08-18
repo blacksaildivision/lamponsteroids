@@ -7,12 +7,14 @@ upstream {{ item.server_name | replace('.', '_') }} {
 {% endif %}
 
 server {
-    #listen {{ '443' if item.https is defined and item.https == true else nginx_port }};
-    listen 80;
-    listen 443 ssl http2;
+    listen {{ '443 ssl http2' if item.https is defined and item.https == true else nginx_port }};
+    server_name {{ item.server_name }} {{ item.server_aliases | join (' ') }};
+
+{% if item.https is defined and item.https == true %}
     ssl_certificate     /var/www/blacksaildivision.com/ssl/cert.pem;
     ssl_certificate_key /var/www/blacksaildivision.com/ssl/privkey.pem;
-    server_name {{ item.server_name }} {{ item.server_aliases | join (' ') }};
+{% endif %}
+
     root {{ nginx_websites_directory }}/{{ item.server_name }}/htdocs;
 
 {% if item.logs is not defined or item.logs == true %}

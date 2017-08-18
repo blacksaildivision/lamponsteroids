@@ -133,3 +133,6 @@ nginx_servers:
   directory_group: "{{ nginx_user }}",
   logrotate: yes
  }
+
+# Redirects
+nginx_redirects: []

@@ -1,0 +1,14 @@
+{% for redirect in nginx_redirects %}
+server {
+    listen {{ nginx_port }};
+    server_name {{ redirect.server_name }} {{ redirect.server_aliases | join (' ') }};
+
+    # Turn off logging
+    error_log off;
+    access_log off;
+
+    # Redirect
+    return  301 {{ redirect.redirect }}$request_uri;
+}
+
+{% endfor %}

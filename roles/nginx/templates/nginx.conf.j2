@@ -54,4 +54,9 @@ http {
 {% for server in nginx_servers %}
     include server-{{ server.server_name }}{{ '-ssl' if server.https is defined and server.https == true else '' }}.conf;
 {% endfor %}
+
+{% if nginx_redirects | length > 0 %}
+    # Redirects
+    include server-redirects.conf;
+{% endif %}
 }

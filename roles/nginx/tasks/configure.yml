@@ -28,4 +28,4 @@
     group: root
     mode: 0644
   notify: restart nginx
-  tags: [nginx, configure]
+  tags: [nginx, configure, servers-update]

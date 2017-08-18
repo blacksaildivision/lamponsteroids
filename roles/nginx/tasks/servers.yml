@@ -70,6 +70,21 @@
 
 
 
+# Setup redirects
+#
+- name: Setup redirects
+  template:
+    src: server-redirects.conf.j2
+    dest: "{{ nginx_install_path }}/conf/server-redirects.conf"
+    owner: root
+    group: root
+    mode: 0644
+  with_items: "{{ nginx_redirects }}"
+  when: "nginx_redirects | length > 0"
+  notify: restart nginx
+  tags: [nginx, servers, servers-update]
+
+
 # Block access to server when accessing via Server IP
 # When server IP address is called display 403 error
 #
