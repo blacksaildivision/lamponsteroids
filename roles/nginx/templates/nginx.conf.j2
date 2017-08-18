@@ -15,7 +15,7 @@ events {
 
 http {
     include mime.types;
-    default_type  application/octet-stream;
+    default_type application/octet-stream;
     aio on;
     index index.php index.html;
     sendfile on;
@@ -38,11 +38,14 @@ http {
         "/robots.txt" 0;
         default 1;
     }
-    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent" "$http_x_forwarded_for"';
+    log_format main '$remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent" "$http_x_forwarded_for"';
+{% for log in nginx_additional_log_formats %}
+    log_format {{ log.name }} '{{ log.format }}';
+{% endfor %}
 
-    ############################################################
-    #keepalive_timeout  0;
-    keepalive_timeout  65;
+    # Keepalive settings
+    keepalive_timeout 65;
+    keepalive_requests 100000;
 
     # Server blocks for each domain
 {% for server in nginx_servers %}
@@ -52,5 +55,10 @@ http {
 {% if nginx_redirects | length > 0 %}
     # Redirects
     include server-redirects.conf;
+{% endif %}
+
+{% if nginx_extra_config != '' %}
+    # Extra config
+    {{ nginx_extra_config }}
 {% endif %}
 }

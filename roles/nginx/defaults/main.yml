@@ -87,6 +87,12 @@ nginx_group: nginx
 # Diffie-Hellman group file
 nginx_df_file_path: /etc/ssl/certs/dhparam.pem
 
+# Additional log formats
+nginx_additional_log_formats: []
+
+# Extra configuration in nginx file
+nginx_extra_config: ''
+
 
 
 
