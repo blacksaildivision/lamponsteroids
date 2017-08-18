@@ -55,6 +55,7 @@ nginx_configure_options:
   - --with-openssl=/usr/src/openssl-OpenSSL_1_1_0f
   - --with-http_v2_module
   - --with-http_stub_status_module
+  - --with-http_realip_module
 
 # Remove downloaded sources after installation
 nginx_cleanup_after_install: yes
