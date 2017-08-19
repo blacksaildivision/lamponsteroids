@@ -44,6 +44,9 @@
 
 {% if item.php is defined %}
     # PHP-FPM settings
+    <Proxy "fcgi://127.0.0.1:{{ item.php.port }}" timeout={{ item.timeout | default(30) }}>
+    </Proxy>
+
     <FilesMatch "\.php$">
         <If "-f %{SCRIPT_FILENAME}">
             SetHandler "proxy:fcgi://127.0.0.1:{{ item.php.port }}"
