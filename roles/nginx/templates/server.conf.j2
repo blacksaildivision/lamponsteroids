@@ -11,6 +11,7 @@ server {
     server_name {{ item.server_name }} {{ item.server_aliases | join (' ') }};
 
 {% if item.https is defined and item.https == true %}
+    # SSL configuration
     ssl_certificate {{ item.cert_file_path }};
     ssl_certificate_key {{ item.cert_key_file_path }};
     ssl_dhparam {{ nginx_df_file_path }};
