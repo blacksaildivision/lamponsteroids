@@ -1,6 +1,6 @@
 {% for redirect in nginx_redirects %}
 server {
-    listen {{ nginx_port }};
+    listen {{ redirect.server_ip + ':' if redirect.server_ip is defined else '' }}{{ nginx_port }};
     server_name {{ redirect.server_name }} {{ redirect.server_aliases | join (' ') }};
 
     # Turn off logging

@@ -8,7 +8,7 @@
     mode: 0755
     owner: root
     group: root
-  tags: [nginx2, servers]
+  tags: [nginx, servers]
 
 
 
@@ -24,7 +24,7 @@
     group: root
   when: "(item.htdocs is not defined or item.htdocs == true) and (item.logs is not defined or item.logs == true)"
   with_items: "{{ nginx_servers }}"
-  tags: [nginx2, servers]
+  tags: [nginx, servers]
 
 
 
@@ -40,7 +40,7 @@
     group: "{{ item.directory_group }}"
   with_items: "{{ nginx_servers }}"
   when: "item.htdocs is not defined or item.htdocs == true"
-  tags: [nginx2, servers]
+  tags: [nginx, servers]
 
 - name: Make sure that website logs directory exists
   file:
@@ -51,7 +51,7 @@
     group: "{{ item.directory_group }}"
   when: "item.logs is not defined or item.logs == true"
   with_items: "{{ nginx_servers }}"
-  tags: [nginx2, servers]
+  tags: [nginx, servers]
 
 
 
@@ -66,7 +66,7 @@
     mode: 0644
   with_items: "{{ nginx_servers }}"
   notify: restart nginx
-  tags: [nginx2, servers, servers-update]
+  tags: [nginx, servers, servers-update]
 
 
 
@@ -82,7 +82,7 @@
   with_items: "{{ nginx_redirects }}"
   when: "nginx_redirects | length > 0"
   notify: restart nginx
-  tags: [nginx2, servers, servers-update]
+  tags: [nginx, servers, servers-update]
 
 
 
