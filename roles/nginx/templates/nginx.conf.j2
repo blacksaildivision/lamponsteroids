@@ -47,6 +47,11 @@ http {
     keepalive_timeout 65;
     keepalive_requests 100000;
 
+    # Client body settings
+    client_body_temp_path /tmp 1 2;
+    client_body_buffer_size 1M;
+    client_max_body_size 10M;
+
     # Server blocks for each domain
 {% for server in nginx_servers %}
     include server-{{ server.server_name }}{{ '-ssl' if server.https is defined and server.https == true else '' }}.conf;
