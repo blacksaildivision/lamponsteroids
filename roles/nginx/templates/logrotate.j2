@@ -9,7 +9,7 @@
   sharedscripts
   missingok
   notifempty
-  su root {{ nginx_user }}
+  su root {{ nginx_group }}
   postrotate
     /bin/systemctl reload nginx.service > /dev/null 2>/dev/null || true
   endscript
