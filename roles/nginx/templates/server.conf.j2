@@ -6,6 +6,11 @@ upstream {{ item.server_name | replace('.', '_') }} {
 }
 {% endif %}
 
+{% if item.extra_config_outside_server is defined %}
+    # Custom config
+    {{ item.extra_config_outside_server }}
+{% endif %}
+
 server {
     listen {{ item.server_ip + ':' if item.server_ip is defined else '' }}{{ '443 ssl http2' if item.https is defined and item.https == true else nginx_port }};
     server_name {{ item.server_name }} {{ item.server_aliases | join (' ') }};
