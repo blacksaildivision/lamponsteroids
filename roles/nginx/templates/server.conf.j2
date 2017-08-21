@@ -32,6 +32,7 @@ server {
 {% if item.logs is not defined or item.logs == true %}
     # Logging
     error_log {{ nginx_websites_directory }}/{{ item.server_name }}/logs/nginx-error.log notice;
+    #access_log {{ nginx_websites_directory }}/{{ item.server_name }}/logs/nginx-access.log main buffer=64k flush=1m if=$loggable;
     access_log {{ nginx_websites_directory }}/{{ item.server_name }}/logs/nginx-access.log main if=$loggable;
 {% else %}
     # Turn off logging
@@ -75,6 +76,16 @@ server {
         log_not_found off;
         deny all;
     }
+
+{% if item.stub_status is defined %}
+    # Stub status
+    location /nginx_status {
+        stub_status;
+        allow {{ item.server_ip | default('127.0.0.1') }};
+        deny all;
+    }
+{% endif %}
+
 
 {% if item.proxy_pass is defined and item.proxy_pass == true %}
     location @proxy {
