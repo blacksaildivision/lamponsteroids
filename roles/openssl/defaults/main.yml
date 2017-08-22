@@ -23,3 +23,6 @@ openssl_build_group: developer
 
 # Path where OpenSSL will be installed. NO trailing slash at the end!
 openssl_install_path: /usr/local/openssl
+
+# Should source files be removed after install? It might be necessary to build nginx from source with latest version of OpenSSL
+openssl_cleanup_after_install: no

@@ -1,0 +1,109 @@
+{% if item.upstream is defined %}
+upstream {{ item.server_name | replace('.', '_') }} {
+{% for upstream in item.upstream %}
+    server {{ upstream }};
+{% endfor %}
+}
+{% endif %}
+
+server {
+    listen {{ item.server_ip + ':' if item.server_ip is defined else '' }}{{ '443 ssl' if item.https is defined and item.https == true else nginx_port }}{{ ' http2' if item.http2 is defined and item.http2 == true else '' }};
+    server_name {{ item.server_name }} {{ item.server_aliases | join (' ') }};
+
+{% if item.https is defined and item.https == true %}
+    # SSL configuration
+    ssl_certificate {{ item.cert_file_path }};
+    ssl_certificate_key {{ item.cert_key_file_path }};
+    ssl_dhparam {{ nginx_df_file_path }};
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers on;
+    ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH";
+    ssl_ecdh_curve secp384r1;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_tickets off;
+    ssl_stapling on;
+    ssl_stapling_verify on;
+    resolver 8.8.8.8 8.8.4.4 valid=300s;
+    resolver_timeout 5s;
+{% endif %}
+
+    root {{ nginx_websites_directory }}/{{ item.server_name }}/htdocs{{ '/'+item.subdirectory if item.subdirectory is defined  else '' }};
+
+{% if item.logs is not defined or item.logs == true %}
+    # Logging
+    error_log {{ nginx_websites_directory }}/{{ item.server_name }}/logs/nginx-error.log notice;
+    access_log {{ nginx_websites_directory }}/{{ item.server_name }}/logs/nginx-access.log main buffer=64k flush=1m if={{ item.custom_log_if | default('$loggable') }};
+{% else %}
+    # Turn off logging
+    error_log off;
+    access_log off;
+{% endif %}
+
+{% if item.rewrites is defined %}
+    # Rewrite URLs
+{% for rewrite in item.rewrites %}
+    rewrite {{ rewrite.regex }} {{ rewrite.replacement }} last;
+{% endfor %}
+{% endif %}
+
+{% if item.override_location is not defined %}
+    location / {
+        try_files $uri {{ '@proxy' if item.proxy_pass is defined and item.proxy_pass == true else '=404' }};
+    }
+{% endif %}
+
+{% if item.proxy_pass_for_php is defined and item.proxy_pass_for_php == true %}
+    # Use proxy for all PHP files
+    location ~ \.php$ {
+        try_files @proxy @proxy;
+    }
+{% endif %}
+
+{% if item.letsencrypt_integration is defined and item.letsencrypt_integration == true %}
+    # Let's encrypt integration
+    location /.well-known/ {
+        alias /var/www/letsencrypt/;
+    }
+{% endif %}
+
+{% if item.extra_config is defined %}
+    # Custom config
+    {{ item.extra_config }}
+{% endif %}
+
+    # Disable access to hidden files
+    location ~ /\. {
+        access_log off;
+        log_not_found off;
+        deny all;
+    }
+
+    # Disable access to common files that should not be accessed by URL
+    location ~* /(composer.json|composer.lock|readme.md) {
+      access_log off;
+      log_not_found off;
+      deny all;
+    }
+
+{% if item.stub_status is defined %}
+    # Stub status
+    location /nginx_status {
+        stub_status;
+        allow {{ item.server_ip | default('127.0.0.1') }};
+        deny all;
+    }
+{% endif %}
+
+
+{% if item.proxy_pass is defined and item.proxy_pass == true %}
+    location @proxy {
+        proxy_pass http://{{ item.server_name | replace('.', '_') }};
+        proxy_set_header Authorization $http_authorization;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_buffering off;
+        proxy_redirect off;
+    }
+{% endif %}
+}

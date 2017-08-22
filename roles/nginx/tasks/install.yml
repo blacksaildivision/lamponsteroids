@@ -1,0 +1,106 @@
+# Install required software for compiling nginx from source
+#
+- name: Install required tools for compiling nginx
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - libtool # Dependencies: autoconf automake cpp gcc glibc-devel glibc-headers kernel-headers libmpc m4 mpfr perl perl-Carp perl-Data-Dumper perl-Encode perl-Exporter perl-File-Path perl-File-Temp perl-Filter perl-Getopt-Long perl-HTTP-Tiny perl-PathTools perl-Pod-Escapes perl-Pod-Perldoc perl-Pod-Simple perl-Pod-Usage perl-Scalar-List-Utils perl-Socket perl-Storable perl-Test-Harness perl-Text-ParseWords perl-Thread-Queue perl-Time-HiRes perl-Time-Local perl-constant perl-libs perl-macros perl-parent perl-podlators perl-threads perl-threads-shared
+    - pcre-devel
+    - zlib-devel
+  tags: [nginx, install]
+
+
+
+# Download source code for building nginx.
+# Easiest method it to download it from nginx download page:
+# http://nginx.org/en/download.html
+#
+- name: Download required source files
+  get_url:
+    dest: "{{ nginx_sources_location }}"
+    url: "http://nginx.org/download/nginx-{{ nginx_version }}.tar.gz"
+  tags: [nginx, install]
+
+
+
+# Unpack downloaded nginx sources
+#
+- name: Unpack downloaded nginx sources
+  unarchive:
+    src: "{{ nginx_sources_location }}/nginx-{{ nginx_version }}.tar.gz"
+    dest: "{{ nginx_sources_location }}"
+    owner: "{{ nginx_build_user }}"
+    group: "{{ nginx_build_group }}"
+    copy: no
+    creates: "{{ nginx_sources_location }}/nginx-{{ nginx_version }}"
+  tags: [nginx, install]
+
+
+
+# Compile nginx
+# It will be compiled by using different user than root.
+#
+- name: Compile nginx
+  command: "{{ item }}"
+  args:
+    chdir: "{{ nginx_sources_location }}/nginx-{{ nginx_version }}"
+  with_items:
+    - "./configure {{ nginx_configure_options | join(' ') }}"
+    - make
+  become: true
+  become_user: "{{ nginx_build_user }}"
+  tags: [nginx, install]
+
+
+
+# Install compiled nginx
+# This operation must be executed as sudo user
+#
+- name: Install compiled nginx
+  command: make install
+  args:
+    chdir: "{{ nginx_sources_location }}/nginx-{{ nginx_version }}"
+  tags: [nginx, install]
+
+
+
+# Remove downloaded sources after installation
+#
+- name: Cleanup downloaded sources
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ nginx_sources_location }}/nginx-{{ nginx_version }}.tar.gz"
+    - "{{ nginx_sources_location }}/nginx-{{ nginx_version }}"
+  when: "nginx_cleanup_after_install == true"
+  tags: [nginx, install]
+
+
+
+# Add nginx executables to PATH
+# It'll be easier to execute some commands without typing full path
+#
+- name: Add nginx executables to PATH
+  template:
+    src: nginx.sh.j2
+    dest: /etc/profile.d/nginx.sh
+    owner: root
+    group: root
+    mode: 0644
+  tags: [nginx, install]
+
+
+
+# Create nginx systemctl entry
+# It will allow nginx to be manage by systemctl (ie. sudo systemctl start nginx).
+#
+- name: Add systemd entry for nginx
+  template:
+    src: nginx.service.j2
+    dest: /etc/systemd/system/nginx.service
+    owner: root
+    group: root
+    mode: 0644
+  tags: [nginx, install]

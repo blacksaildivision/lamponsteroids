@@ -1,0 +1,104 @@
+# All websites should be stored under one directory.
+# On CentOS it's usually /var/www. Make sure that this directory exists
+#
+- name: Make sure that main website directory exists
+  file:
+    path: "{{ nginx_websites_directory }}"
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+  tags: [nginx, servers]
+
+
+
+# Each website is hosted in separate directory. Directory is named after domain name
+# Example: /var/www/blacksaildivision.com
+#
+- name: Make sure that website directory exists
+  file:
+    path: "{{ nginx_websites_directory }}/{{ item.server_name }}"
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+  when: "(item.htdocs is not defined or item.htdocs == true) and (item.logs is not defined or item.logs == true)"
+  with_items: "{{ nginx_servers }}"
+  tags: [nginx, servers]
+
+
+
+# Each website directory has htdocs and logs directory for storing website files and logs
+# Example: /var/www/blacksaildivision.com/htdocs, /var/www/blacksaildivision.com/logs
+#
+- name: Make sure that website DocumentRoot directory exists
+  file:
+    path: "{{ nginx_websites_directory }}/{{ item.server_name }}/htdocs"
+    state: directory
+    mode: "2775"
+    owner: "{{ item.directory_owner }}"
+    group: "{{ item.directory_group }}"
+  with_items: "{{ nginx_servers }}"
+  when: "item.htdocs is not defined or item.htdocs == true"
+  tags: [nginx, servers]
+
+- name: Make sure that website logs directory exists
+  file:
+    path: "{{ nginx_websites_directory }}/{{ item.server_name }}/logs"
+    state: directory
+    mode: "2775"
+    owner: "{{ item.directory_owner }}"
+    group: "{{ item.directory_group }}"
+  when: "item.logs is not defined or item.logs == true"
+  with_items: "{{ nginx_servers }}"
+  tags: [nginx, servers]
+
+
+
+# Create nginx server files for each domain
+#
+- name: Add server files
+  template:
+    src: server.conf.j2
+    dest: "{{ nginx_install_path }}/conf/server-{{ item.server_name }}{{ '-ssl' if item.https is defined and item.https == true else '' }}.conf"
+    owner: root
+    group: root
+    mode: 0644
+  with_items: "{{ nginx_servers }}"
+  notify: restart nginx
+  tags: [nginx, servers, servers-update]
+
+
+
+# Setup redirects
+#
+- name: Setup redirects
+  template:
+    src: server-redirects.conf.j2
+    dest: "{{ nginx_install_path }}/conf/server-redirects.conf"
+    owner: root
+    group: root
+    mode: 0644
+  with_items: "{{ nginx_redirects }}"
+  when: "nginx_redirects | length > 0"
+  notify: restart nginx
+  tags: [nginx, servers, servers-update]
+
+
+
+# Setup logrotate for given servers
+# Each item must have logrotate set up. File will not be used if all have logrotate to false or logs to false
+#
+- set_fact:
+    nginx_servers_with_logrotate: "{{ nginx_servers | rejectattr('logrotate', 'even') | list }}"
+  tags: [nginx, servers]
+
+- name: Setup logrotate for servers
+  template:
+    src: logrotate.j2
+    dest: "/etc/logrotate.d/nginx"
+    owner: root
+    group: root
+    mode: 0644
+  when: "nginx_servers_with_logrotate | length > 0"
+  tags: [nginx, servers]

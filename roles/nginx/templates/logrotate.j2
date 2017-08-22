@@ -1,0 +1,16 @@
+{% for item in nginx_servers_with_logrotate %}
+{{ nginx_websites_directory }}/{{ item.server_name }}/logs/nginx-*.log
+{% endfor %}
+{
+  rotate 30
+  daily
+  compress
+  delaycompress
+  sharedscripts
+  missingok
+  notifempty
+  su root {{ nginx_group }}
+  postrotate
+    /bin/systemctl reload nginx.service > /dev/null 2>/dev/null || true
+  endscript
+}

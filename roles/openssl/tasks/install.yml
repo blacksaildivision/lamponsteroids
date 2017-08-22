@@ -75,6 +75,7 @@
   with_items:
     - "{{ openssl_sources_location }}/openssl-OpenSSL_{{ openssl_version | replace( '.', '_' ) }}.tar.gz"
     - "{{ openssl_sources_location }}/openssl-OpenSSL_{{ openssl_version | replace( '.', '_' ) }}"
+  when: "openssl_cleanup_after_install == true"
   tags: [openssl, install]
 
 

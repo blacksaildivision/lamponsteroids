@@ -1,0 +1,31 @@
+{% for redirect in nginx_redirects %}
+server {
+    listen {{ redirect.server_ip + ':' if redirect.server_ip is defined else '' }}{{ '443 ssl http2' if redirect.https is defined and redirect.https == true else nginx_port }};
+    server_name {{ redirect.server_name }} {{ redirect.server_aliases | join (' ') }};
+
+    # Turn off logging
+    error_log off;
+    access_log off;
+
+{% if redirect.https is defined and redirect.https == true %}
+    # SSL configuration
+    ssl_certificate {{ redirect.cert_file_path }};
+    ssl_certificate_key {{ redirect.cert_key_file_path }};
+    ssl_dhparam {{ nginx_df_file_path }};
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers on;
+    ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH";
+    ssl_ecdh_curve secp384r1;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_tickets off;
+    ssl_stapling on;
+    ssl_stapling_verify on;
+    resolver 8.8.8.8 8.8.4.4 valid=300s;
+    resolver_timeout 5s;
+{% endif %}
+
+    # Redirect
+    return  301 {{ redirect.redirect }}$request_uri;
+}
+
+{% endfor %}

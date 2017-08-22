@@ -1,0 +1,42 @@
+# Make sure that dedicated nginx daemon user and group exists
+# It's nice to create separate user for each service like httpd, nginx etc.
+#
+- name: Create dedicated nginx group
+  group:
+    name: "{{ nginx_group }}"
+    state: present
+  tags: [nginx, configure]
+
+- name: Create dedicated nginx user
+  user:
+    name: "{{ nginx_user }}"
+    createhome: no
+    group: "{{ nginx_group }}"
+    state: present
+    shell: /sbin/nologin
+  tags: [nginx, configure]
+
+
+
+# Create a strong Diffie-Hellman group for Forward Secrecy
+# It is used for improving SSL security
+#
+- name: Create Diffie-Hellman group
+  shell: "/usr/local/openssl/bin/openssl dhparam -out {{ nginx_df_file_path }} 2048"
+  args:
+    creates: "{{ nginx_df_file_path }}"
+  tags: [nginx, configure]
+
+
+
+# Setup nginx main configuration
+#
+- name: Setup nginx main configuration
+  template:
+    src: nginx.conf.j2
+    dest: "{{ nginx_conf_path }}"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart nginx
+  tags: [nginx, configure, servers-update]
