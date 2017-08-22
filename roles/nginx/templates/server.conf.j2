@@ -37,8 +37,7 @@ server {
 {% if item.logs is not defined or item.logs == true %}
     # Logging
     error_log {{ nginx_websites_directory }}/{{ item.server_name }}/logs/nginx-error.log notice;
-    #access_log {{ nginx_websites_directory }}/{{ item.server_name }}/logs/nginx-access.log main buffer=64k flush=1m if=$loggable;
-    access_log {{ nginx_websites_directory }}/{{ item.server_name }}/logs/nginx-access.log main if=$loggable;
+    access_log {{ nginx_websites_directory }}/{{ item.server_name }}/logs/nginx-access.log main buffer=64k flush=1m if={{ item.custom_log_if | default('$loggable') }};
 {% else %}
     # Turn off logging
     error_log off;
@@ -52,14 +51,22 @@ server {
 {% endfor %}
 {% endif %}
 
+{% if item.override_location is not defined %}
     location / {
         try_files $uri {{ '/'+item.subdirectory+'$uri' if item.subdirectory is defined  else '' }} {{ '@proxy' if item.proxy_pass is defined and item.proxy_pass == true else '=404' }};
     }
+{% endif %}
 
 {% if item.proxy_pass_for_php is defined and item.proxy_pass_for_php == true %}
     # Use proxy for all PHP files
     location ~ \.php$ {
-        try_files $uri @proxy;
+        proxy_pass http://{{ item.server_name | replace('.', '_') }};
+        proxy_set_header Authorization $http_authorization;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_buffering off;
+        proxy_redirect off;
     }
 {% endif %}
 
