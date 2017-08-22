@@ -1,0 +1,14 @@
+[Unit]
+Description=Redis Datastore Server
+Documentation=https://redis.io/documentation
+After=network.target
+
+[Service]
+Type=forking
+PIDFile={{ redis_pid_file_path }}
+ExecStart=/usr/local/bin/redis-server {{ redis_conf_path }}
+ExecStop=/bin/kill -s TERM $MAINPID
+ExecReload=/bin/kill -s HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target

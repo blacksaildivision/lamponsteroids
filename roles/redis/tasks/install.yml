@@ -1,6 +1,6 @@
 # Install required software for compiling redis from source
 #
-- name: Install required tools for compiling nginx
+- name: Install required tools for compiling redis
   yum:
     name: "{{ item }}"
     state: latest
@@ -69,19 +69,19 @@
   with_items:
     - "{{ redis_sources_location }}/redis-{{ redis_version }}.tar.gz"
     - "{{ redis_sources_location }}/redis-{{ redis_version }}"
-  when: "redis_cleanup_after_install == true"
+  when: "redis_cleanup_after_install == false"
   tags: [redis, install]
 
 
 
-# Create nginx systemctl entry
-# It will allow nginx to be manage by systemctl (ie. sudo systemctl start nginx).
+# Create redis systemctl entry
+# It will allow redis to be manage by systemctl (ie. sudo systemctl start redis).
 #
-#- name: Add systemd entry for nginx
-#  template:
-#    src: nginx.service.j2
-#    dest: /etc/systemd/system/nginx.service
-#    owner: root
-#    group: root
-#    mode: 0644
-#  tags: [nginx, install]
+- name: Add systemd entry for redis
+  template:
+    src: redis.service.j2
+    dest: /etc/systemd/system/redis.service
+    owner: root
+    group: root
+    mode: 0644
+  tags: [redis, install]
