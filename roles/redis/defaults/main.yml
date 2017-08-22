@@ -1,0 +1,28 @@
+####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
+
+# Should this role use install tasks for compiling nginx?
+redis_manage_installation: yes
+
+
+
+
+
+####### INSTALL TASKS CONFIGURATION #######
+
+# Version of redis that should be present in the system
+redis_version: "4.0.1"
+
+# Path where nginx will be installed. NO trailing slash at the end!
+#nginx_install_path: /usr/local/nginx
+
+# Location of files for redis sources
+redis_sources_location: /usr/src
+
+# User that will build redis. Please never use root account for compiling software. It can lead to serious security issues
+redis_build_user: vagrant
+
+# Group of the build user.
+redis_build_group: vagrant
+
+# Remove downloaded sources after installation
+redis_cleanup_after_install: yes

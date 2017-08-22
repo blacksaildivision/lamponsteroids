@@ -1,0 +1,87 @@
+# Install required software for compiling redis from source
+#
+- name: Install required tools for compiling nginx
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - gcc # Dependencies: cpp glibc-devel glibc-headers kernel-headers libmpc mpfr
+  tags: [redis, install]
+
+
+
+# Download source code for building redis.
+# Easiest method it to download it from redis download page:
+# https://redis.io/download
+#
+- name: Download required source files
+  get_url:
+    dest: "{{ redis_sources_location }}"
+    url: "http://download.redis.io/releases/redis-{{ redis_version }}.tar.gz"
+  tags: [redis, install]
+
+
+
+# Unpack downloaded redis sources
+#
+- name: Unpack downloaded redis sources
+  unarchive:
+    src: "{{ redis_sources_location }}/redis-{{ redis_version }}.tar.gz"
+    dest: "{{ redis_sources_location }}"
+    owner: "{{ redis_build_user }}"
+    group: "{{ redis_build_group }}"
+    copy: no
+    creates: "{{ redis_sources_location }}/redis-{{ redis_version }}"
+  tags: [redis, install]
+
+
+
+# Compile redis
+# It will be compiled by using different user than root.
+#
+- name: Compile redis
+  command: make MALLOC=libc
+  args:
+    chdir: "{{ redis_sources_location }}/redis-{{ redis_version }}"
+  become: true
+  become_user: "{{ redis_build_user }}"
+  tags: [redis, install]
+
+
+
+# Install compiled redis
+# This operation must be executed as sudo user
+#
+- name: Install compiled redis
+  command: make install
+  args:
+    chdir: "{{ redis_sources_location }}/redis-{{ redis_version }}"
+  tags: [redis, install]
+
+
+
+# Remove downloaded sources after installation
+#
+- name: Cleanup downloaded sources
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ redis_sources_location }}/redis-{{ redis_version }}.tar.gz"
+    - "{{ redis_sources_location }}/redis-{{ redis_version }}"
+  when: "redis_cleanup_after_install == true"
+  tags: [redis, install]
+
+
+
+# Create nginx systemctl entry
+# It will allow nginx to be manage by systemctl (ie. sudo systemctl start nginx).
+#
+#- name: Add systemd entry for nginx
+#  template:
+#    src: nginx.service.j2
+#    dest: /etc/systemd/system/nginx.service
+#    owner: root
+#    group: root
+#    mode: 0644
+#  tags: [nginx, install]
