@@ -105,14 +105,6 @@ nginx_websites_directory: /var/www
 # Default nginx port
 nginx_port: 80
 
-# Should server return 403 on accessing by server IP(s)
-# By default ip address for the server is downloaded from ansible_all_ipv4_addresses variable. But on some hosts, IP address is different.
-# If you need to specify list of additional server IPs, create variable httpd_server_ips. Example:
-# httpd_server_ips:
-#  - 83.23.13.63
-#  - 83.23.13.64
-#httpd_403_for_localhost: yes
-
 # List of servers that should be enabled.
 # Here is full entry with all available options"
 # - {
@@ -120,20 +112,29 @@ nginx_port: 80
 #  server_aliases: [optional.domain.alias.com] # optional field with list of server aliases
 #  directory_owner: existing system user # mandatory field
 #  directory_group: existing group # mandatory field
-
-#  subdirectory: path to subdirectory. By default DocumentDirectory is set to htdocs. # optinal field
-#  extra_config: [] list of extra lines to be included in VirtualHost file # optional field
-#  php: { # optinal field
-#    port: port number for PHP-FPM daemon
-#  },
-#  redirect: "http(s)://redirect.domain.com" # Optional parameter. It will redirect everything to different domain. Protocol is required, trailing slash must be omitted.
-#  logs: no # Turn off access and error log. Default is set to yes, it means that both access and error log will be active
-#  htdocs: no # Turn off crating directory for htdocs. Default is set to yes, which means that directory will be created
-#  https: yes # Turn on HTTPS/SSL for given domain
+#  upstream: [] # list of upstream servers
+#  server_ip: '23.42.53.64' # dedicated ip for given server. Optional field.
+#  https: yes # Turn on HTTPS/SSL for given domain. Optional field
+#  http2: yes # Should http2 be enabled? Optional field
 #  cert_file_path: /path/to/certfile.cert # If https is enabled this is the path to server certificate file
 #  cert_key_file_path: /path/to/certkeyfile.key # If https is enabled this is the path to private key file
-#  cert_chain_file: /path/to/cert.crt # Path to server certificate chain if applicable
+#  subdirectory: path to subdirectory. By default root is set to htdocs. # optional field
+#  logs: no # Turn off access and error log. Default is set to yes, it means that both access and error log will be active
+#  htdocs: no # Turn off crating directory for htdocs. Default is set to yes, which means that directory will be created
+#  custom_log_if: $loggable # Modify access_log if parameter
+#  rewrites:
+#   - {
+#      regex: '^/wp-content/(.*)$',
+#      replacement: '/content/$1'
+#    } # List of rewrites. Optional field
+#
+#  extra_config: [] list of extra lines to be included in VirtualHost file # optional field
+#  override_location: yes # disable default location block #optional field
+#  proxy_pass: yes # creates proxy block to upstream #optional field
+#  proxy_pass_for_php: yes #Opional field creates block that transfers all PHP files to proxy
 #  logrotate: yes # Enables or disables logrotate for httpd logs
+#  letsencrypt_integration: yes # adds lets encrypt integration
+#  stub_status: yes # dds stub_status option
 # }
 nginx_servers:
  - {

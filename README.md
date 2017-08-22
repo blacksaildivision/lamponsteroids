@@ -69,6 +69,8 @@ You can setup logrotate scripts with this role as well.
 
 **letsencrypt** - Install Certbot and obtain certificates from Let's Encrypt
 
+**nginx** - Install and configure latest version of nginx (1.13.4)
+
 Changelog
 ---------
 
