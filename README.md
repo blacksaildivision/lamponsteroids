@@ -71,6 +71,8 @@ You can setup logrotate scripts with this role as well.
 
 **nginx** - Install and configure latest version of nginx (1.13.4)
 
+**redis** - Install and configure latest version of redis (4.0.1)
+
 Changelog
 ---------
 
