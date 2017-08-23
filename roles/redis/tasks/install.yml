@@ -60,6 +60,35 @@
 
 
 
+# Make sure that directory for configuration is created
+#
+- name: Make sure that redis configuration directory exists
+  file:
+    path: "{{ redis_config_directory }}"
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+  tags: [redis, install]
+
+
+
+# Copy fresh config copy to redis directory
+# Fresh file with default config is in uncompressed directory with source code
+#
+- name: Create redis.conf file if not present
+  copy:
+    src: "{{ redis_sources_location }}/redis-{{ redis_version }}/redis.conf"
+    dest: "{{ redis_conf_path }}"
+    remote_src: yes
+    force: no
+    owner: root
+    group: root
+    mode: 0644
+  tags: [redis, install]
+
+
+
 # Remove downloaded sources after installation
 #
 - name: Cleanup downloaded sources
@@ -69,7 +98,7 @@
   with_items:
     - "{{ redis_sources_location }}/redis-{{ redis_version }}.tar.gz"
     - "{{ redis_sources_location }}/redis-{{ redis_version }}"
-  when: "redis_cleanup_after_install == false"
+  when: "redis_cleanup_after_install == true"
   tags: [redis, install]
 
 
