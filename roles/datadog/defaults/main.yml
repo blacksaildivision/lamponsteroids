@@ -1,5 +1,26 @@
+####### MAIN TASKS CONFIGURATION #######
+
 # Datadog key. It must be valid key
 datadog_key: 37bd293b3418375da9349de40623a273
 
 # Datadog hostname
 datadog_hostname: example-hostname.com
+
+# Datadog integrations directory
+datadog_conf_path: /etc/dd-agent/conf.d
+
+
+
+
+
+####### INTEGRATIONS TASKS CONFIGURATION #######
+
+# List of enabled integrations
+datadog_enabled_integrations:
+ - http_check
+
+# Config for http_check integration
+http_check_websites:
+ - name: "Example website"
+   url: http://example.com
+   timeout: 4

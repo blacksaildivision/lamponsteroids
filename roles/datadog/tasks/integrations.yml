@@ -1,0 +1,12 @@
+# Setup datadog integration config files
+#
+- name: Setup datadog integration config files
+  template:
+    src: "{{ item }}.yaml.j2"
+    dest: "{{ datadog_conf_path }}/{{ item }}.yaml"
+    owner: root
+    group: root
+    mode: 0644
+  with_items: "{{ datadog_enabled_integrations }}"
+  notify: restart datadog-agent
+  tags: [datadog, integrations]
