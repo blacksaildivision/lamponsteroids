@@ -18,6 +18,7 @@ datadog_conf_path: /etc/dd-agent/conf.d
 # List of enabled integrations
 datadog_enabled_integrations:
  - http_check
+ - system_core
 
 # Config for http_check integration
 http_check_websites:
