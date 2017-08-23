@@ -23,3 +23,18 @@
     priv: "{{ item.database }}.*:ALL"
   with_items: "{{ mysql_databases }}"
   tags: [mysql, databases]
+
+
+
+# Create user for DataDog agent. User needs to have special privileges
+#
+- name: Create DataDog user
+  mysql_user:
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    name: datadog
+    password: "{{ mysql_datadog_user_password }}"
+    state: present
+    priv: "*.*:REPLICATION CLIENT,PROCESS/performance_schema.*:SELECT"
+  with_items: "mysql_datadog_integration == true"
+  tags: [mysql, databases]

@@ -1,0 +1,7 @@
+init_config:
+
+instances:
+  - server: localhost
+    user: datadog
+    pass: "{{ datadog_mysql_password }}"
+    sock: /var/lib/mysql/mysql.sock

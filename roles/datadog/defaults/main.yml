@@ -19,6 +19,7 @@ datadog_conf_path: /etc/dd-agent/conf.d
 datadog_enabled_integrations:
  - apache
  - http_check
+ - mysql
  - system_core
 
 # Config for http_check integration
@@ -29,3 +30,6 @@ datadog_http_check_websites:
 
 # Url for checking apache server status
 datadog_apache_status_url: http://127.0.0.1/server-status?auto
+
+# MySQL DataDog user password
+datadog_mysql_password: X07HNhVTKmR4qwDMeQQCuZdb
