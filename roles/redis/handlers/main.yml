@@ -1,0 +1,7 @@
+# Restart redis-server
+# This handler is executed on changes in redis.conf file
+#
+- name: restart redis
+  service:
+    name: redis
+    state: restarted

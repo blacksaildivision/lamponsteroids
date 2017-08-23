@@ -3,6 +3,9 @@
 # Should this role use install tasks for compiling redis?
 redis_manage_installation: yes
 
+# Should this role use configure tasks for redis configuration?
+redis_manage_configuration: yes
+
 
 
 
@@ -16,10 +19,10 @@ redis_version: "4.0.1"
 redis_sources_location: /usr/src
 
 # User that will build redis. Please never use root account for compiling software. It can lead to serious security issues
-redis_build_user: vagrant
+redis_build_user: developer
 
 # Group of the build user.
-redis_build_group: vagrant
+redis_build_group: developer
 
 # Remove downloaded sources after installation
 redis_cleanup_after_install: yes
@@ -37,3 +40,6 @@ redis_conf_path: "{{ redis_config_directory }}/redis.conf"
 
 # redis PID file path
 redis_pid_file_path: "/var/run/redis.pid"
+
+# Redis port
+redis_port: 6379

@@ -1,0 +1,23 @@
+# Set Redis port
+#
+- name: Set redis port
+  lineinfile:
+    dest: "{{ redis_conf_path }}"
+    line: "port {{ redis_port }}"
+    state: present
+    regexp: '^#?port'
+  notify: restart redis
+  tags: [redis, configure]
+
+
+
+# Set path to Redis PID file
+#
+- name: Set redis PID path
+  lineinfile:
+    dest: "{{ redis_conf_path }}"
+    line: "pidfile {{ redis_pid_file_path }}"
+    state: present
+    regexp: '^#?pidfile'
+  notify: restart redis
+  tags: [redis, configure]

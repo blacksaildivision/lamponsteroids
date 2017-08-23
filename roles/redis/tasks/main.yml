@@ -55,23 +55,16 @@
 
 # Configure redis
 #
-#- include: configure.yml
-#  when: "redis_manage_configuration == true"
-
-
-
-# Configure redis servers
-#
-#- include: servers.yml
-#  when: "redis_manage_servers == true"
+- include: configure.yml
+  when: "redis_manage_configuration == true"
 
 
 
 # Make sure that redis service is started and enabled on boot
 #
-#- name: Start and enable redis service
-#  service:
-#    name: redis
-#    state: started
-#    enabled: yes
-#  tags: [redis, healthcheck]
+- name: Start and enable redis service
+  service:
+    name: redis
+    state: started
+    enabled: yes
+  tags: [redis, healthcheck]
