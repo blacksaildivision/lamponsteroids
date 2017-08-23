@@ -72,9 +72,11 @@
 {% if item.cert_chain_file is defined %}
     SSLCertificateChainFile "{{ item.cert_chain_file }}"
 {% endif %}
+{% if item.http2 is defined and item.http2 == true %}
     <IfModule mod_http2.c>
         Protocols h2 h2c http/1.1
     </IfModule>
+{% endif %}
 {% endif %}
 
 </VirtualHost>

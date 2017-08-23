@@ -76,6 +76,7 @@ httpd_active_modules:
  - access_compat
  - alias
  - authz_core
+ - authz_host
  - dir
  - deflate
  - filter
@@ -89,6 +90,7 @@ httpd_active_modules:
  - setenvif
  - socache_shmcb
  - ssl
+ - status
  - unixd
 
 # DirectoryIndex - which file should be loaded by default

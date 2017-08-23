@@ -316,3 +316,18 @@
   notify: restart httpd
   when: "httpd_real_ip_recording == true"
   tags: [httpd, configure]
+
+
+
+# Enable extended status for mod_status
+# It will give additional data about apache
+#
+- name: Enabled extended status
+  blockinfile:
+    path: "{{ httpd_config_file }}"
+    block: |
+      # Enable extended status
+      <IfModule status_module>
+          ExtendedStatus On
+      </IfModule>
+  tags: [httpd, configure]
