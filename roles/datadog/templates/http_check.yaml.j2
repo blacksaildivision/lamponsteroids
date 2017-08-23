@@ -1,7 +1,7 @@
 init_config:
 
 instances:
-{% for website in http_check_websites %}
+{% for website in datadog_http_check_websites %}
   - name: {{ website.name }}
     url: {{ website.url }}
     timeout: {{ website.timeout }}
