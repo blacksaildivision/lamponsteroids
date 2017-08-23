@@ -19,6 +19,7 @@
     - ../roles/mongodb
     - ../roles/letsencrypt
     - ../roles/nginx
+    - ../roles/redis
 
   vars_files:
     - ../vars/example-vars.yml
