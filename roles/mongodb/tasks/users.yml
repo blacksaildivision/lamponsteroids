@@ -87,7 +87,7 @@
     password: "{{ mongodb_datadog_user_password }}"
     roles:
      - { db: admin, role: read }
-     - { db: clusterMonitor, role: read }
+     - { db: admin, role: clusterMonitor }
      - { db: local, role: read }
     update_password: on_create
   when: "mongodb_datadog_integration == true"

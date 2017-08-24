@@ -19,6 +19,7 @@ datadog_conf_path: /etc/dd-agent/conf.d
 datadog_enabled_integrations:
  - apache
  - http_check
+ - mongo
  - mysql
  - php_fpm
  - system_core
@@ -38,3 +39,6 @@ datadog_mysql_password: X07HNhVTKmR4qwDMeQQCuZdb
 # PHP-FPM list of pools. Just the url without trailing /. /ping and /status will be automatically appended
 datadog_php_fpm_pools:
  - http://example.com
+
+# MongoDB DataDog user password
+datadog_mongodb_password: g3PzK8mJpWvBUz81GrDGANHO
