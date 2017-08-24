@@ -89,5 +89,6 @@
      - { db: admin, role: read }
      - { db: clusterMonitor, role: read }
      - { db: local, role: read }
+    update_password: on_create
   when: "mongodb_datadog_integration == true"
   tags: [mongodb, users]
