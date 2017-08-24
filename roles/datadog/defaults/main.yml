@@ -35,6 +35,6 @@ datadog_apache_status_url: http://127.0.0.1/server-status?auto
 # MySQL DataDog user password
 datadog_mysql_password: X07HNhVTKmR4qwDMeQQCuZdb
 
-# PHP-FPM list of pools
+# PHP-FPM list of pools. Just the url without trailing /. /ping and /status will be automatically appended
 datadog_php_fpm_pools:
  - http://example.com

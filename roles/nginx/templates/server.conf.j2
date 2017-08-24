@@ -59,6 +59,20 @@ server {
     }
 {% endif %}
 
+{% if item.php_status is defined and item.php_status == true %}
+    location ~/(status|ping)$ {
+        try_files @proxy @proxy;
+        access_log off;
+        allow 127.0.0.1;
+{% if item.stub_status is defined %}
+    {% for allowed_ip in item.php_status_allowed_ips %}
+        allow allowed_ip;
+    {% endfor %}
+{% endif %}
+        deny all;
+    }
+{% endif %}
+
 {% if item.letsencrypt_integration is defined and item.letsencrypt_integration == true %}
     # Let's encrypt integration
     location /.well-known/ {

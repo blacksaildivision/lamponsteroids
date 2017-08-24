@@ -132,6 +132,8 @@ nginx_port: 80
 #  override_location: yes # disable default location block #optional field
 #  proxy_pass: yes # creates proxy block to upstream #optional field
 #  proxy_pass_for_php: yes #Opional field creates block that transfers all PHP files to proxy
+#  php_status: yes # Optional field enables access to /ping and /status urls
+#  php_status_allowed_ips: list of allowed ips except 127.0.0.1 that can access /ping and /status urls
 #  logrotate: yes # Enables or disables logrotate for httpd logs
 #  letsencrypt_integration: yes # adds lets encrypt integration
 #  stub_status: yes # dds stub_status option
