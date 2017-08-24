@@ -64,10 +64,10 @@ server {
         try_files @proxy @proxy;
         access_log off;
         allow 127.0.0.1;
-{% if item.stub_status is defined %}
-    {% for allowed_ip in item.php_status_allowed_ips %}
-        allow allowed_ip;
-    {% endfor %}
+{% if item.php_status_allowed_ips is defined %}
+{% for allowed_ip in item.php_status_allowed_ips %}
+        allow {{ allowed_ip }};
+{% endfor %}
 {% endif %}
         deny all;
     }
