@@ -54,6 +54,12 @@ mongodb_databases:
     roles: "readWrite,dbAdmin"
  }
 
+# Enable Datadog integration
+mongodb_datadog_integration: yes
+
+# Password for datadog user
+mongodb_datadog_user_password: "g3PzK8mJpWvBUz81GrDGANHO"
+
 
 
 
