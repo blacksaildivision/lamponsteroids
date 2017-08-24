@@ -9,7 +9,7 @@
   with_items:
     - epel-release
     - libselinux-python
-    - python-pip # Dependencies python-backports python-backports-ssl_match_hostname python-setuptools
+    - python2-pip # Dependencies python-backports python-backports-ssl_match_hostname python-setuptools
   tags: [awscli]
 
 

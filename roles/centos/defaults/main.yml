@@ -124,6 +124,7 @@ centos_yum_other_packages:
  - device-mapper-persistent-data
  - dhclient # depenencies: bind-libs-lite
  - dmidecode
+ - dnsmasq
  - dracut-network # dependencies: dracut, iproute, dhclient, bind-libs-lite
  - dracut-config-rescue # dependencies: dracut
  - e2fsprogs # dependencies: e2fsprogs-libs libcom_err libss
@@ -131,6 +132,7 @@ centos_yum_other_packages:
  - ethtool
  - file # dependencies: file-libs
  - freetype
+ - gnutls
  - grub2 # dependencies: grub2-tools
  - grubby
  - hwdata
@@ -153,6 +155,7 @@ centos_yum_other_packages:
  - make
  - microcode_ctl
  - mozjs17
+ - nettle # dependencies: gnutls
  - openssh # dependencies: openssh-clients, openssh-server
  - openssh-clients
  - openssh-server
@@ -172,6 +175,7 @@ centos_yum_other_packages:
  - tuned # dependencies: python-perf
  - vim-minimal
  - virt-what
+ - xfsprogs
  - yum-utils
 
 # List of additional tools that are missing from CentOS minimal installation but are super useful
