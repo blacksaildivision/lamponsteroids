@@ -17,12 +17,17 @@ catch_workers_output = yes
 
 {% if item.php_admin_flags is defined %}
 {% for config in item.php_admin_flags %}
-  php_flag[{{ config.key }}] = {{ config.value }}
+php_flag[{{ config.key }}] = {{ config.value }}
 {% endfor %}
 {% endif %}
 
 {% if item.php_admin_values is defined %}
 {% for config in item.php_admin_values %}
-  php_admin_value[{{ config.key }}] = {{ config.value }}
+php_admin_value[{{ config.key }}] = {{ config.value }}
 {% endfor %}
+{% endif %}
+
+{% if item.status is defined and item.status == true %}
+pm.status_path = /status
+ping.path = /ping
 {% endif %}

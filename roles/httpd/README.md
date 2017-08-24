@@ -43,7 +43,8 @@ httpd_virtualhosts:
         '</Directory>',
       ],
     php:{
-        port: 9000
+        port: 9000,
+        status: yes
     },
     redirect: "https://example2.com",
     redirect_www_to_non_www: yes,

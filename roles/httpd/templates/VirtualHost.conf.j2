@@ -47,6 +47,15 @@
     <Proxy "fcgi://127.0.0.1:{{ item.php.port }}" timeout={{ item.timeout | default(30) }}>
     </Proxy>
 
+{% if item.php.status is defined and item.php.status == true %}
+    <LocationMatch "/(status|ping)">
+        RewriteEngine Off
+        Require all denied
+        Require ip 127.0.0.1 {{ httpd_server_ips | join(' ') | default('') }}
+        SetHandler "proxy:fcgi://127.0.0.1:{{ item.php.port }}"
+    </LocationMatch>
+{% endif %}
+
     <FilesMatch "\.php$">
         <If "-f %{SCRIPT_FILENAME}">
             SetHandler "proxy:fcgi://127.0.0.1:{{ item.php.port }}"

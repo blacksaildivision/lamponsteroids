@@ -31,6 +31,7 @@ php_fpm_pools:
   user: developer,
   group: www,
   port: 9000,
+  status: yes,
   process_manager: {
     pm: dynamic,
     max_children: 5,
