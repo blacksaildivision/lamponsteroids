@@ -22,6 +22,7 @@ datadog_enabled_integrations:
  - mongo
  - mysql
  - php_fpm
+ - redisdb
  - system_core
 
 # Config for http_check integration
