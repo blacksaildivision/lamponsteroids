@@ -13,7 +13,7 @@
 #
 - name: Install Certbot
   yum:
-    name: certbot # Dependencies: dialog pyOpenSSL python-cffi python-enum34 python-idna python-ipaddress python-ndg_httpsclientpython-parsedatetime python-ply python-psutil python-pycparser python-requests python-six python-urllib3 python-zope-component python-zope-event python-zope-interface python2-acme python2-certbot python2-configargparsepython2-cryptography python2-dialog python2-mock python2-pyasn1 python2-pyrfc3339 pytz
+    name: certbot # Dependencies: dialog pyOpenSSL python-cffi python-enum34 python-idna python-ipaddress python-ndg_httpsclientpython-parsedatetime python-ply python-psutil python-pycparser python-requests python-six python-urllib3 python-zope-component python-zope-event python-zope-interface python2-acme python2-certbot python2-configargparse python2-cryptography python2-dialog python2-mock python2-pyasn1 python2-pyrfc3339 pytz
     state: latest
   tags: [letsencrypt]
 
