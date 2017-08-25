@@ -18,6 +18,7 @@ datadog_conf_path: /etc/dd-agent/conf.d
 # List of enabled integrations
 datadog_enabled_integrations:
  - apache
+ - directory
  - http_check
  - mongo
  - mysql
@@ -48,3 +49,7 @@ datadog_mongodb_password: g3PzK8mJpWvBUz81GrDGANHO
 # Lisf of nginx instances with status page enabled
 datadog_nginx_status_urls:
  - http://example.com/nginx_status
+
+# List of directories to inspect with directory integration
+datadog_directory_list:
+ - /var/www/example.com/logs
