@@ -21,6 +21,7 @@ datadog_enabled_integrations:
  - http_check
  - mongo
  - mysql
+ - nginx
  - php_fpm
  - redisdb
  - system_core
@@ -43,3 +44,7 @@ datadog_php_fpm_pools:
 
 # MongoDB DataDog user password
 datadog_mongodb_password: g3PzK8mJpWvBUz81GrDGANHO
+
+# Lisf of nginx instances with status page enabled
+datadog_nginx_status_urls:
+ - http://example.com/nginx_status
