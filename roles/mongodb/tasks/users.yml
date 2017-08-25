@@ -73,3 +73,22 @@
     update_password: on_create
   with_items: "{{ mongodb_databases }}"
   tags: [mongodb, users]
+
+
+
+# Create user for DataDog agent. User needs to have special privileges
+#
+- name: Create DataDog user
+  mongodb_user:
+    database: admin
+    login_user: admin
+    login_password: "{{ mongodb_admin_password }}"
+    name: datadog
+    password: "{{ mongodb_datadog_user_password }}"
+    roles:
+     - { db: admin, role: read }
+     - { db: admin, role: clusterMonitor }
+     - { db: local, role: read }
+    update_password: on_create
+  when: "mongodb_datadog_integration == true"
+  tags: [mongodb, users]

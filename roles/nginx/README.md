@@ -52,6 +52,8 @@ httpd_virtualhosts:
     override_location: no,
     proxy_pass: yes,
     proxy_pass_for_php: yes,
+    php_status: yes,
+    php_status_allowed_ips: ['23.42.53.64'],
     logrotate: yes,
     letsencrypt_integration: yes,
     stub_status: yes

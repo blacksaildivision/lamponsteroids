@@ -1,0 +1,8 @@
+init_config:
+
+instances:
+{% for directory in datadog_directory_list %}
+  - directory: "{{ directory }}"
+    countonly: True
+
+{% endfor %}

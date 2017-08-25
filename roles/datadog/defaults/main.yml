@@ -1,5 +1,56 @@
+####### MAIN TASKS CONFIGURATION #######
+
 # Datadog key. It must be valid key
 datadog_key: 37bd293b3418375da9349de40623a273
 
 # Datadog hostname
 datadog_hostname: example-hostname.com
+
+# Datadog integrations directory
+datadog_conf_path: /etc/dd-agent/conf.d
+
+
+
+
+
+####### INTEGRATIONS TASKS CONFIGURATION #######
+
+# List of enabled integrations
+datadog_enabled_integrations:
+ - apache
+ - directory
+ - http_check
+ - mongo
+ - mysql
+ - nginx
+ - ntp
+ - php_fpm
+ - redisdb
+ - system_core
+
+# Config for http_check integration
+datadog_http_check_websites:
+ - name: "Example website"
+   url: http://example.com
+   timeout: 4
+
+# Url for checking apache server status
+datadog_apache_status_url: http://127.0.0.1/server-status?auto
+
+# MySQL DataDog user password
+datadog_mysql_password: X07HNhVTKmR4qwDMeQQCuZdb
+
+# PHP-FPM list of pools. Just the url without trailing /. /ping and /status will be automatically appended
+datadog_php_fpm_pools:
+ - http://example.com
+
+# MongoDB DataDog user password
+datadog_mongodb_password: g3PzK8mJpWvBUz81GrDGANHO
+
+# Lisf of nginx instances with status page enabled
+datadog_nginx_status_urls:
+ - http://example.com/nginx_status
+
+# List of directories to inspect with directory integration
+datadog_directory_list:
+ - /var/www/example.com/logs

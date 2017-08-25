@@ -45,6 +45,12 @@
 
 
 
+# Setup Datadog integrations
+#
+- include: integrations.yml
+
+
+
 # Make sure that Datadog agent service is started and enabled on boot
 #
 - name: Start and enable DataDog agent service

@@ -57,7 +57,7 @@ You can setup logrotate scripts with this role as well.
 
 **nodejs** - Install latest version of Node.js (8.3.0) and NPM
 
-**datadog** - Install and configure datadog agent.
+**datadog** - Install and configure DataDog agent with multiple integrations.
 
 **mysql** - Install and configure MySQL community server (5.7.19). Create databases and users. Install MySQLTuner
 

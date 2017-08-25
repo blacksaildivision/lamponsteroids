@@ -93,6 +93,12 @@ mysql_databases:
   password: "+;GPS,uP6%MXYTFo2k8bpo57v"
  }
 
+# Enable Datadog integration
+mysql_datadog_integration: yes
+
+# Password for datadog user
+mysql_datadog_user_password: "sZ9TxYbRrwmEJNGWEbtUDFCj"
+
 
 
 

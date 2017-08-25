@@ -10,6 +10,15 @@
         Require all denied
     </Location>
 
+    # Enable mod_status integration
+    <IfModule mod_status.c>
+        <Location /server-status>
+            SetHandler server-status
+            Require all denied
+            Require ip {{ httpd_localhost_ips[0] }}
+        </Location>
+    </IfModule>
+
     # Turn off logging
     ErrorLog /dev/null
     CustomLog /dev/null common

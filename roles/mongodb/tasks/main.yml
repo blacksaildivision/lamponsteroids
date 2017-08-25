@@ -15,7 +15,7 @@
 
 - name: Install pip command
   yum:
-    name: python-pip
+    name: python2-pip
     state: latest
   tags: [mongodb]
 
