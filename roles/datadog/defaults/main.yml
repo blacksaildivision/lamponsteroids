@@ -23,6 +23,7 @@ datadog_enabled_integrations:
  - mongo
  - mysql
  - nginx
+ - ntp
  - php_fpm
  - redisdb
  - system_core
