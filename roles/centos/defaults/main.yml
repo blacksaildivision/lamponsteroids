@@ -236,28 +236,22 @@ centos_users_to_remove: []
 # If you want to give sudo power to the user, add him to "wheel" group
 # Password should NOT be stored in plain text. To make it secure you should override it variable file and encrypt it with Ansible Vault
 # If generate_ssh_key is set to yes, user will have 4096 bit RSA key in his profile
-centos_users_available:
-  - {
-      username: developer,
-      groups: 'wheel,www',
-      password: "{{ centos_users_developer_password }}",
-      generate_ssh_key: yes
-    }
-
 # You can't use plain text user passwords with Ansible
 # Password must by encrypted with crypt with following command:
 # python -c "from passlib.hash import sha512_crypt; import getpass; print sha512_crypt.encrypt(getpass.getpass())"
 # Make sure that you have passlib package installed ( sudo pip install passlib )
 # Please remember to use Ansible Vault for keeping such credentials in a safe way
-centos_users_developer_password: "$6$rounds=656000$DeNu.bf92WDgbQIW$olUwR2s0Oz92c/PFKdBSedZNJS80APVsFkxExoOACwMDMBrM7d.6DHSpx8wW7kBL3QLfCXSyf2O6MQj.sXUnN/"
+centos_users_available:
+  - username: developer
+    groups: 'wheel,www'
+    password: "$6$rounds=656000$DeNu.bf92WDgbQIW$olUwR2s0Oz92c/PFKdBSedZNJS80APVsFkxExoOACwMDMBrM7d.6DHSpx8wW7kBL3QLfCXSyf2O6MQj.sXUnN/"
+    generate_ssh_key: yes
 
 # Authorised keys to add to user
 # Path to file must be the path to your public key, not private!
 centos_users_authorized_keys:
-  - {
-    username: developer,
+  - username: developer
     path_to_file: "{{ centos_users_developer_authorized_key_path }}"
-  }
 
 # To make it simpler to use in vars file, we extracted path to authorized key for developer account as separate variable
 centos_users_developer_authorized_key_path: ~/.ssh/id_rsa.pub
