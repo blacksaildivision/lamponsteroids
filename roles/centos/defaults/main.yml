@@ -37,6 +37,7 @@ centos_yum_initial_package_list_path: /etc/yum/initial-packages-list
 centos_yum_unnecessary_packages:
  - btrfs-progs # leave it if you are using btrfs file system
  - gssproxy # leave it if you are using GSSAPI
+ - hyperv-daemons-license # leave it if you are running linux guest on windows hosts, dependecies: hyperv-daemons, hypervcopyd hypervkvpd hypervvssd
  - libgudev1 # allow to connect to WiFi, not necessary on the server
  - mariadb-libs # leave it if you plan to use MariaDB instead of MySQL
  - NetworkManager # dependencies: libgudev1
@@ -53,7 +54,9 @@ centos_yum_core_packages:
  - centos-release
  - chkconfig
  - coreutils
+ - cpio
  - cryptsetup-libs
+ - cyrus-sasl-lib
  - curl # dependencies: libcurl
  - dbus
  - dbus-libs # dependencies: dbus
@@ -65,22 +68,29 @@ centos_yum_core_packages:
  - glib2
  - glibc
  - glibc-common # dependencies: glibc
+ - gmp
  - gnupg2
+ - grep
+ - gzip
  - kmod
  - kmod-libs
  - kpartx
  - krb5-libs
  - libblkid
- - libgcrypt
- - libmount # dependencies: libblkid
+ - libcap
+ - libdb # dependencies: libdb-utils
  - libffi
  - libgcc
+ - libgcrypt
+ - libmount # dependencies: libblkid
  - libuuid # dependencies: libblkid
+ - libsemanage
  - libstdc++
  - libssh2
  - libtasn1
  - libxml2
  - lua
+ - ncurses # dependencies: ncurses-base ncurses-libs
  - nspr
  - nss
  - nss-softokn
@@ -97,9 +107,11 @@ centos_yum_core_packages:
  - python
  - python-libs # dependencies: python
  - python-pycurl
+ - readline
  - rpm # dependencies rpm-build-libs rpm-libs rpm-python
  - setup
  - shadow-utils
+ - shared-mime-info
  - systemd
  - systemd-libs # dependencies: systemd
  - systemd-sysv # dependencies: systemd
@@ -131,8 +143,11 @@ centos_yum_other_packages:
  - epel-release
  - ethtool
  - file # dependencies: file-libs
+ - fipscheck # dependencies: fipscheck-lib openssh openssh-clients openssh-server
  - freetype
+ - gettext # dependencies: grub2 grub2-pc grub2-tools grub2-tools-extra grub2-tools-minimal gettext-libs
  - gnutls
+ - gobject-introspection # dependencies: pygobject3-base tuned
  - grub2 # dependencies: grub2-tools
  - grubby
  - hwdata
@@ -146,6 +161,7 @@ centos_yum_other_packages:
  - kernel-tools
  - kernel-tools-libs # dependencies: kernel-tools
  - kexec-tools # dependencies: dhclient, bind-libs-lite
+ - libcroco # dependecies: gettext gettext-libs grub2 grub2-pc grub2-tools grub2-tools-extra grub2-tools-minimal
  - libdrm
  - libgomp
  - libnetfilter_conntrack # dependencies: dhclient dracut-network firewalld initscripts iproute iptables kbd kexec-tools plymout plymouth-scripts
@@ -165,9 +181,13 @@ centos_yum_other_packages:
  - pciutils-libs
  - plymouth # dependencies plymouth-core-libs
  - plymouth-scripts
+ - policycoreutils # dependencies: authconfig
  - polkit
+ - python-gobject-base # dependencies: tuned
  - python-perf
- - rdma
+ - python-pyudev # dependencies: tuned
+ - rdma-core
+ - rsync
  - rsyslog
  - selinux-policy
  - selinux-policy-targeted # depenency of selinux-policy
