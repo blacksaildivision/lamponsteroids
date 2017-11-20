@@ -1,48 +1,48 @@
 # Yum and packages related tasks
 #
-- include: yum.yml
+- import_tasks: yum.yml
   when: "centos_manage_yum == true"
 
 
 
 # Manage system groups
 #
-- include: groups.yml
+- import_tasks: groups.yml
   when: "centos_manage_groups == true"
 
 
 
 # Manage system users
 #
-- include: users.yml
+- import_tasks: users.yml
   when: "centos_manage_users == true"
 
 
 
 # Manage sudo
-- include: sudo.yml
+- import_tasks: sudo.yml
   when: "centos_manage_sudo == true"
 
 
 
 # Manage SSH
-- include: ssh.yml
+- import_tasks: ssh.yml
   when: "centos_manage_ssh == true"
 
 
 
-# Manage iptables
-- include: iptables.yml
-  when: "centos_manage_iptables == true"
-
-
-
 # Disable Transparent Huge Pages
-- include: thp.yml
+- import_tasks: thp.yml
   when: "centos_disable_thp == true"
 
 
 
 # Manage logrotate scripts
-- include: logrotate.yml
+- import_tasks: logrotate.yml
   when: "centos_manage_logrotate == true"
+
+
+
+# Manage iptables
+- import_tasks: iptables.yml
+  when: "centos_manage_iptables == true"

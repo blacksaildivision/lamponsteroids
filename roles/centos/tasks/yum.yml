@@ -159,7 +159,7 @@
 
 
 
-# yum-cron is awesome tool, but we shouldn't install them automatically.
+# yum-cron is awesome tool, but we shouldn't install updates automatically.
 # Auto updates can really mess up your system
 #
 - name: Disable automatic installation for yum-cron

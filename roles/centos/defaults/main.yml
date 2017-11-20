@@ -37,6 +37,7 @@ centos_yum_initial_package_list_path: /etc/yum/initial-packages-list
 centos_yum_unnecessary_packages:
  - btrfs-progs # leave it if you are using btrfs file system
  - gssproxy # leave it if you are using GSSAPI
+ - hyperv-daemons-license # leave it if you are running linux guest on windows hosts, dependecies: hyperv-daemons, hypervcopyd hypervkvpd hypervvssd
  - libgudev1 # allow to connect to WiFi, not necessary on the server
  - mariadb-libs # leave it if you plan to use MariaDB instead of MySQL
  - NetworkManager # dependencies: libgudev1
@@ -53,7 +54,9 @@ centos_yum_core_packages:
  - centos-release
  - chkconfig
  - coreutils
+ - cpio
  - cryptsetup-libs
+ - cyrus-sasl-lib
  - curl # dependencies: libcurl
  - dbus
  - dbus-libs # dependencies: dbus
@@ -65,22 +68,29 @@ centos_yum_core_packages:
  - glib2
  - glibc
  - glibc-common # dependencies: glibc
+ - gmp
  - gnupg2
+ - grep
+ - gzip
  - kmod
  - kmod-libs
  - kpartx
  - krb5-libs
  - libblkid
- - libgcrypt
- - libmount # dependencies: libblkid
+ - libcap
+ - libdb # dependencies: libdb-utils
  - libffi
  - libgcc
+ - libgcrypt
+ - libmount # dependencies: libblkid
  - libuuid # dependencies: libblkid
+ - libsemanage
  - libstdc++
  - libssh2
  - libtasn1
  - libxml2
  - lua
+ - ncurses # dependencies: ncurses-base ncurses-libs
  - nspr
  - nss
  - nss-softokn
@@ -97,9 +107,11 @@ centos_yum_core_packages:
  - python
  - python-libs # dependencies: python
  - python-pycurl
+ - readline
  - rpm # dependencies rpm-build-libs rpm-libs rpm-python
  - setup
  - shadow-utils
+ - shared-mime-info
  - systemd
  - systemd-libs # dependencies: systemd
  - systemd-sysv # dependencies: systemd
@@ -131,8 +143,11 @@ centos_yum_other_packages:
  - epel-release
  - ethtool
  - file # dependencies: file-libs
+ - fipscheck # dependencies: fipscheck-lib openssh openssh-clients openssh-server
  - freetype
+ - gettext # dependencies: grub2 grub2-pc grub2-tools grub2-tools-extra grub2-tools-minimal gettext-libs
  - gnutls
+ - gobject-introspection # dependencies: pygobject3-base tuned
  - grub2 # dependencies: grub2-tools
  - grubby
  - hwdata
@@ -146,6 +161,7 @@ centos_yum_other_packages:
  - kernel-tools
  - kernel-tools-libs # dependencies: kernel-tools
  - kexec-tools # dependencies: dhclient, bind-libs-lite
+ - libcroco # dependecies: gettext gettext-libs grub2 grub2-pc grub2-tools grub2-tools-extra grub2-tools-minimal
  - libdrm
  - libgomp
  - libnetfilter_conntrack # dependencies: dhclient dracut-network firewalld initscripts iproute iptables kbd kexec-tools plymout plymouth-scripts
@@ -165,9 +181,13 @@ centos_yum_other_packages:
  - pciutils-libs
  - plymouth # dependencies plymouth-core-libs
  - plymouth-scripts
+ - policycoreutils # dependencies: authconfig
  - polkit
+ - python-gobject-base # dependencies: tuned
  - python-perf
- - rdma
+ - python-pyudev # dependencies: tuned
+ - rdma-core
+ - rsync
  - rsyslog
  - selinux-policy
  - selinux-policy-targeted # depenency of selinux-policy
@@ -216,28 +236,22 @@ centos_users_to_remove: []
 # If you want to give sudo power to the user, add him to "wheel" group
 # Password should NOT be stored in plain text. To make it secure you should override it variable file and encrypt it with Ansible Vault
 # If generate_ssh_key is set to yes, user will have 4096 bit RSA key in his profile
-centos_users_available:
-  - {
-      username: developer,
-      groups: 'wheel,www',
-      password: "{{ centos_users_developer_password }}",
-      generate_ssh_key: yes
-    }
-
 # You can't use plain text user passwords with Ansible
 # Password must by encrypted with crypt with following command:
 # python -c "from passlib.hash import sha512_crypt; import getpass; print sha512_crypt.encrypt(getpass.getpass())"
 # Make sure that you have passlib package installed ( sudo pip install passlib )
 # Please remember to use Ansible Vault for keeping such credentials in a safe way
-centos_users_developer_password: "$6$rounds=656000$DeNu.bf92WDgbQIW$olUwR2s0Oz92c/PFKdBSedZNJS80APVsFkxExoOACwMDMBrM7d.6DHSpx8wW7kBL3QLfCXSyf2O6MQj.sXUnN/"
+centos_users_available:
+  - username: developer
+    groups: 'wheel,www'
+    password: "$6$rounds=656000$DeNu.bf92WDgbQIW$olUwR2s0Oz92c/PFKdBSedZNJS80APVsFkxExoOACwMDMBrM7d.6DHSpx8wW7kBL3QLfCXSyf2O6MQj.sXUnN/"
+    generate_ssh_key: yes
 
 # Authorised keys to add to user
 # Path to file must be the path to your public key, not private!
 centos_users_authorized_keys:
-  - {
-    username: developer,
+  - username: developer
     path_to_file: "{{ centos_users_developer_authorized_key_path }}"
-  }
 
 # To make it simpler to use in vars file, we extracted path to authorized key for developer account as separate variable
 centos_users_developer_authorized_key_path: ~/.ssh/id_rsa.pub
