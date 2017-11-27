@@ -1,11 +1,11 @@
 # Set system date&time
 #
-- include: timezone.yml
+- import_tasks: timezone.yml
   when: "ntp_manage_timezone == true"
 
 
 
 # Install and configure NTP server
 #
-- include: chrony.yml
+- import_tasks: chrony.yml
   when: "ntp_manage_chrony == true"
