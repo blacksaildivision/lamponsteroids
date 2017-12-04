@@ -10,7 +10,7 @@ openssl_manage_installation: yes
 ####### INSTALL TASKS CONFIGURATION #######
 
 # Version of OpenSSL that should be present in the system
-openssl_version: "1.1.0f"
+openssl_version: "1.1.0g"
 
 # Location of files for OpenSSL sources
 openssl_sources_location: /usr/src

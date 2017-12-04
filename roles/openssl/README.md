@@ -1,7 +1,7 @@
 OpenSSL role
 ============
 
-This role will install latest version of OpenSSL (1.1.0f) on CentOS server.
+This role will install latest version of OpenSSL (1.1.0g) on CentOS server.
 OpenSSL will be compiled from source.
 
 What you should know?
