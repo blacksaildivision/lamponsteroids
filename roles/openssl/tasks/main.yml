@@ -38,5 +38,5 @@
 #  1. OpenSSL is not installed
 #  2. OpenSSL is installed but not in desired version
 #
-- include: install.yml
+- import_tasks: install.yml
   when: "openssl_install_new_version == true and openssl_manage_installation == true"
