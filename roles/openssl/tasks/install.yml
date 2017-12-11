@@ -46,7 +46,7 @@
   args:
     chdir: "{{ openssl_sources_location }}/openssl-OpenSSL_{{ openssl_version | replace( '.', '_' ) }}"
   with_items:
-    - "./config --prefix={{ openssl_install_path }} --openssldir=/etc/ssl shared zlib"
+    - "./config --prefix={{ openssl_install_path }} --openssldir={{ openssl_install_path }} shared zlib"
     - make
     - make test
   become: true

@@ -49,9 +49,9 @@ You can setup logrotate scripts with this role as well.
 
 **ntp** - Takes care of system timezone and NTP server. It uses Chrony for using NTP.
 
-**openssl** - Install OpenSSL (1.1.0g)
+**openssl** - Compile OpenSSL from source (1.1.0g)
 
-**git** - Install latest version of git (2.14.1) 
+**git** - Compile git from source with OpenSSL (2.15.1) 
 
 **httpd** - Install and configure latest version of Apache httpd (2.4.27)
 

@@ -2,7 +2,7 @@ GIT role
 ========
 
 This role will install git https://git-scm.com/ on CentOS server.
-Git will be installed in latest version (2.13.3) and will be compiled from source.
+Git will be installed in latest version (2.15.1) and will be compiled from source.
 
 What you should know?
 ----------------------
@@ -18,4 +18,4 @@ If you only use git role, make sure that you set these variables correctly.
 OpenSSL
 -------
 
-This role requires `openssl` role installed. It will install latest version of OpenSSL and GIT will be configured with `--with-openssl` parameter pointing to location where latest version is compiled (/usr/local/openssl)
+This role requires `openssl` role installed. It will install latest version of OpenSSL and GIT will be configured with `--with-openssl` parameter and compiler flags pointing to location where latest version is compiled (/usr/local/openssl)
