@@ -1,5 +1,5 @@
 # Version of git that should be present in the system
-git_version: "2.14.1"
+git_version: "2.15.1"
 
 # Location of files for git sources
 git_sources_location: /usr/src
@@ -11,7 +11,10 @@ git_build_user: developer
 git_build_group: developer
 
 # Installation path for GIT
-git_install_path: /usr/local
+git_install_path: /usr/local/git
 
 # Should downloaded source files be deleted after installation?
 git_cleanup_after_install: yes
+
+# OpenSSL libraries path
+git_openssl_path: /usr/local/openssl

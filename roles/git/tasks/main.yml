@@ -37,5 +37,5 @@
 #  1. Git is not installed
 #  2. Git is installed but not in desired version
 #
-- include: install.yml
+- import_tasks: install.yml
   when: "git_install_new_version == true"

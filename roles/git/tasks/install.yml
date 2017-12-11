@@ -52,10 +52,19 @@
   with_items:
     - make clean
     - make configure
-    - "./configure --prefix={{ git_install_path }} --with-openssl=/usr/local/openssl"
+    - "./configure CFLAGS='-I{{ git_openssl_path }}/include' LDFLAGS='-L{{ git_openssl_path }}/lib' --prefix={{ git_install_path }} --with-openssl={{ git_openssl_path }}"
     - make
   become: true
   become_user: "{{ git_build_user }}"
+  tags: [git, install]
+
+
+
+# In order to check if Git was compiled with custom OpenSSL library we need to use ldd tool to check linked libraries
+#
+- name: Check if custom OpenSSL is used
+  shell: "ldd {{ git_sources_location }}/git-{{ git_version }}/git-http-fetch | grep '{{ git_openssl_path }}'"
+  changed_when: false
   tags: [git, install]
 
 
