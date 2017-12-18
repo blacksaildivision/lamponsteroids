@@ -169,6 +169,7 @@ centos_yum_other_packages:
  - lsscsi
  - lvm2 # dependencies: device-mapper-persistent-data
  - make
+ - mdadm # dependencies: libreport-filesystem
  - microcode_ctl
  - mozjs17
  - nettle # dependencies: gnutls

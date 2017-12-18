@@ -53,7 +53,7 @@ You can setup logrotate scripts with this role as well.
 
 **git** - Compile git from source with OpenSSL (2.15.1) 
 
-**httpd** - Install and configure latest version of Apache httpd (2.4.27)
+**httpd** - Compile and configure Apache httpd from source with OpenSSL (2.4.29)
 
 **nodejs** - Install latest version of Node.js (8.3.0) and NPM
 
