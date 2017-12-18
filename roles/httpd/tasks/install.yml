@@ -1,3 +1,13 @@
+# Install epel-release that provides libnghttp2-devel package required for compilation with HTTP2
+#
+- name: Install epel-release for libnghttp2-devel package
+  yum:
+    name: epel-release
+    state: latest
+  tags: [httpd, install]
+
+
+
 # Install required software for compiling Apache httpd from source
 #
 - name: Install required tools for compiling Apache httpd
@@ -6,6 +16,7 @@
     state: latest
   with_items:
     - autoconf # Dependencies: m4 perl perl-Carp perl-Data-Dumper perl-Encode perl-Exporter perl-File-Path perl-File-Temp perl-Filter perl-Getopt-Long perl-HTTP-Tiny perl-PathTools perl-Pod-Escapes perl-Pod-Perldoc perl-Pod-Simple perl-Pod-Usage perl-Scalar-List-Utils perl-Socket perl-Storable perl-Text-ParseWords perl-Time-HiRes perl-Time-Local perl-constant perl-libs perl-macros perl-parent perl-podlators perl-threads perl-threads-shared
+    - expat-devel
     - libtool # Dependencies: autoconf automake cpp gcc glibc-devel glibc-headers kernel-headers libmpc m4 mpfr perl perl-Carp perl-Data-Dumper perl-Encode perl-Exporter perl-File-Path perl-File-Temp perl-Filter perl-Getopt-Long perl-HTTP-Tiny perl-PathTools perl-Pod-Escapes perl-Pod-Perldoc perl-Pod-Simple perl-Pod-Usage perl-Scalar-List-Utils perl-Socket perl-Storable perl-Test-Harness perl-Text-ParseWords perl-Thread-Queue perl-Time-HiRes perl-Time-Local perl-constant perl-libs perl-macros perl-parent perl-podlators perl-threads perl-threads-shared
     - libnghttp2-devel # Dependencies: libnghttp2
     - pcre-devel
