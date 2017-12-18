@@ -197,7 +197,7 @@
     group: root
     mode: 0644
   when: "httpd_enable_gzip_compression == true"
-  tags: [httpd, configure, t2]
+  tags: [httpd, configure]
 
 - name: Make sure that gzip compression is enabled
   lineinfile:
@@ -217,6 +217,41 @@
     regexp: '^#?Include\ conf\/extra/\httpd-deflate'
   notify: restart httpd
   when: "httpd_enable_gzip_compression == false"
+  tags: [httpd, configure]
+
+
+
+# Configure mod_expires
+# mod_expires handle expiration headers for given mime types
+#
+- name: Add separate config file with expires configuration
+  template:
+    src: httpd-expires.conf.j2
+    dest: "{{ httpd_install_path }}/conf/extra/httpd-expires.conf"
+    owner: root
+    group: root
+    mode: 0644
+  when: "httpd_enable_expires_headers == true"
+  tags: [httpd, configure]
+
+- name: Make sure that expires headers are enabled
+  lineinfile:
+    dest: "{{ httpd_config_file }}"
+    line: "Include conf/extra/httpd-expires.conf"
+    state: present
+    regexp: '^#?Include\ conf\/extra/\httpd-expires'
+  notify: restart httpd
+  when: "httpd_enable_expires_headers == true"
+  tags: [httpd, configure]
+
+- name: Make sure that expires headers are disabled
+  lineinfile:
+    dest: "{{ httpd_config_file }}"
+    line: "#Include conf/extra/httpd-expires.conf"
+    state: present
+    regexp: '^#?Include\ conf\/extra/\httpd-expires'
+  notify: restart httpd
+  when: "httpd_enable_expires_headers == false"
   tags: [httpd, configure]
 
 

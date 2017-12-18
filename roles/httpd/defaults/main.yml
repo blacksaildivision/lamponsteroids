@@ -79,6 +79,7 @@ httpd_active_modules:
  - authz_host
  - dir
  - deflate
+ - expires
  - filter
  - http2
  - log_config
@@ -128,6 +129,22 @@ httpd_gzip_mime_types:
  - text/html
  - text/plain
  - text/xml
+
+# Enable expires header for browser caching
+httpd_enable_expires_headers: yes
+
+# List of mime types that should have added expires header
+httpd_expires_mime_types:
+  - image/gif
+  - image/ico
+  - image/jpg
+  - image/jpeg
+  - image/png
+  - text/css
+  - text/javascript
+
+# Timeout for expires. Will be used in "access plus ..."
+httpd_expires_timeout: "1 week"
 
 # Enable SSL encryption
 httpd_enable_ssl: yes
