@@ -2,9 +2,6 @@
   # Enable expirations
   ExpiresActive On
 
-  # Default directive
-  ExpiresDefault "access plus 1 month"
-
   # Expirations for given mime type
 {% for mime in httpd_expires_mime_types %}
   ExpiresByType {{ mime }} "access plus {{ httpd_expires_timeout }}"
