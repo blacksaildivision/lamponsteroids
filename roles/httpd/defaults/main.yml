@@ -15,7 +15,7 @@ httpd_manage_virtualhosts: yes
 ####### INSTALL TASKS CONFIGURATION #######
 
 # Version of Apache httpd that should be present in the system
-httpd_version: "2.4.29"
+httpd_version: "2.4.33"
 
 # Version of APR library required for compiling Apache httpd
 httpd_apr_version: "1.6.3"

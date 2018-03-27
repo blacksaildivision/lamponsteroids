@@ -2,7 +2,7 @@ HTTPD role
 ==========
 
 This role will install Apache httpd https://httpd.apache.org/ server on CentOS.
-Apache httpd will be installed in 2.4.29 version and will be compiled from source.
+Apache httpd will be installed in 2.4.33 version and will be compiled from source.
 
 What you should know?
 ---------------------
