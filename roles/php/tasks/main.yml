@@ -48,42 +48,42 @@
 #  1. PHP is not installed
 #  2. PHP is installed but not in desired version
 #
-- include: install.yml
+- import_tasks: install.yml
   when: "( php_install_new_version == true and php_manage_installation == true) or php_force_install == true"
 
 
 
 # Configure PHP
 #
-- include: configure.yml
+- import_tasks: configure.yml
   when: "php_manage_configuration == true"
 
 
 
 # Configure PHP-FPM and Pools
 #
-- include: fpm.yml
+- import_tasks: fpm.yml
   when: "php_manage_fpm == true"
 
 
 
 # Install PHP extensions
 #
-- include: extensions.yml
+- import_tasks: extensions.yml
   when: "php_manage_extensions == true"
 
 
 
 # Install Composer
 #
-- include: composer.yml
+- import_tasks: composer.yml
   when: "php_manage_composer == true"
 
 
 
 # Manage OPcache
 #
-- include: opcache.yml
+- import_tasks: opcache.yml
   when: "php_manage_opcache == true"
 
 

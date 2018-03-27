@@ -63,7 +63,7 @@ You can setup logrotate scripts with this role as well.
 
 **awscli** - Install and configure AWS CLI command line tool
 
-**php** - Install and configure PHP (7.1.8), PHP-FPM, PHP Pecl extensions and Composer. Opcache is enabled as well.
+**php** - Install and configure PHP (7.2.3), PHP-FPM, PHP Pecl extensions and Composer. Opcache is enabled as well.
 
 **mongodb** - Install and configure MongoDB (3.4.7) with authentication
 

@@ -2,7 +2,7 @@ PHP role
 ==========
 
 This role will install PHP with FPM mode server on CentOS.
-PHP will be installed in latest version (7.1.0) and will be compiled from source.
+PHP will be installed in latest version (7.2.3) and will be compiled from source.
 
 What you should know?
 ---------------------
@@ -51,8 +51,3 @@ php_fpm_pools:
     ]
  }
 ```
-
-OpenSSL
--------
-
-This role requires `openssl` role installed. It will install latest version of OpenSSL and PHP will be compiled with `--with-openssl` parameter pointing to location where latest version is compiled (/usr/local/openssl)

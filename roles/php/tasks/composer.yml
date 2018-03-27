@@ -1,7 +1,18 @@
 # Install composer globally
 #
 - name: Install Composer
-  shell: "curl -sS https://getcomposer.org/installer | {{ php_install_path }}/bin/php -- --install-dir=/usr/local/bin --filename=composer installer warn=no"
+  shell: "curl -sS https://getcomposer.org/installer | {{ php_install_path }}/bin/php -- --install-dir={{ php_composer_install_path }} --filename=composer installer warn=no"
   args:
     creates: /usr/local/bin/composer
+  tags: [php, composer]
+
+
+
+# Setup crontab to update composer automatically
+#
+- name: Setup crontab for composer updates
+  cron:
+    name: composer update
+    special_time: weekly
+    job: "{{ php_install_path }}/bin/php {{ php_composer_install_path }}/composer self-update"
   tags: [php, composer]

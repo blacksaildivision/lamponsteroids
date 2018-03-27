@@ -25,7 +25,7 @@ php_manage_opcache: yes
 ####### INSTALL TASKS CONFIGURATION #######
 
 # Version of PHP to install
-php_version: "7.1.8"
+php_version: "7.2.3"
 
 # Location for PHP installation
 php_install_path: /usr/local/php
@@ -57,10 +57,8 @@ php_configure_options:
  - --with-curl
  - --enable-exif
  - --with-gd
- - --enable-gd-native-ttf
  - --enable-intl
  - --enable-mbstring
- - --with-mcrypt
  - --with-mysqli
  - --enable-pcntl
  - --with-pdo-mysql
@@ -68,10 +66,15 @@ php_configure_options:
  - --enable-sockets
  - --with-xmlrpc
  - --enable-zip
- - --with-openssl=/usr/local/openssl
+ - --with-webp-dir
+ - --with-jpeg-dir
+ - --with-png-dir
 
 # Should this role delete downloaded and uncompressed files after installation?
 php_cleanup_after_install: yes
+
+# Path where to install composer bin
+php_composer_install_path: /usr/local/bin
 
 
 
@@ -181,6 +184,7 @@ php_fpm_logrotate: yes
 php_extensions:
   - mongodb
   - redis
+  - xdebug
 
 
 
