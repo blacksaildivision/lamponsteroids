@@ -2,7 +2,7 @@ GIT role
 ========
 
 This role will install git https://git-scm.com/ on CentOS server.
-Git will be installed in latest version (2.15.1) and will be compiled from source.
+Git will be installed in latest version (2.16.3) and will be compiled from source.
 
 What you should know?
 ----------------------

@@ -51,9 +51,9 @@ You can setup logrotate scripts with this role as well.
 
 **openssl** - Compile OpenSSL from source (1.1.0g)
 
-**git** - Compile git from source with OpenSSL (2.15.1) 
+**git** - Compile git from source with OpenSSL (2.16.3) 
 
-**httpd** - Compile and configure Apache httpd from source with OpenSSL (2.4.29)
+**httpd** - Compile and configure Apache httpd from source with OpenSSL (2.4.33)
 
 **nodejs** - Install latest version of Node.js (8.3.0) and NPM
 
@@ -63,7 +63,7 @@ You can setup logrotate scripts with this role as well.
 
 **awscli** - Install and configure AWS CLI command line tool
 
-**php** - Install and configure PHP (7.1.8), PHP-FPM, PHP Pecl extensions and Composer. Opcache is enabled as well.
+**php** - Install and configure PHP (7.2.3), PHP-FPM, PHP Pecl extensions and Composer. Opcache is enabled as well.
 
 **mongodb** - Install and configure MongoDB (3.4.7) with authentication
 

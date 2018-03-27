@@ -14,7 +14,6 @@
   with_items:
     - autoconf # Dependencies: m4 perl perl-Carp perl-Data-Dumper perl-Encode perl-Exporter perl-File-Path perl-File-Temp perl-Filter perl-Getopt-Long perl-HTTP-Tiny perl-PathTools perl-Pod-Escapes perl-Pod-Perldoc perl-Pod-Simple perl-Pod-Usage perl-Scalar-List-Utils perl-Socket perl-Storable perl-Text-ParseWords perl-Time-HiRes perl-Time-Local perl-constant perl-libs perl-macros perl-parent perl-podlators perl-threads perl-threads-shared
     - libtool # Dependencies: autoconf automake cpp gcc glibc-devel glibc-headers kernel-headers libmpc m4 mpfr perl perl-Carp perl-Data-Dumper perl-Encode perl-Exporter perl-File-Path perl-File-Temp perl-Filter perl-Getopt-Long perl-HTTP-Tiny perl-PathTools perl-Pod-Escapes perl-Pod-Perldoc perl-Pod-Simple perl-Pod-Usage perl-Scalar-List-Utils perl-Socket perl-Storable perl-Test-Harness perl-Text-ParseWords perl-Thread-Queue perl-Time-HiRes perl-Time-Local perl-constant perl-libs perl-macros perl-parent perl-podlators perl-threads perl-threads-shared
-    - epel-release # Provides re2 package
     - re2c
     - bison
     - libxml2-devel
@@ -24,6 +23,9 @@
     - libicu-devel
     - gcc-c++
     - libmcrypt-devel
+    - libwebp-devel
+    - libjpeg-devel
+    - openssl-devel
   tags: [php, install]
 
 
