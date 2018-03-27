@@ -51,7 +51,7 @@ You can setup logrotate scripts with this role as well.
 
 **openssl** - Compile OpenSSL from source (1.1.0g)
 
-**git** - Compile git from source with OpenSSL (2.15.1) 
+**git** - Compile git from source with OpenSSL (2.16.3) 
 
 **httpd** - Compile and configure Apache httpd from source with OpenSSL (2.4.29)
 
