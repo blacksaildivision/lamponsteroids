@@ -1,0 +1,10 @@
+# List of packages to be removed from the server
+yum_packages_to_remove: []
+
+# List of packages that should be installed or updated to latest version
+yum_packages_to_install_or_update:
+  - "*"
+  - net-tools
+
+# List of packages that should be excluded from update or install
+yum_exclude_packages_to_install_or_update: "mongodb*,mysql*,nodejs*"
