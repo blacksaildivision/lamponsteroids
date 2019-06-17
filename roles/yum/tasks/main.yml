@@ -1,0 +1,114 @@
+# Make sure that gpgcheck is enabled in Yum configuration.
+# You should always check package signature before it's installation.
+# Main configuration is located in /etc/yum.conf file, but you should also check all files in /etc/yum.repos.d directory
+#
+- name: Make sure that GPG check is enabled in /etc/yum.conf file
+  lineinfile:
+    path: /etc/yum.conf
+    line: "gpgcheck=1"
+    state: present
+  tags: [yum]
+
+- name: Find all repo files in /etc/yum.repos.d directory
+  find:
+    paths: /etc/yum.repos.d
+    patterns: "*.repo"
+  register: yum_repositories
+  tags: [yum]
+
+- name: Make sure that GPG check is enabled in all repositories inside /etc/yum.repos.d
+  replace:
+    path: "{{ item.path }}"
+    regexp: "gpgcheck=0"
+    replace: "gpgcheck=1"
+  with_items: "{{ yum_repositories.files }}"
+  tags: [yum]
+
+
+
+# You can speed up downloading and installing packages with two things:
+# First one is deltarpm package. Instead of downloading entire packages, only the changes between versions are downloaded
+# Second one is yum-cron package. It will check periodically for new updates and will download them, but without installing.
+# It speeds up installation, since the packages doesn't have to be downloaded on install task - they are already in place.
+#
+- name: Install delta RPM
+  yum:
+    name: deltarpm
+    state: latest
+  tags: [yum]
+
+- name: Install yum-cron
+  yum:
+    name: yum-cron
+    state: latest
+  tags: [yum]
+
+- name: Make sure that packages are only downloaded without installation by yum-cron
+  lineinfile:
+    path: /etc/yum/yum-cron.conf
+    line: "apply_updates = no"
+    state: present
+  tags: [yum]
+
+- name: Start yum-cron service and enable it on start
+  service:
+    name: yum-cron
+    state: started
+    enabled: yes
+  tags: [yum]
+
+
+
+# Update installed packages to latest versions or install them if they are not present
+# You can exclude certain packages if you don't want to update or install them with this role
+#
+- name: Update packages to latest versions
+  yum:
+    name: "{{ yum_packages_to_install_or_update }}"
+    state: latest
+    exclude: "{{ yum_exclude_packages_to_install_or_update }}"
+  tags: [yum]
+
+
+
+# Remove packages from the server provided by the user and autoremove packages that are unused on the server
+#
+- name: Remove packages
+  yum:
+    name: "{{ item }}"
+    state: removed
+  with_items: "{{ yum_packages_to_remove }}"
+  tags: [yum]
+
+- name: Autoremove unused packages
+  shell: yum autoremove -y | grep "Erasing" | awk '{print $3}'
+  register: yum_autoremove
+  args:
+    warn: no
+  changed_when: "yum_autoremove.stdout != ''"
+  tags: [yum]
+
+- debug:
+    msg: "List of autoremoved packages:"
+  when: "yum_autoremove.stdout != ''"
+  tags: [yum]
+
+- debug:
+    msg: "{{ yum_autoremove.stdout_lines }}"
+  when: "yum_autoremove.stdout != ''"
+  tags: [yum]
+
+
+
+# Some packages might be excluded from update task and manual update should be performed.
+# List all of such packages here
+#
+- name: Get the list of non-updated packages
+  yum:
+    list: updates
+  register: yum_not_updated
+  tags: [yum]
+
+- debug:
+    msg: "List of packages available for updates: {{ yum_not_updated.results | map(attribute='name') |join(', ') }}"
+  tags: [yum]
