@@ -112,4 +112,5 @@
 
 - debug:
     msg: "List of packages available for updates: {{ yum_not_updated.results | map(attribute='name') |join(', ') }}"
+  when: "yum_not_updated.results | length > 0"
   tags: [yum]
