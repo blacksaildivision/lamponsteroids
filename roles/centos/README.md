@@ -3,7 +3,6 @@ CentOS role
 
 This role will install and configure CentOS to version 7.4
 There are multiple tasks and scenarios this role can do:
- - `yum` - update packages to latest versions, install helper tools like delta-rpm and yum cron, check if GPG is enabled for all repos
  - `groups` - create groups for users
  - `users` - create users with SSH keys
  - `sudo` - enable sudo group

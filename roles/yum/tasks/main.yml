@@ -48,6 +48,7 @@
     path: /etc/yum/yum-cron.conf
     line: "apply_updates = no"
     state: present
+  notify: restart yum-cron
   tags: [yum]
 
 - name: Start yum-cron service and enable it on start
