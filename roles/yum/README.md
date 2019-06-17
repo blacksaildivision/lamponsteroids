@@ -1,7 +1,7 @@
 Yum role
 ==========
 
-This role is responsible for updating, installing and removing packages with yum role. 
+This role is responsible for updating, installing and removing packages with yum package manager. 
 It also contains some security checks for GPG validation during package management.
 This role also installs two helper tools: `yum-cron` and `deltarpm` to speed up package installation.
 
