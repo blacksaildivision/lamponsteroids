@@ -63,11 +63,35 @@
 # Update installed packages to latest versions or install them if they are not present
 # You can exclude certain packages if you don't want to update or install them with this role
 #
+- name: Get the list of packages to update before actual update
+  yum:
+    list: updates
+  register: yum_packages_before_update
+  tags: [yum]
+
 - name: Update packages to latest versions
   yum:
     name: "{{ yum_packages_to_install_or_update }}"
     state: latest
     exclude: "{{ yum_exclude_packages_to_install_or_update }}"
+  register: yum_updated_packages
+  tags: [yum]
+
+- name: Get list of packages to update after the update
+  yum:
+    list: updates
+  register: yum_packages_after_update
+  when: "yum_updated_packages.changed == true"
+  tags: [yum]
+
+- set_fact:
+    yum_packages_after_update: "{{yum_packages_after_update.results | map(attribute='name') | list }}"
+  when: "yum_updated_packages.changed == true"
+  tags: [yum]
+
+- debug:
+    msg: "List of updated packages: {{ yum_packages_before_update.results | map(attribute='name') | list | symmetric_difference(yum_packages_after_update) | join(', ') }}"
+  when: "yum_updated_packages.changed == true"
   tags: [yum]
 
 
@@ -111,6 +135,6 @@
   tags: [yum]
 
 - debug:
-    msg: "List of packages available for updates: {{ yum_not_updated.results | map(attribute='name') |join(', ') }}"
+    msg: "List of packages available for updates: {{ yum_not_updated.results | map(attribute='name') | join(', ') }}"
   when: "yum_not_updated.results | length > 0"
   tags: [yum]
