@@ -2,9 +2,12 @@
 yum_packages_to_remove: []
 
 # List of packages that should be installed or updated to latest version
-yum_packages_to_install_or_update:
-  - "*"
+yum_packages_to_install:
+  - libselinux-python
   - net-tools
 
-# List of packages that should be excluded from update or install
-yum_exclude_packages_to_install_or_update: "mongodb*,mysql*,nodejs*"
+# List of packages that should be excluded from update
+yum_exclude_packages_to_update: "mongodb*,mysql*,nodejs*"
+
+# List of packages excluded from autoremove
+yum_exclude_packages_to_autoremove: "libselinux-python*"

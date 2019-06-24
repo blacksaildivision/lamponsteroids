@@ -71,9 +71,9 @@
 
 - name: Update packages to latest versions
   yum:
-    name: "{{ yum_packages_to_install_or_update }}"
+    name: "*"
     state: latest
-    exclude: "{{ yum_exclude_packages_to_install_or_update }}"
+    exclude: "{{ yum_exclude_packages_to_update }}"
   register: yum_updated_packages
   tags: [yum]
 
@@ -94,6 +94,12 @@
   when: "yum_updated_packages.changed == true"
   tags: [yum]
 
+- name: Install additional packages
+  yum:
+    name: "{{ yum_packages_to_install }}"
+    state: latest
+  tags: [yum]
+
 
 
 # Remove packages from the server provided by the user and autoremove packages that are unused on the server
@@ -106,7 +112,7 @@
   tags: [yum]
 
 - name: Autoremove unused packages
-  shell: yum autoremove -y | grep "Erasing" | awk '{print $3}'
+  shell: "yum autoremove --exclude='{{ yum_exclude_packages_to_autoremove }}' -y | grep 'Erasing' | awk '{print $3}'"
   register: yum_autoremove
   args:
     warn: no
