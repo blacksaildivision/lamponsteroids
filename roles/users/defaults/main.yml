@@ -13,8 +13,8 @@ users_to_remove: []
 users_to_create:
   - name: developer
     password: "$6$s60kc6yAy4$qqFLRihYSdVP9EVPV6bP7X3nPtItMiqPDmyMAhsMybWsWRmHvOVYHEwNU/okPsemJ0Aa3RfCrINHoNsbpNAQL1"
-    authorized_keys: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
-    generate_ssh_key: yes
     groups:
       - www
       - wheel
+    generate_ssh_key: yes
+    authorized_keys: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
