@@ -1,0 +1,37 @@
+# Remove given users from the system
+#
+- name: Remove users from system
+  user:
+    name: "{{ item }}"
+    state: absent
+    remove: yes
+    force: yes
+  with_items: "{{ users_to_remove }}"
+  tags: [users]
+
+
+
+# Make sure that following users are available in the system
+#
+- name: Create users
+  user:
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
+    groups: "{{ item.groups }}"
+    append: true
+    state: present
+    generate_ssh_key: "{{ item.generate_ssh_key }}"
+    ssh_key_bits: 4096
+  with_items: "{{ users_to_create }}"
+  tags: [users]
+
+
+
+# Configure authorized keys for the users
+#
+- name: Add authorized keys to users
+  authorized_key:
+    user: "{{ item.name }}"
+    key: "{{ item.authorized_keys }}"
+  with_items: "{{ users_to_create }}"
+  tags: [users]

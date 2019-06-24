@@ -1,0 +1,19 @@
+# Remove the groups from the server
+#
+- name: Remove groups from system
+  group:
+    name: "{{ item }}"
+    state: absent
+  with_items: "{{ users_groups_to_remove }}"
+  tags: [users]
+
+
+
+# Make sure that following groups are available in the system
+#
+- name: Create groups
+  group:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ users_groups_to_create }}"
+  tags: [users]

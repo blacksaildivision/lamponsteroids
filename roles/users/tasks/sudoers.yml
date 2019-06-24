@@ -1,0 +1,10 @@
+# Enable sudo that requires password
+#
+- name: Enable sudo
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: "^%wheel"
+    line: "%wheel ALL=(ALL) ALL"
+    validate: /usr/sbin/visudo -cf %s
+  tags: [users]
