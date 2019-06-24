@@ -1,0 +1,6 @@
+# List of groups to remove from the system
+users_groups_to_remove: []
+
+# List of groups that should be present
+users_groups_to_create:
+  - www

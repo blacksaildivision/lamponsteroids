@@ -6,6 +6,7 @@
   become: yes
   become_user: root
   roles:
+    - ../roles/yum
     - ../roles/centos
     - ../roles/ntp
     - ../roles/openssl
