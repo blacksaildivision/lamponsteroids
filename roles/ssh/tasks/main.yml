@@ -1,11 +1,16 @@
+- name: Merge default and user config
+  set_fact:
+    ssh_sshd_config: "{{ ssh_sshd_default_config_options | combine(ssh_sshd_user_config_options) }}"
+  tags: [ssh]
+
 - name: Configure /etc/ssh/sshd_config file
   lineinfile:
     path: /etc/ssh/sshd_config
     line: "{{ item.key }} {{ item.value }}"
     regexp: "^#?{{ item.key }}"
-  with_dict: "{{ ssh_sshd_config_options }}"
+  with_dict: "{{ ssh_sshd_config }}"
+  notify: restart sshd
   tags: [ssh]
-
 
 
 
