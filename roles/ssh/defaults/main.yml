@@ -1,0 +1,13 @@
+ssh_sshd_config_options:
+  PubkeyAuthentication: "yes"
+  PasswordAuthentication : "no"
+  ChallengeResponseAuthentication: "no"
+  GSSAPIAuthentication: "no"
+  KerberosAuthentication: "no"
+  PermitRootLogin: "no"
+  IgnoreRhosts: "yes"
+  PermitEmptyPasswords: "no"
+  StrictModes: "yes"
+  AllowUsers: "developer"
+  X11Forwarding: "no"
+  PrintLastLog: "yes"

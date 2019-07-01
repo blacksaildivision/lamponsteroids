@@ -1,0 +1,12 @@
+- name: Configure /etc/ssh/sshd_config file
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    line: "{{ item.key }} {{ item.value }}"
+    regexp: "^#?{{ item.key }}"
+  with_dict: "{{ ssh_sshd_config_options }}"
+  tags: [ssh]
+
+
+
+
+
