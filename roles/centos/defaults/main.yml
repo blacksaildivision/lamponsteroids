@@ -1,8 +1,5 @@
 ####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
 
-# Should this role use ssh tasks for setting up secure SSH?
-centos_manage_ssh: yes
-
 # Should this role use iptables task for setting up firewall?
 centos_manage_iptables: yes
 
@@ -11,79 +8,6 @@ centos_disable_thp: yes
 
 # Should this role manage logrotate scripts?
 centos_manage_logrotate: yes
-
-
-
-
-
-####### SSH TASKS CONFIGURATION #######
-
-# Path to SSH config file
-centos_ssh_config_file: /etc/ssh/sshd_config
-
-# Turn on or off authentication with public key (valid values: "yes" | "no")
-centos_ssh_authentication_public_key: "yes"
-
-# Turn on or off authentication with passwords (valid values: "yes" | "no")
-centos_ssh_authentication_password: "no"
-
-# Turn on or off GSS API authentication (valid values: "yes" | "no")
-centos_ssh_authentication_gss_api: "no"
-
-# Turn on or off Kerberos authentication (valid values: "yes" | "no")
-centos_ssh_authentication_kerberos: "no"
-
-# Turn on or off PAM-based authentication (valid values: "yes" | "no")
-# If you will set centos_ssh_authentication_password to "no", you should set this to "no" as well to trully disable password authentication.
-centos_ssh_challenge_response: "no"
-
-# Turn on or off logging in as root (valid values: "yes" | "no")
-centos_ssh_login_as_root: "no"
-
-# Turn on or off logging for users with empty password (valid values: "yes" | "no")
-centos_ssh_login_with_empty_password: "no"
-
-# Turn on or off strict mode
-centos_ssh_strict_mode: "yes"
-
-# List of users that are able to login via SSH. Leave it empty ( value:  [] )to turn this feature off (all users are able to login)
-centos_ssh_allowed_users:
-  - developer
-
-# Turn on or off ignoring .rhosts and .shosts files (valid values: "yes" | "no")
-centos_ssh_ignore_rhosts: "yes"
-
-# Turn on or off X11 Forwarding (valid values: "yes" | "no")
-centos_ssh_x11_forwarding: "no"
-
-# Setup key exchange algorithm. Default is the safest one, but if you need some compatilibity with other tools, please check http://ssh-comparison.quendi.de/comparison/kex.html this website
-centos_ssh_key_exchange_algorithms:
-  - curve25519-sha256@libssh.org
-
-# List of keys for ssh server authentication. The defaults are the safest one. Path ( /etc/ssh ) should be omited
-centos_ssh_server_key_authentications:
-  - ssh_host_ed25519_key
-  - ssh_host_rsa_key
-
-# List of SSH ciphers. The default are the safest one.
-centos_ssh_ciphers:
-  - chacha20-poly1305@openssh.com
-  - aes256-gcm@openssh.com
-  - aes128-gcm@openssh.com
-  - aes256-ctr
-  - aes192-ctr
-  - aes128-ctr
-
-# List of MACs. The default are the safest one.
-centos_ssh_macs:
-  - hmac-sha2-512-etm@openssh.com
-  - hmac-sha2-256-etm@openssh.com
-  - hmac-ripemd160-etm@openssh.com
-  - umac-128-etm@openssh.com
-  - hmac-sha2-512
-  - hmac-sha2-256
-  - hmac-ripemd160
-  - umac-128@openssh.com
 
 
 

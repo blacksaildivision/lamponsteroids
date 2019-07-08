@@ -1,9 +1,3 @@
-# Manage SSH
-- import_tasks: ssh.yml
-  when: "centos_manage_ssh == true"
-
-
-
 # Disable Transparent Huge Pages
 - import_tasks: thp.yml
   when: "centos_disable_thp == true"
