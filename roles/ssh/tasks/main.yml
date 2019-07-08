@@ -1,0 +1,43 @@
+# Configure /etc/ssh/sshd_config file options and host keys
+#
+- name: Merge default and user config
+  set_fact:
+    ssh_sshd_config: "{{ ssh_sshd_default_config_options | combine(ssh_sshd_user_config_options) }}"
+  tags: [ssh]
+
+- name: Configure /etc/ssh/sshd_config file
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    line: "{{ item.key }} {{ item.value }}"
+    regexp: "^#?{{ item.key }}"
+  with_dict: "{{ ssh_sshd_config }}"
+  notify: restart sshd
+  tags: [ssh]
+
+- name: Enable HostKeys in /etc/ssh/sshd_config
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    line: "HostKey /etc/ssh/{{ item }}"
+    state: present
+  with_items: "{{ ssh_sshd_host_keys }}"
+  notify: restart sshd
+  tags: [ssh]
+
+- name: Disable all other HostKeys in /etc/ssh/sshd_config
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "HostKey /etc/ssh/(?!{{ ssh_sshd_host_keys | join('|') }})"
+    state: absent
+  notify: restart sshd
+  tags: [ssh]
+
+
+
+# Make sure that sshd service is started and enabled on boot
+#
+- name: Make sure that sshd service is started and enabled on boot
+  service:
+    name: sshd
+    state: started
+    enabled: yes
+  tags: [ssh]

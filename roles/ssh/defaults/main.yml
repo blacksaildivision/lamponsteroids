@@ -1,0 +1,26 @@
+# List of default secure config options for /etc/ssh/sshd_config file
+ssh_sshd_default_config_options:
+  PubkeyAuthentication: "yes"
+  PasswordAuthentication : "no"
+  ChallengeResponseAuthentication: "no"
+  GSSAPIAuthentication: "no"
+  KerberosAuthentication: "no"
+  PermitRootLogin: "no"
+  IgnoreRhosts: "yes"
+  PermitEmptyPasswords: "no"
+  StrictModes: "yes"
+  AllowUsers: "developer"
+  X11Forwarding: "no"
+  PrintLastLog: "yes"
+  MaxAuthTries: "3"
+  KexAlgorithms: "curve25519-sha256@libssh.org,diffie-hellman-group18-sha512,diffie-hellman-group14-sha256,diffie-hellman-group16-sha512"
+  Ciphers: "chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr"
+  MACs: "hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com"
+
+# Custom user settings to be applied to /etc/ssh/sshd_config file. Please refer to README.md in this role
+ssh_sshd_user_config_options: []
+
+# List of host keys to be active in /etc/ssh/sshd_config file
+ssh_sshd_host_keys:
+  - ssh_host_ed25519_key
+  - ssh_host_rsa_key
