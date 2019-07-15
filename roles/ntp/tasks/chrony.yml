@@ -14,7 +14,7 @@
 
 
 
-# Configure chrony.conf file
+# Set up /etc/chrony.conf file
 #
 - name: Add servers to sync with
   lineinfile:

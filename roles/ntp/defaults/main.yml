@@ -1,5 +1,7 @@
+# Default system timezone
 ntp_timezone: "UTC"
 
+# List of servers to sync with for chrony
 ntp_servers:
   - time.cloudflare.com
   - 0.pool.ntp.org
