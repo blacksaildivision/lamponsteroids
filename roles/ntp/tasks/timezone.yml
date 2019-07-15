@@ -1,4 +1,4 @@
-# Update system timezone if needed
+# Update system timezone
 #
 - name: Check current timezone
   shell: timedatectl | awk '/Time zone:/ {print $3}'
