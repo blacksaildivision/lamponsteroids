@@ -9,8 +9,8 @@
     - ../roles/yum
     - ../roles/users
     - ../roles/ssh
-    - ../roles/centos
     - ../roles/ntp
+    - ../roles/centos
     - ../roles/openssl
     - ../roles/git
     - ../roles/httpd

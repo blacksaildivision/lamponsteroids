@@ -1,7 +1,4 @@
-# Set system date&time
-#
 - import_tasks: timezone.yml
-  when: "ntp_manage_timezone == true"
 
 
 

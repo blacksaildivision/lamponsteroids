@@ -46,10 +46,12 @@ Included roles
 
 **users** - Handle users/groups management and enables sudo. 
 
-**centos** - Takes care of system settings. Configure secure SSH. Set up firewall based on iptables. Disable Transparent Huge Pages.
-You can setup logrotate scripts with this role as well.
+**ssh** - SSHD hardening.
 
 **ntp** - Takes care of system timezone and NTP server. It uses Chrony for using NTP.
+
+**centos** - Takes care of system settings. Set up firewall based on iptables. Disable Transparent Huge Pages.
+You can setup logrotate scripts with this role as well.
 
 **openssl** - Compile OpenSSL from source (1.1.0g)
 

@@ -1,8 +1,5 @@
 ####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
 
-# Should this role set timezone?
-ntp_manage_timezone: yes
-
 # Should this role install Chrony NTP server?
 ntp_manage_chrony: yes
 
