@@ -1,8 +1,2 @@
 - import_tasks: timezone.yml
-
-
-
-# Install and configure NTP server
-#
 - import_tasks: chrony.yml
-  when: "ntp_manage_chrony == true"

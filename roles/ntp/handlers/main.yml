@@ -1,6 +1,3 @@
-# Restart chronyd service
-# This is usually executed on changes in /etc/chrony.conf file
-#
 - name: restart chronyd
   service:
     name: chronyd

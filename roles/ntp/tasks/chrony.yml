@@ -1,49 +1,37 @@
-# Make sure that ntpd is removed
-# Having two NTP servers installed can cause synchronisation issues
+# Install chrony in latest version. Also make sure that NTP tool is removed from the system
 #
 - name: Remove ntp packages if present
   yum:
-    name: "{{ item }}"
+    name: [ntp, ntpdate]
     state: removed
-  with_items:
-    - ntp
-    - ntpdate
-  when: ntp_chrony_remove_ntpd == true
-  tags: [ntp, chrony]
+  tags: [ntp]
 
-
-
-# Install chrony service
-#
-- name: Install chrony
+- name: Install chrony in latest version
   yum:
-    name: "{{ item }}"
+    name: chrony
     state: latest
-  with_items:
-    - chrony
-    - libselinux-python # Required for Ansible templates
-  tags: [ntp, chrony]
+  tags: [ntp]
 
 
 
-# Set servers that chrony will sync with
+# Configure chrony.conf file
 #
 - name: Add servers to sync with
   lineinfile:
-    dest: /etc/chrony.conf
+    path: /etc/chrony.conf
     line: "server {{ item }} iburst"
     state: present
-  with_items: "{{ ntp_chrony_servers }}"
+  with_items: "{{ ntp_servers }}"
   notify: restart chronyd
-  tags: [ntp, chrony]
+  tags: [ntp]
 
-- name: Remove all other servers
+- name: Remove unspecified servers
   lineinfile:
-    dest: /etc/chrony.conf
-    regexp: "server (?!{{ ntp_chrony_servers | join('|') |  replace('.','\\.') }})"
+    path: /etc/chrony.conf
+    regexp: "server (?!{{ ntp_servers | join('|') |  replace('.','\\.') }})"
     state: absent
   notify: restart chronyd
-  tags: [ntp, chrony]
+  tags: [ntp]
 
 
 
@@ -54,4 +42,4 @@
     name: chronyd
     state: started
     enabled: yes
-  tags: [ntp, chrony, healthcheck]
+  tags: [ntp]
