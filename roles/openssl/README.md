@@ -1,16 +1,18 @@
 OpenSSL role
 ============
 
-This role will install latest version of OpenSSL (1.1.0g) on CentOS server.
-OpenSSL will be compiled from source.
+This role will compile from source latest version of OpenSSL (1.1.1c) on CentOS server.
 
-What you should know?
-----------------------
+Variables
+---------
+Here is the list of configurable variables for this role:
 
-There are two things. First are two variables:
- - `openssl_build_user`
- - `openssl_build_group`
+ - `openssl_version` version of OpenSSL to install.
  
-You should set them to an existing user and group it cannot be root. Compiling software from root account can have serious security impacts.
-By default it's set to `developer`. If you are using whole LampOnSteroids project, such user will be created in `centos` role.
-If you only use `openssl` role, make sure that you set these variables correctly.
+ - `openssl_install_path` path where OpenSSL will be installed. By default it's `/usr/local/openssl`
+
+ - `openssl_sources_location` path where OpenSSL sources will be downloaded and unpacked. Make sure that `openssl_build_user` has access to this directory. By default it's `/usr/src`
+ 
+ - `openssl_build_user` user that will build the OpenSSL. It's not compiled as root. By default it's `developer`. If you don't have such user or you wish to provide your own, make sure the user exists.
+ 
+ - `openssl_build_group` group of the user for the build process. By default it's `developer`.
