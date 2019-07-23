@@ -1,42 +1,17 @@
-# Check if desired version of OpenSSL is installed or not and if it should be updated or not
-# Setting PATH is required, because sometimes Ansible doesn't use /etc/profile.d data;/
-#
-- name: Check if OpenSSL is installed
-  command: openssl version warn=no
-  register: openssl_is_installed_test
-  ignore_errors: yes
-  changed_when: false
-  environment:
-    PATH: "{{ openssl_install_path }}/bin:{{ ansible_env.PATH }}"
-  tags: [openssl]
-
-- set_fact:
-    openssl_is_installed: true
-  when: openssl_is_installed_test.rc != 2
-  tags: [openssl]
-
-- set_fact:
-    openssl_is_installed: false
-    openssl_install_new_version: true
-  when: openssl_is_installed_test.rc == 2
-  tags: [openssl]
-
-- set_fact:
-    openssl_install_new_version: true
-  when: ( openssl_is_installed == true ) and ( openssl_is_installed_test.stdout.split(' ')[1] != openssl_version )
-  tags: [openssl]
-
-- set_fact:
-    openssl_install_new_version: false
-  when: ( openssl_is_installed == true ) and ( openssl_is_installed_test.stdout.split(' ')[1] == openssl_version )
-  tags: [openssl]
-
-
-
 # Install/Update OpenSSL to desired version
 # These tasks will be executed when
-#  1. OpenSSL is not installed
+#  1. OpenSSL is not installed from within this role
 #  2. OpenSSL is installed but not in desired version
 #
-- import_tasks: install.yml
-  when: "openssl_install_new_version == true and openssl_manage_installation == true"
+- name: Check if OpenSSL is installed
+  shell: "{{ openssl_install_path }}/bin/openssl version | awk '{print $2}'"
+  args:
+    warn: no
+  ignore_errors: yes
+  changed_when: false
+  register: openssl_version_test
+  tags: [openssl]
+
+- include_tasks: install.yml
+  when: "openssl_version_test.stdout != openssl_version"
+  tags: [openssl]

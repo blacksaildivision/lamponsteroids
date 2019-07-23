@@ -1,28 +1,14 @@
-####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
-
-# Should this role use install tasks for compiling OpenSSL?
-openssl_manage_installation: yes
-
-
-
-
-
-####### INSTALL TASKS CONFIGURATION #######
-
-# Version of OpenSSL that should be present in the system
-openssl_version: "1.1.0g"
-
-# Location of files for OpenSSL sources
-openssl_sources_location: /usr/src
-
-# User that will build OpenSSL. Please never use root account for compiling software. It can lead to serious security issues
-openssl_build_user: developer
-
-# Group of the build user.
-openssl_build_group: developer
+# Version of OpenSSL that should be installed
+openssl_version: "1.1.1c"
 
 # Path where OpenSSL will be installed. NO trailing slash at the end!
 openssl_install_path: /usr/local/openssl
 
-# Should source files be removed after install? It might be necessary to build nginx from source with latest version of OpenSSL
-openssl_cleanup_after_install: no
+# Location of files for OpenSSL sources
+openssl_sources_location: /usr/src
+
+# User that will build OpenSSL
+openssl_build_user: developer
+
+# Group of the build user
+openssl_build_group: developer
