@@ -1,21 +1,18 @@
-GIT role
+Git role
 ========
 
-This role will install git https://git-scm.com/ on CentOS server.
-Git will be installed in latest version (2.16.3) and will be compiled from source.
+This role will compile and install Git from source code
 
-What you should know?
-----------------------
+Variables
+---------
+Here is the list of configurable variables for this role:
 
-There are two things. First are two variables:
- - `git_build_user`
- - `git_build_group`
+ - `git_version` version of Git to install.
+
+ - `git_install_path` path where Git will be installed. By default it's `/usr/local/git`
+
+ - `git_sources_location` path where Git source code will be downloaded and unpacked. Make sure that `git_build_user` has access to this directory. By default it's `/usr/src`
  
-You should set them to an existing user and group it cannot be root. Compiling software from root account can have serious security impacts.
-By default it's set to `developer`. If you are using whole LampOnSteroids project, such user will be created in `centos` role.
-If you only use git role, make sure that you set these variables correctly.
-
-OpenSSL
--------
-
-This role requires `openssl` role installed. It will install latest version of OpenSSL and GIT will be configured with `--with-openssl` parameter and compiler flags pointing to location where latest version is compiled (/usr/local/openssl)
+ - `git_build_user` user that will build the Git. It's not compiled as root. By default it's `developer`. If you don't have such user or you wish to provide your own, make sure the user exists.
+ 
+ - `git_build_group` group of the user for the build process. By default it's `developer`.

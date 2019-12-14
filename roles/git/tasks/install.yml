@@ -1,36 +1,24 @@
-# Install required software for compiling git from source
+# Install required packages for compiling Git from source
 #
-- name: Install required tools for compiling git
+- name: Install required packages for compiling Git
   yum:
-    name: "{{ item }}"
+    name: [autoconf, expat-devel, gcc, gettext-devel, libcurl-devel, openssl-devel, perl-devel, zlib-devel]
     state: latest
-  with_items:
-    - autoconf # Dependencies: m4 perl perl-Carp perl-Data-Dumper perl-Encode perl-Exporter perl-File-Path perl-File-Temp perl-Filter perl-Getopt-Long perl-HTTP-Tiny perl-PathTools perl-Pod-Escapes perl-Pod-Perldoc perl-Pod-Simple perl-Pod-Usage perl-Scalar-List-Utils perl-Socket perl-Storable perl-Text-ParseWords perl-Time-HiRes perl-Time-Local perl-constant perl-libs perl-macros perl-parent perl-podlators perl-threads perl-threads-shared
-    - libcurl-devel
-    - expat-devel
-    - gcc # Dependencies: cpp glibc-devel glibc-headers kernel-headers libmpc mpfr
-    - gettext-devel # Dependencies: gettext-common-devel git libgnome-keyring perl perl-Carp perl-Encode perl-Error perl-Exporter perl-File-Path perl-File-Temp perl-Filter perl-Getopt-Long perl-Git perl-HTTP-Tiny perl-PathTools perl-Pod-Escapesperl-Pod-Perldoc perl-Pod-Simple perl-Pod-Usage perl-Scalar-List-Utils perl-Socket perl-Storable perl-TermReadKey perl-Text-ParseWords perl-Time-HiRes perl-Time-Local perl-constant perl-libs perl-macros perl-parent perl-podlators perl-threads perl-threads-shared
-    - kernel-headers
-    - perl-devel # Dependencies: gdbm-devel glibc-devel glibc-headers kernel-headers libdb-devel perl perl-Carp perl-Encode perl-Exporter perl-ExtUtils-Install  perl-ExtUtils-MakeMaker perl-ExtUtils-Manifest perl-ExtUtils-ParseXS perl-File-Path perl-File-Temp perl-Filter perl-Getopt-Long perl-HTTP-Tiny perl-PathTools perl-Pod-Escapes perl-Pod-Perldoc perl-Pod-Simple perl-Pod-Usage perl-Scalar-List-Utils perl-Socket perl-Storable perl-Test-Harness perl-Text-ParseWords perl-Time-HiRes perl-Time-Local perl-constant perl-libs perl-macros perl-parent perl-podlators perl-threads perl-threads-shared pyparsing systemtap-sdt-devel
-    - zlib-devel
-  tags: [git, install]
+  tags: [git]
 
 
 
-# Download git sources from github releases:
+# Download and unpack sources
+# Source code will be downloaded from GitHub releases:
 # https://github.com/git/git/releases
 #
-- name: Download git sources
+- name: Download Git source code
   get_url:
     dest: "{{ git_sources_location }}"
     url: "https://github.com/git/git/archive/v{{ git_version }}.tar.gz"
-  tags: [git, install]
+  tags: [git]
 
-
-
-# Unpack downloaded git sources
-#
-- name: Unpack downloaded git sources
+- name: Unpack downloaded Git source code
   unarchive:
     src: "{{ git_sources_location }}/git-{{ git_version }}.tar.gz"
     dest: "{{ git_sources_location }}"
@@ -38,45 +26,32 @@
     group: "{{ git_build_group }}"
     copy: no
     creates: "{{ git_sources_location }}/git-{{ git_version }}"
-  tags: [git, install]
+  tags: [git]
 
 
 
-# Compile git
+# Compile and install Git
 # It will be compiled by using different user than root.
+# Install operation  must be executed as sudo user
 #
-- name: Compile git
+- name: Compile Git
   command: "{{ item }}"
   args:
     chdir: "{{ git_sources_location }}/git-{{ git_version }}"
   with_items:
     - make clean
     - make configure
-    - "./configure CFLAGS='-I{{ git_openssl_path }}/include' LDFLAGS='-L{{ git_openssl_path }}/lib' --prefix={{ git_install_path }} --with-openssl={{ git_openssl_path }}"
+    - "./configure --prefix={{ git_install_path }}"
     - make
   become: true
   become_user: "{{ git_build_user }}"
-  tags: [git, install]
+  tags: [git]
 
-
-
-# In order to check if Git was compiled with custom OpenSSL library we need to use ldd tool to check linked libraries
-#
-- name: Check if custom OpenSSL is used
-  shell: "ldd {{ git_sources_location }}/git-{{ git_version }}/git-http-fetch | grep '{{ git_openssl_path }}'"
-  changed_when: false
-  tags: [git, install]
-
-
-
-# Install compiled git
-# This operation must be executed as sudo user
-#
-- name: Install compiled git
+- name: Install compiled Git
   command: make install
   args:
     chdir: "{{ git_sources_location }}/git-{{ git_version }}"
-  tags: [git, install]
+  tags: [git]
 
 
 
@@ -89,19 +64,18 @@
   with_items:
     - "{{ git_sources_location }}/git-{{ git_version }}.tar.gz"
     - "{{ git_sources_location }}/git-{{ git_version }}"
-  when: "git_cleanup_after_install == true"
-  tags: [git, install]
+  tags: [git]
 
 
 
-# Add new GIT executables to PATH
+# Add Git executables to PATH
 # It will fix the issue when git compiled from source can be overridden by git installed with yum
 #
-- name: Add GIT executables to PATH
+- name: Add Git executables to $PATH
   template:
     src: git.sh.j2
     dest: /etc/profile.d/git.sh
     owner: root
     group: root
     mode: 0644
-  tags: [git, install]
+  tags: [git]
