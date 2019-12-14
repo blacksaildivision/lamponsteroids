@@ -46,6 +46,12 @@
   become_user: "{{ openssl_build_user }}"
   tags: [openssl]
 
+- name: Install compiled OpenSSL
+  command: make install
+  args:
+    chdir: "{{ openssl_sources_location }}/openssl-OpenSSL_{{ openssl_version | replace( '.', '_' ) }}"
+  tags: [openssl]
+
 
 
 # Remove downloaded sources after installation

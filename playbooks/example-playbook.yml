@@ -10,9 +10,9 @@
     - ../roles/users
     - ../roles/ssh
     - ../roles/ntp
-    - ../roles/centos
     - ../roles/openssl
     - ../roles/git
+    - ../roles/centos
     - ../roles/httpd
     - ../roles/nodejs
     - ../roles/awscli
