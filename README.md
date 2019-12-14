@@ -52,10 +52,10 @@ Included roles
 
 **openssl** - Compile OpenSSL from source (1.1.1c)
 
+**git** - Compile and install Git from source (2.24.1) 
+
 **centos** - Takes care of system settings. Set up firewall based on iptables. Disable Transparent Huge Pages.
 You can setup logrotate scripts with this role as well.
-
-**git** - Compile git from source with OpenSSL (2.16.3) 
 
 **httpd** - Compile and configure Apache httpd from source with OpenSSL (2.4.33)
 
