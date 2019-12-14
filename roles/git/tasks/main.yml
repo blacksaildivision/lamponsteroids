@@ -1,41 +1,17 @@
-# Check if git is installed or not and if it should be updated or not
-#
-- name: Check if git is installed
-  command: git --version warn=no
-  register: git_is_installed_test
-  ignore_errors: yes
-  changed_when: false
-  environment:
-    PATH: "{{ git_install_path }}/bin:{{ ansible_env.PATH }}"
-  tags: [git]
-
-- set_fact:
-    git_is_installed: true
-  when: git_is_installed_test.rc != 2
-  tags: [git]
-
-- set_fact:
-    git_is_installed: false
-    git_install_new_version: true
-  when: git_is_installed_test.rc == 2
-  tags: [git]
-
-- set_fact:
-    git_install_new_version: true
-  when: ( git_is_installed == true ) and ( git_is_installed_test.stdout | replace('git version ','') != git_version )
-  tags: [git]
-
-- set_fact:
-    git_install_new_version: false
-  when: ( git_is_installed == true ) and ( git_is_installed_test.stdout | replace('git version ','') == git_version )
-  tags: [git]
-
-
-
-# Install/Update git to desired version
+# Install/Update Git to desired version
 # These tasks will be executed when
-#  1. Git is not installed
+#  1. Git is not installed from within this role
 #  2. Git is installed but not in desired version
 #
-- import_tasks: install.yml
-  when: "git_install_new_version == true"
+- name: Check if Git is installed in required version
+  shell: "{{ git_install_path }}/bin/git --version | awk '{print $3}'"
+  args:
+    warn: no
+  ignore_errors: yes
+  changed_when: false
+  register: git_version_test
+  tags: [git]
+
+- include_tasks: install.yml
+  when: "git_version_test.stdout != git_version"
+  tags: [git]

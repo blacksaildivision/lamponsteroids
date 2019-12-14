@@ -1,20 +1,14 @@
-# Version of git that should be present in the system
-git_version: "2.16.3"
+# Version of git that should be installed
+git_version: "2.24.1"
+
+# Location where Git should be installed
+git_install_path: /usr/local/git
 
 # Location of files for git sources
 git_sources_location: /usr/src
 
-# User that will build git. Please never use root account for compiling software. It can lead to serious issues
+# User that will build Git from sources
 git_build_user: developer
 
 # Group of the build user.
 git_build_group: developer
-
-# Installation path for GIT
-git_install_path: /usr/local/git
-
-# Should downloaded source files be deleted after installation?
-git_cleanup_after_install: yes
-
-# OpenSSL libraries path
-git_openssl_path: /usr/local/openssl
