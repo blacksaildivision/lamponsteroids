@@ -17,21 +17,9 @@
   tags: [nginx]
 
 
+# Create groups, users and add basic configuration
+- import_tasks: configure.yml
 
-# Make sure that libselinux-python is installed (required for Ansible templates)
-#
-- name: Make sure that libselinux-python is installed
-  yum:
-    name: libselinux-python
-    state: latest
-  tags: [nginx]
-
-
-
-# Configure nginx
-#
-- include: configure.yml
-  when: "nginx_manage_configuration == true"
 
 
 

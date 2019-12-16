@@ -1,6 +1,3 @@
-# Restart nginx service
-# This handler is executed on changes in nginx config files
-#
 - name: restart nginx
   service:
     name: nginx

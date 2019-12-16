@@ -65,10 +65,18 @@ nginx_conf_path: "{{ nginx_install_path }}/conf/nginx.conf"
 # nginx PID file path
 nginx_pid_file_path: "{{ nginx_install_path }}/logs/nginx.pid"
 
+# User for nginx daemon(s)
+nginx_user: nginx
+
+# Group for nginx daemon(s)
+nginx_group: www
+
+# Diffie-Hellman group file
+nginx_df_file_path: /etc/ssl/certs/dhparam.pem
+
+
 ####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
 
-# Should this role use configure tasks for configuring nginx?
-nginx_manage_configuration: yes
 
 # Should this role use servers tasks for setting up virtual hosts?
 nginx_manage_servers: yes
@@ -79,21 +87,6 @@ nginx_manage_servers: yes
 
 
 ####### CONFIGURE TASKS CONFIGURATION #######
-
-# Number of simultaneous connections that can be opened by worker process
-nginx_worker_connections: 4096
-
-# Limit of the maximum number of open files for worker
-nginx_worker_rlimit_nofile: 4096
-
-# User for nginx daemon(s)
-nginx_user: nginx
-
-# Group for nginx daemon(s)
-nginx_group: nginx
-
-# Diffie-Hellman group file
-nginx_df_file_path: /etc/ssl/certs/dhparam.pem
 
 # Additional log formats
 nginx_additional_log_formats: []

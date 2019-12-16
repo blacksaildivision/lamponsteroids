@@ -1,70 +1,88 @@
-error_log  logs/error.log warn;
+# This file is managed by Ansible
+error_log logs/error.log warn;
 pcre_jit on;
 pid {{ nginx_pid_file_path }};
 user {{ nginx_user }} {{ nginx_group }};
 worker_processes auto;
-worker_rlimit_nofile {{ nginx_worker_rlimit_nofile }};
-
+worker_rlimit_nofile 65535;
 
 events {
     multi_accept on;
-    worker_connections {{ nginx_worker_connections }};
+    worker_connections 65535;
     use epoll;
 }
 
-
 http {
-    include mime.types;
-    default_type text/html;
     aio on;
-    index index.php index.html;
     sendfile on;
     sendfile_max_chunk 256k;
     tcp_nopush on;
+    types_hash_max_size 2048;
     server_tokens off;
 
-    # GZIP configuration
-    gzip on;
-    gzip_disable "msie6";
-    gzip_vary on;
-    gzip_proxied any;
-    gzip_comp_level 6;
-    gzip_min_length 256;
-    gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/javascript application/vnd.ms-fontobject application/x-font-ttf font/opentype image/svg+xml image/x-icon;
+    # MIME types
+    include mime.types;
+    default_type application/octet-stream;
 
-    # Logging
-    map $request_uri $loggable {
-        "/favicon.ico" 0;
-        "/robots.txt" 0;
-        "/nginx_status" 0;
-        default 1;
-    }
-    log_format main '$remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent" "$http_x_forwarded_for"';
-{% for log in nginx_additional_log_formats %}
-    log_format {{ log.name }} '{{ log.format }}';
-{% endfor %}
+    #log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+    #                  '$status $body_bytes_sent "$http_referer" '
+    #                  '"$http_user_agent" "$http_x_forwarded_for"';
 
-    # Keepalive settings
-    keepalive_timeout 65;
-    keepalive_requests 100000;
+    #access_log  logs/access.log  main;
 
-    # Client body settings
-    client_body_temp_path /tmp 1 2;
-    client_body_buffer_size 1M;
-    client_max_body_size 10M;
+    #keepalive_timeout  0;
+    keepalive_timeout  65;
 
-    # Server blocks for each domain
-{% for server in nginx_servers %}
-    include server-{{ server.server_name }}{{ '-ssl' if server.https is defined and server.https == true else '' }}.conf;
-{% endfor %}
-
-{% if nginx_redirects | length > 0 %}
-    # Redirects
-    include server-redirects.conf;
-{% endif %}
-
-{% if nginx_extra_config != '' %}
-    # Extra config
-    {{ nginx_extra_config }}
-{% endif %}
+    #gzip  on;
 }
+
+#
+#
+#http {
+
+#    # GZIP configuration
+#    gzip on;
+#    gzip_disable "msie6";
+#    gzip_vary on;
+#    gzip_proxied any;
+#    gzip_comp_level 6;
+#    gzip_min_length 256;
+#    gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/javascript application/vnd.ms-fontobject application/x-font-ttf font/opentype image/svg+xml image/x-icon;
+#
+#    # Logging
+#    map $request_uri $loggable {
+#        "/favicon.ico" 0;
+#        "/robots.txt" 0;
+#        "/nginx_status" 0;
+#        default 1;
+#    }
+#    log_format main '$remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent" "$http_x_forwarded_for"';
+#{% for log in nginx_additional_log_formats %}
+#    log_format {{ log.name }} '{{ log.format }}';
+#{% endfor %}
+#
+#    # Keepalive settings
+#    keepalive_timeout 65;
+#    keepalive_requests 100000;
+#
+#    # Client body settings
+#    client_body_temp_path /tmp 1 2;
+#    client_body_buffer_size 1M;
+#    client_max_body_size 10M;
+#
+#    # Server blocks for each domain
+#{% for server in nginx_servers %}
+#    include server-{{ server.server_name }}{{ '-ssl' if server.https is defined and server.https == true else '' }}.conf;
+#{% endfor %}
+#
+#{% if nginx_redirects | length > 0 %}
+#    # Redirects
+#    include server-redirects.conf;
+#{% endif %}
+#
+#{% if nginx_extra_config != '' %}
+#    # Extra config
+#    {{ nginx_extra_config }}
+#{% endif %}
+#}
+
