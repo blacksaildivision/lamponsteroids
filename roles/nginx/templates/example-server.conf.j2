@@ -1,0 +1,14 @@
+server {
+    listen 443 ssl http2;
+    server_name example.com dev.example.com;
+    root /var/www/example.com/htdocs;
+
+    # SSL configuration
+    ssl_certificate /var/www/example.com/ssl/fullchain.pem;
+    ssl_certificate_key /var/www/example.com/ssl/privkey.pem;
+    include ssl.conf; # This file contains modern configuration for SSL settings
+
+    # Logging
+    error_log /var/www/example.com/logs/nginx-error.log notice;
+    access_log /var/www/example.com/logs/nginx-access.log main buffer=64k flush=1m;
+}

@@ -27,9 +27,18 @@
 
 
 
-# Setup directory for active sites
+# Setup base directory structure
 #
-- name: Create directory for server files
+- name: Create root directory for websites
+  file:
+    path: /var/www
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+  tags: [nginx]
+
+- name: Create directory for server configuration files
   file:
     path: "{{ nginx_install_path }}/conf/sites-enabled"
     state: directory
@@ -52,6 +61,16 @@
   notify: restart nginx
   tags: [nginx]
 
+- name: Setup SSL configuration
+  template:
+    src: ssl.conf.j2
+    dest: "{{ nginx_install_path }}/conf/ssl.conf"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart nginx
+  tags: [nginx]
+
 - name: Setup nginx main configuration
   template:
     src: nginx.conf.j2
@@ -60,4 +79,13 @@
     group: root
     mode: 0644
   notify: restart nginx
+  tags: [nginx]
+
+- name: Add example configuration file
+  template:
+    src: example-server.conf.j2
+    dest: "{{ nginx_install_path }}/conf/sites-enabled/example-server.conf-disabled"
+    owner: root
+    group: root
+    mode: 0644
   tags: [nginx]
