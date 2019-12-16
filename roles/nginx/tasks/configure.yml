@@ -27,8 +27,18 @@
 
 
 
-# Setup nginx main configuration
+# Setup nginx configuration files
 #
+- name: Setup Gzip and Brotli configuration
+  template:
+    src: compression.conf.j2
+    dest: "{{ nginx_install_path }}/conf/compression.conf"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart nginx
+  tags: [nginx]
+
 - name: Setup nginx main configuration
   template:
     src: nginx.conf.j2
