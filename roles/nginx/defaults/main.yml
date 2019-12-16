@@ -1,7 +1,10 @@
-####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
+# Version of nginx that should be installed
+nginx_version: "1.17.6"
 
-# Should this role use install tasks for compiling nginx?
-nginx_manage_installation: yes
+# Path where nginx will be installed. NO trailing slash at the end!
+nginx_install_path: /usr/local/nginx
+
+####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
 
 # Should this role use configure tasks for configuring nginx?
 nginx_manage_configuration: yes
@@ -15,11 +18,7 @@ nginx_manage_servers: yes
 
 ####### INSTALL TASKS CONFIGURATION #######
 
-# Version of nginx that should be present in the system
-nginx_version: "1.13.4"
 
-# Path where nginx will be installed. NO trailing slash at the end!
-nginx_install_path: /usr/local/nginx
 
 # Location of files for nginx sources
 nginx_sources_location: /usr/src

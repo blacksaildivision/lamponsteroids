@@ -1,44 +1,29 @@
+# Install/Update nginx to desired version
+# These tasks will be executed when
+#  1. nginx is not installed from within this role
+#  2. nginx is installed but not in desired version
+#
+- name: Check if nginx is installed in required version
+  shell: "{{ nginx_install_path }}/sbin/nginx -v 2>&1 | awk '{print substr($3, 7)}'"
+  args:
+    warn: no
+  ignore_errors: yes
+  changed_when: false
+  register: nginx_version_test
+  tags: [nginx]
+
+- include_tasks: install.yml
+  when: "nginx_version_test.stdout != nginx_version"
+  tags: [nginx]
+
+
+
 # Make sure that libselinux-python is installed (required for Ansible templates)
 #
 - name: Make sure that libselinux-python is installed
   yum:
     name: libselinux-python
     state: latest
-  tags: [nginx]
-
-
-
-# Check if nginx is installed or not and if it should be updated or not
-# Setting PATH is required, because sometimes Ansible doesn't use /etc/profile.d data;/
-#
-- name: Check if nginx is installed
-  command: nginx -v warn=no
-  register: nginx_is_installed_test
-  ignore_errors: yes
-  changed_when: false
-  environment:
-    PATH: "{{ ansible_env.PATH }}:{{ nginx_install_path }}/sbin"
-  tags: [nginx]
-
-- set_fact:
-    nginx_is_installed: true
-  when: nginx_is_installed_test.rc != 2
-  tags: [nginx]
-
-- set_fact:
-    nginx_is_installed: false
-    nginx_install_new_version: true
-  when: nginx_is_installed_test.rc == 2
-  tags: [nginx]
-
-- set_fact:
-    nginx_install_new_version: true
-  when: ( nginx_is_installed == true ) and ( nginx_is_installed_test.stderr | regex_replace('[^0-9.]','') != nginx_version )
-  tags: [nginx]
-
-- set_fact:
-    nginx_install_new_version: false
-  when: ( nginx_is_installed == true ) and ( nginx_is_installed_test.stderr | regex_replace('[^0-9.]','') == nginx_version )
   tags: [nginx]
 
 
