@@ -4,6 +4,67 @@ nginx_version: "1.17.6"
 # Path where nginx will be installed. NO trailing slash at the end!
 nginx_install_path: /usr/local/nginx
 
+# Where nginx source code should be downloaded
+nginx_sources_path: /usr/src
+
+# User that will build nginx
+nginx_build_user: developer
+
+# Group of the build user
+nginx_build_group: developer
+
+# Version of PCRE that will be compiled with nginx
+nginx_pcre_version: "8.43"
+
+# Version of OpenSSL that will be compiled with nginx
+nginx_openssl_version: "1.1.1d"
+
+# Version of Zlib that will be compiled with nginx
+nginx_zlib_version: "1.2.11"
+
+# List of configuration options for nginx
+nginx_configure_options:
+  - "--prefix={{ nginx_install_path }}"
+  - "--with-pcre=../pcre-{{ nginx_pcre_version }}"
+  - "--with-openssl=../openssl-OpenSSL_{{ nginx_openssl_version | replace( '.', '_' ) }}"
+  - "--with-zlib=../zlib-{{ nginx_zlib_version }}"
+  - --add-module=../ngx_brotli
+  - --with-threads
+  - --with-file-aio
+  - --with-http_ssl_module
+  - --with-http_v2_module
+  - --with-http_realip_module
+  - --with-http_stub_status_module
+  - --without-http_charset_module
+  - --without-http_ssi_module
+  - --without-http_userid_module
+  - --without-http_auth_basic_module
+  - --without-http_mirror_module
+  - --without-http_autoindex_module
+  - --without-http_geo_module
+  - --without-http_split_clients_module
+  - --without-http_referer_module
+  - --without-http_fastcgi_module
+  - --without-http_uwsgi_module
+  - --without-http_scgi_module
+  - --without-http_grpc_module
+  - --without-http_memcached_module
+  - --without-http_limit_conn_module
+  - --without-http_limit_req_module
+  - --without-http_browser_module
+  - --without-http_upstream_hash_module
+  - --without-http_upstream_ip_hash_module
+  - --without-http_upstream_least_conn_module
+  - --without-http_upstream_keepalive_module
+  - --without-http_upstream_zone_module
+  - --with-pcre-jit
+
+# nginx.conf path
+nginx_conf_path: "{{ nginx_install_path }}/conf/nginx.conf"
+
+# nginx PID file path
+nginx_pid_file_path: "{{ nginx_install_path }}/logs/nginx.pid"
+
 ####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
 
 # Should this role use configure tasks for configuring nginx?
@@ -16,60 +77,8 @@ nginx_manage_servers: yes
 
 
 
-####### INSTALL TASKS CONFIGURATION #######
-
-
-
-# Location of files for nginx sources
-nginx_sources_location: /usr/src
-
-# User that will build nginx. Please never use root account for compiling software. It can lead to serious security issues
-nginx_build_user: developer
-
-# Group of the build user.
-nginx_build_group: developer
-
-# List of configuration options for nginx
-nginx_configure_options:
-  - "--prefix={{ nginx_install_path }}"
-  - --with-pcre-jit
-  - --without-http_charset_module
-  - --without-http_ssi_module
-  - --without-http_userid_module
-  - --without-http_auth_basic_module
-  - --without-http_autoindex_module
-  - --without-http_geo_module
-  - --without-http_split_clients_module
-  - --without-http_referer_module
-  - --without-http_fastcgi_module
-  - --without-http_uwsgi_module
-  - --without-http_scgi_module
-  - --without-http_memcached_module
-  - --without-http_limit_conn_module
-  - --without-http_limit_req_module
-  - --without-http_browser_module
-  - --with-threads
-  - --with-file-aio
-  - --with-http_ssl_module
-  - --with-openssl=/usr/src/openssl-OpenSSL_1_1_0f
-  - --with-http_v2_module
-  - --with-http_stub_status_module
-  - --with-http_realip_module
-
-# Remove downloaded sources after installation
-nginx_cleanup_after_install: yes
-
-
-
-
 
 ####### CONFIGURE TASKS CONFIGURATION #######
-
-# nginx.conf path
-nginx_conf_path: "{{ nginx_install_path }}/conf/nginx.conf"
-
-# nginx PID file path
-nginx_pid_file_path: "{{ nginx_install_path }}/logs/nginx.pid"
 
 # Number of simultaneous connections that can be opened by worker process
 nginx_worker_connections: 4096

@@ -28,16 +28,6 @@
 
 
 
-# Install/Update nginx to desired version
-# These tasks will be executed when
-#  1. nginx is not installed
-#  2. nginx is installed but not in desired version
-#
-- include: install.yml
-  when: "nginx_install_new_version == true and nginx_manage_installation == true"
-
-
-
 # Configure nginx
 #
 - include: configure.yml
