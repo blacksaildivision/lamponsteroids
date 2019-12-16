@@ -27,6 +27,19 @@
 
 
 
+# Setup directory for active sites
+#
+- name: Create directory for server files
+  file:
+    path: "{{ nginx_install_path }}/conf/sites-enabled"
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+  tags: [nginx]
+
+
+
 # Setup nginx configuration files
 #
 - name: Setup Gzip and Brotli configuration

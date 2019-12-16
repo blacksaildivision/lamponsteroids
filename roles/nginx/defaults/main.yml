@@ -84,20 +84,6 @@ nginx_manage_servers: yes
 
 
 
-
-
-####### CONFIGURE TASKS CONFIGURATION #######
-
-# Additional log formats
-nginx_additional_log_formats: []
-
-# Extra configuration in nginx file
-nginx_extra_config: ''
-
-
-
-
-
 ####### VIRTUALHOSTS TASKS CONFIGURATION #######
 
 # Root directory for hosting all website files

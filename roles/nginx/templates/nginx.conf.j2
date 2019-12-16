@@ -22,50 +22,12 @@ http {
     include mime.types;
     default_type application/octet-stream;
 
+    # Predefined log formats
+    log_format main '$remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent" "$http_x_forwarded_for"';
+
     # Gzip and Brotli compression settings
     include compression.conf;
+
+    # Load configurations for websites
+    include sites-enabled/*.conf;
 }
-
-#
-#
-#http {
-
-
-#
-#    # Logging
-#    map $request_uri $loggable {
-#        "/favicon.ico" 0;
-#        "/robots.txt" 0;
-#        "/nginx_status" 0;
-#        default 1;
-#    }
-#    log_format main '$remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent" "$http_x_forwarded_for"';
-#{% for log in nginx_additional_log_formats %}
-#    log_format {{ log.name }} '{{ log.format }}';
-#{% endfor %}
-#
-#    # Keepalive settings
-#    keepalive_timeout 65;
-#    keepalive_requests 100000;
-#
-#    # Client body settings
-#    client_body_temp_path /tmp 1 2;
-#    client_body_buffer_size 1M;
-#    client_max_body_size 10M;
-#
-#    # Server blocks for each domain
-#{% for server in nginx_servers %}
-#    include server-{{ server.server_name }}{{ '-ssl' if server.https is defined and server.https == true else '' }}.conf;
-#{% endfor %}
-#
-#{% if nginx_redirects | length > 0 %}
-#    # Redirects
-#    include server-redirects.conf;
-#{% endif %}
-#
-#{% if nginx_extra_config != '' %}
-#    # Extra config
-#    {{ nginx_extra_config }}
-#{% endif %}
-#}
-
