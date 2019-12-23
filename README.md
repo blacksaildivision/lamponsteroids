@@ -54,6 +54,8 @@ Included roles
 
 **git** - Compile and install Git from source (2.24.1) 
 
+**nginx** - Compile, install and configure nginx from source (1.17.6)
+
 **centos** - Takes care of system settings. Set up firewall based on iptables. Disable Transparent Huge Pages.
 You can setup logrotate scripts with this role as well.
 
@@ -72,8 +74,6 @@ You can setup logrotate scripts with this role as well.
 **mongodb** - Install and configure MongoDB (3.4.7) with authentication
 
 **letsencrypt** - Install Certbot and obtain certificates from Let's Encrypt
-
-**nginx** - Install and configure latest version of nginx (1.13.4)
 
 **redis** - Install and configure latest version of redis (4.0.1)
 
