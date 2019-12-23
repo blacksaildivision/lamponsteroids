@@ -12,6 +12,7 @@
     - ../roles/ntp
     - ../roles/openssl
     - ../roles/git
+    - ../roles/nginx
     - ../roles/centos
     - ../roles/httpd
     - ../roles/nodejs
@@ -21,7 +22,6 @@
     - ../roles/datadog
     - ../roles/mongodb
     - ../roles/letsencrypt
-    - ../roles/nginx
     - ../roles/redis
 
   vars_files:

@@ -1,11 +1,10 @@
 # Make sure that dedicated nginx daemon user and group exists
-# It's nice to create separate user for each service like httpd, nginx etc.
 #
 - name: Create dedicated nginx group
   group:
     name: "{{ nginx_group }}"
     state: present
-  tags: [nginx, configure]
+  tags: [nginx]
 
 - name: Create dedicated nginx user
   user:
@@ -14,7 +13,7 @@
     group: "{{ nginx_group }}"
     state: present
     shell: /sbin/nologin
-  tags: [nginx, configure]
+  tags: [nginx]
 
 
 
@@ -22,15 +21,56 @@
 # It is used for improving SSL security
 #
 - name: Create Diffie-Hellman group
-  shell: "/usr/local/openssl/bin/openssl dhparam -out {{ nginx_df_file_path }} 2048"
-  args:
-    creates: "{{ nginx_df_file_path }}"
-  tags: [nginx, configure]
+  openssl_dhparam:
+    path: "{{ nginx_df_file_path }}"
+  tags: [nginx]
 
 
 
-# Setup nginx main configuration
+# Setup base directory structure
 #
+- name: Create root directory for websites
+  file:
+    path: /var/www
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+  tags: [nginx]
+
+- name: Create directory for server configuration files
+  file:
+    path: "{{ nginx_install_path }}/conf/sites-enabled"
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+  tags: [nginx]
+
+
+
+# Setup nginx configuration files
+#
+- name: Setup Gzip and Brotli configuration
+  template:
+    src: compression.conf.j2
+    dest: "{{ nginx_install_path }}/conf/compression.conf"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart nginx
+  tags: [nginx]
+
+- name: Setup SSL configuration
+  template:
+    src: ssl.conf.j2
+    dest: "{{ nginx_install_path }}/conf/ssl.conf"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart nginx
+  tags: [nginx]
+
 - name: Setup nginx main configuration
   template:
     src: nginx.conf.j2
@@ -39,4 +79,13 @@
     group: root
     mode: 0644
   notify: restart nginx
-  tags: [nginx, configure, servers-update]
+  tags: [nginx]
+
+- name: Add example configuration file
+  template:
+    src: example-server.conf.j2
+    dest: "{{ nginx_install_path }}/conf/sites-enabled/example-server.conf-disabled"
+    owner: root
+    group: root
+    mode: 0644
+  tags: [nginx]

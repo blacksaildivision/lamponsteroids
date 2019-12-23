@@ -1,7 +1,7 @@
 [Unit]
-Description=nginx - high performance web server
+Description=The NGINX HTTP and reverse proxy server
 Documentation=http://nginx.org/en/docs/
-After=network-online.target remote-fs.target nss-lookup.target
+After=syslog.target network.target remote-fs.target nss-lookup.target
 Wants=network-online.target
 
 [Service]
@@ -9,8 +9,8 @@ Type=forking
 PIDFile={{ nginx_pid_file_path }}
 ExecStartPre={{ nginx_install_path }}/sbin/nginx -t -c {{ nginx_conf_path }}
 ExecStart={{ nginx_install_path }}/sbin/nginx -c {{ nginx_conf_path }}
-ExecReload=/bin/kill -s HUP $MAINPID
-ExecStop=/bin/kill -s TERM $MAINPID
+ExecReload={{ nginx_install_path }}/sbin/nginx -s reload
+ExecStop=/bin/kill -s QUIT $MAINPID
 
 [Install]
 WantedBy=multi-user.target

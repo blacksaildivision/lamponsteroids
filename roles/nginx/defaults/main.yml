@@ -1,43 +1,45 @@
-####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
-
-# Should this role use install tasks for compiling nginx?
-nginx_manage_installation: yes
-
-# Should this role use configure tasks for configuring nginx?
-nginx_manage_configuration: yes
-
-# Should this role use servers tasks for setting up virtual hosts?
-nginx_manage_servers: yes
-
-
-
-
-
-####### INSTALL TASKS CONFIGURATION #######
-
-# Version of nginx that should be present in the system
-nginx_version: "1.13.4"
+# Version of nginx that should be installed
+nginx_version: "1.17.6"
 
 # Path where nginx will be installed. NO trailing slash at the end!
 nginx_install_path: /usr/local/nginx
 
-# Location of files for nginx sources
-nginx_sources_location: /usr/src
+# Where nginx source code should be downloaded
+nginx_sources_path: /usr/src
 
-# User that will build nginx. Please never use root account for compiling software. It can lead to serious security issues
+# User that will build nginx
 nginx_build_user: developer
 
-# Group of the build user.
+# Group of the build user
 nginx_build_group: developer
+
+# Version of PCRE that will be compiled with nginx
+nginx_pcre_version: "8.43"
+
+# Version of OpenSSL that will be compiled with nginx
+nginx_openssl_version: "1.1.1d"
+
+# Version of Zlib that will be compiled with nginx
+nginx_zlib_version: "1.2.11"
 
 # List of configuration options for nginx
 nginx_configure_options:
   - "--prefix={{ nginx_install_path }}"
-  - --with-pcre-jit
+  - "--with-pcre=../pcre-{{ nginx_pcre_version }}"
+  - "--with-openssl=../openssl-OpenSSL_{{ nginx_openssl_version | replace( '.', '_' ) }}"
+  - "--with-zlib=../zlib-{{ nginx_zlib_version }}"
+  - --add-module=../ngx_brotli
+  - --with-threads
+  - --with-file-aio
+  - --with-http_ssl_module
+  - --with-http_v2_module
+  - --with-http_realip_module
+  - --with-http_stub_status_module
   - --without-http_charset_module
   - --without-http_ssi_module
   - --without-http_userid_module
   - --without-http_auth_basic_module
+  - --without-http_mirror_module
   - --without-http_autoindex_module
   - --without-http_geo_module
   - --without-http_split_clients_module
@@ -45,26 +47,17 @@ nginx_configure_options:
   - --without-http_fastcgi_module
   - --without-http_uwsgi_module
   - --without-http_scgi_module
+  - --without-http_grpc_module
   - --without-http_memcached_module
   - --without-http_limit_conn_module
   - --without-http_limit_req_module
   - --without-http_browser_module
-  - --with-threads
-  - --with-file-aio
-  - --with-http_ssl_module
-  - --with-openssl=/usr/src/openssl-OpenSSL_1_1_0f
-  - --with-http_v2_module
-  - --with-http_stub_status_module
-  - --with-http_realip_module
-
-# Remove downloaded sources after installation
-nginx_cleanup_after_install: yes
-
-
-
-
-
-####### CONFIGURE TASKS CONFIGURATION #######
+  - --without-http_upstream_hash_module
+  - --without-http_upstream_ip_hash_module
+  - --without-http_upstream_least_conn_module
+  - --without-http_upstream_keepalive_module
+  - --without-http_upstream_zone_module
+  - --with-pcre-jit
 
 # nginx.conf path
 nginx_conf_path: "{{ nginx_install_path }}/conf/nginx.conf"
@@ -72,80 +65,11 @@ nginx_conf_path: "{{ nginx_install_path }}/conf/nginx.conf"
 # nginx PID file path
 nginx_pid_file_path: "{{ nginx_install_path }}/logs/nginx.pid"
 
-# Number of simultaneous connections that can be opened by worker process
-nginx_worker_connections: 4096
-
-# Limit of the maximum number of open files for worker
-nginx_worker_rlimit_nofile: 4096
-
 # User for nginx daemon(s)
 nginx_user: nginx
 
 # Group for nginx daemon(s)
-nginx_group: nginx
+nginx_group: www
 
 # Diffie-Hellman group file
 nginx_df_file_path: /etc/ssl/certs/dhparam.pem
-
-# Additional log formats
-nginx_additional_log_formats: []
-
-# Extra configuration in nginx file
-nginx_extra_config: ''
-
-
-
-
-
-####### VIRTUALHOSTS TASKS CONFIGURATION #######
-
-# Root directory for hosting all website files
-nginx_websites_directory: /var/www
-
-# Default nginx port
-nginx_port: 80
-
-# List of servers that should be enabled.
-# Here is full entry with all available options"
-# - {
-#  server_name: your.domain.here # mandatory field
-#  server_aliases: [optional.domain.alias.com] # optional field with list of server aliases
-#  directory_owner: existing system user # mandatory field
-#  directory_group: existing group # mandatory field
-#  upstream: [] # list of upstream servers
-#  server_ip: '23.42.53.64' # dedicated ip for given server. Optional field.
-#  https: yes # Turn on HTTPS/SSL for given domain. Optional field
-#  http2: yes # Should http2 be enabled? Optional field
-#  cert_file_path: /path/to/certfile.cert # If https is enabled this is the path to server certificate file
-#  cert_key_file_path: /path/to/certkeyfile.key # If https is enabled this is the path to private key file
-#  subdirectory: path to subdirectory. By default root is set to htdocs. # optional field
-#  logs: no # Turn off access and error log. Default is set to yes, it means that both access and error log will be active
-#  htdocs: no # Turn off crating directory for htdocs. Default is set to yes, which means that directory will be created
-#  custom_log_if: $loggable # Modify access_log if parameter
-#  rewrites:
-#   - {
-#      regex: '^/wp-content/(.*)$',
-#      replacement: '/content/$1'
-#    } # List of rewrites. Optional field
-#
-#  extra_config: [] list of extra lines to be included in VirtualHost file # optional field
-#  override_location: yes # disable default location block #optional field
-#  proxy_pass: yes # creates proxy block to upstream #optional field
-#  proxy_pass_for_php: yes #Opional field creates block that transfers all PHP files to proxy
-#  php_status: yes # Optional field enables access to /ping and /status urls
-#  php_status_allowed_ips: list of allowed ips except 127.0.0.1 that can access /ping and /status urls
-#  logrotate: yes # Enables or disables logrotate for httpd logs
-#  letsencrypt_integration: yes # adds lets encrypt integration
-#  stub_status: yes # dds stub_status option
-# }
-nginx_servers:
- - {
-  server_name: testtest.com,
-  server_aliases: [dev.testtest.com],
-  directory_owner: "{{ nginx_user }}",
-  directory_group: "{{ nginx_user }}",
-  logrotate: yes
- }
-
-# Redirects
-nginx_redirects: []
