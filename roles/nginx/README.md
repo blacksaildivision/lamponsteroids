@@ -1,81 +1,38 @@
 nginx role
 ==========
 
-This role will install Nginx http://nginx.org/ server on CentOS.
-Nginx will be installed in latest version (1.13.4) and will be compiled from source.
+This role will compile and install [nginx](https://nginx.org/). 
+Nginx is compiled with latest version of OpenSSL, Brotli, Zlib and PCRE. 
+This role does not directly manage the server {} blocks. You should set it up using your own custom role or just place a `.conf` file inside `sites-enabled` directory. 
 
-What you should know?
----------------------
+Variables
+---------
+Here is the list of configurable variables for this role:
 
-**Installation**
-For installing purpose you need to configure two variables
- - `nginx_build_user`
- - `nginx_build_group`
+ - `nginx_version` version of nginx to install.
+
+ - `nginx_install_path` path where nginx will be installed. By default it's `/usr/local/nginx`.
+
+ - `nginx_sources_path` path where nginx source code will be downloaded and unpacked. Make sure that `nginx_build_user` has access to this directory. By default it's `/usr/src`.
  
-You should set them to an existing user and group it cannot be root. Compiling software from root account can have serious security impacts.
-By default it's set to `developer`. If you are using whole LampOnSteroids project, such user will be created in `centos` role.
-If you only use `nginx` role, make sure that you set these variables correctly.
-
-**Configuration**
-There is new user created for Apache httpd daemon. If you want to change that, modify following variables:
- - `nginx_user`
- - `nginx_group`
+ - `nginx_build_user` user that will build the nginx. It's not compiled as root. By default it's `developer`. If you don't have such user or you wish to provide your own, make sure the user exists.
  
-nginx will be configured with minimal number of modules required for basic functioning + SSL. Please review and update `nginx_configure_options` variable if you need anything more enabled.
+ - `nginx_build_group` group of the user for the build process. By default it's `developer`.
 
-**Servers**
-You need to define list of servers that should be present in the system
-Full example with all available options:
-
-```
-httpd_virtualhosts:
- - {
-    server_name: example.com,
-    server_aliases: [dev.example.com],
-    directory_owner: developer,
-    directory_group: "{{ nginx_group }}",
-    upstream: ['127.0.0.1:81'],
-    server_ip: '23.42.53.64',
-    https: yes,
-    http2: yes,
-    cert_file_path: /etc/letsencrypt/live/example.com/cert.pem,
-    cert_key_file_path: /etc/letsencrypt/live/example.com/privkey.pem,
-    subdirectory: wp,
-    logs: yes,
-    htdocs: yes,
-    custom_log_if: "$example_com_log",
-    rewrites:
-      - {
-         regex: '^/wp-content/(.*)$',
-         replacement: '/content/$1'
-    },
-    override_location: no,
-    proxy_pass: yes,
-    proxy_pass_for_php: yes,
-    php_status: yes,
-    php_status_allowed_ips: ['23.42.53.64'],
-    logrotate: yes,
-    letsencrypt_integration: yes,
-    stub_status: yes
- }
-```
-
-**Redirects**
-
-In order to setup redirects you need to adjust `nginx_redirects` variable. Here is an example of redirect:
-
-```
-nginx_redirects: 
- - {
-   server_name: example.com,
-   server_aliases: [www.example.com],
-   redirect: 'https://example.com',
- }
-```
-
-HTTPS option is also supported here
-
-OpenSSL
--------
-
-This role requires `openssl` role installed. It will install latest version of OpenSSL and Apache HTTPD will be compiled with `--with-openssl` parameter pointing to location where latest version is compiled (/usr/local/openssl)
+ - `nginx_pcre_version` version of PCRE to download and compile with nginx. It will not override PCRE binaries on CentOS.
+ 
+ - `nginx_openssl_version` version of OpenSSL to download and compile with nginx. It will not override OpenSSL binaries on CentOS.
+ 
+ - `nginx_zlib_version` version of Zlib to download and compile with nginx. It will not override Zlib binaries on CentOS.
+ 
+ - `nginx_configure_options` list of arguments for `./configure` command.
+ 
+ - `nginx_conf_path` path to `nginx.conf` file. By default it is `/usr/local/nginx/conf/nginx.conf`.
+ 
+ - `nginx_pid_file_path` path to nginx PID file. By default it is `/usr/local/nginx/logs/nginx.pid`.
+ 
+ - `nginx_user` user that should run nginx process. By default it is `nginx`.
+ 
+ - `nginx_group` group of the user that should run nginx process. By default it is `www`.
+ 
+ - `nginx_df_file_path` Diffie-Hellman group file location. By default it is `/etc/ssl/certs/dhparam.pem`.
