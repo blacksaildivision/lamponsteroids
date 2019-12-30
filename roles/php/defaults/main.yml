@@ -1,7 +1,42 @@
-####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
+# Location for PHP installation
+php_install_path: /usr/local/php
 
-# Should this role use install tasks to install desired version of PHP?
-php_manage_installation: yes
+# Version of PHP to install
+php_version: "7.4.1"
+
+# Path where to download and unpack PHP sources
+php_sources_path: /usr/src
+
+# User that should compile PHP
+php_build_user: developer
+
+# Group of the user that should compile PHP
+php_build_group: developer
+
+# List of arguments for ./configure command
+php_configure_options:
+ - "--prefix={{ php_install_path }}"
+ - --enable-fpm
+ - --disable-short-tags
+ - --with-openssl
+ - --with-pcre-jit
+ - --with-zlib
+ - --with-bz2
+ - --enable-calendar
+ - --with-curl
+ - --enable-exif
+ - --enable-gd
+ - --with-webp
+ - --with-jpeg
+ - --enable-intl
+ - --enable-mbstring
+ - --with-mysqli
+ - --enable-pcntl
+ - --without-sqlite3
+ - --without-pdo-sqlite
+ - --with-pdo-mysql
+
+####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
 
 # Should this role use configure tasks to configure php.ini?
 php_manage_configuration: yes
@@ -23,55 +58,6 @@ php_manage_opcache: yes
 
 
 ####### INSTALL TASKS CONFIGURATION #######
-
-# Version of PHP to install
-php_version: "7.2.3"
-
-# Location for PHP installation
-php_install_path: /usr/local/php
-
-# Force install (skip all conditions)
-php_force_install: no
-
-# Location for PHP sources
-php_sources_location: /usr/src
-
-# User that should compile PHP
-php_build_user: developer
-
-# Group of the user that should compile PHP
-php_build_group: developer
-
-# List of configuration options
-php_configure_options:
- - "--prefix={{ php_install_path }}"
- - --enable-fpm
- - --disable-short-tags
- - --with-openssl
- - --with-pcre-regex
- - --with-pcre-jit
- - --with-zlib
- - --enable-bcmath
- - --with-bz2
- - --enable-calendar
- - --with-curl
- - --enable-exif
- - --with-gd
- - --enable-intl
- - --enable-mbstring
- - --with-mysqli
- - --enable-pcntl
- - --with-pdo-mysql
- - --enable-soap
- - --enable-sockets
- - --with-xmlrpc
- - --enable-zip
- - --with-webp-dir
- - --with-jpeg-dir
- - --with-png-dir
-
-# Should this role delete downloaded and uncompressed files after installation?
-php_cleanup_after_install: yes
 
 # Path where to install composer bin
 php_composer_install_path: /usr/local/bin

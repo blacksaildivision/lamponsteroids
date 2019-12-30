@@ -1,86 +1,62 @@
-# Install required software for compiling PHP from source
-# Task is slitted into two parts, because Ansible can't resolve dependencies of re2c without epel
+# Install required packages for compiling PHP from source
 #
 - name: Make sure that epel repository is present
   yum:
     name: epel-release
     state: latest
-  tags: [php, install]
+  tags: [php]
 
-- name: Install required tools for compiling PHP
+- name: Install required packages for compiling PHP
   yum:
-    name: "{{ item }}"
+    name: [autoconf, gcc, gcc-c++, bison, re2c, libxml2-devel, openssl-devel, bzip2-devel, libcurl-devel, libpng-devel, libwebp-devel, libjpeg-devel, libicu-devel, oniguruma-devel]
     state: latest
-  with_items:
-    - autoconf # Dependencies: m4 perl perl-Carp perl-Data-Dumper perl-Encode perl-Exporter perl-File-Path perl-File-Temp perl-Filter perl-Getopt-Long perl-HTTP-Tiny perl-PathTools perl-Pod-Escapes perl-Pod-Perldoc perl-Pod-Simple perl-Pod-Usage perl-Scalar-List-Utils perl-Socket perl-Storable perl-Text-ParseWords perl-Time-HiRes perl-Time-Local perl-constant perl-libs perl-macros perl-parent perl-podlators perl-threads perl-threads-shared
-    - libtool # Dependencies: autoconf automake cpp gcc glibc-devel glibc-headers kernel-headers libmpc m4 mpfr perl perl-Carp perl-Data-Dumper perl-Encode perl-Exporter perl-File-Path perl-File-Temp perl-Filter perl-Getopt-Long perl-HTTP-Tiny perl-PathTools perl-Pod-Escapes perl-Pod-Perldoc perl-Pod-Simple perl-Pod-Usage perl-Scalar-List-Utils perl-Socket perl-Storable perl-Test-Harness perl-Text-ParseWords perl-Thread-Queue perl-Time-HiRes perl-Time-Local perl-constant perl-libs perl-macros perl-parent perl-podlators perl-threads perl-threads-shared
-    - re2c
-    - bison
-    - libxml2-devel
-    - bzip2-devel
-    - libcurl-devel
-    - libpng-devel
-    - libicu-devel
-    - gcc-c++
-    - libmcrypt-devel
-    - libwebp-devel
-    - libjpeg-devel
-    - openssl-devel
-  tags: [php, install]
+  tags: [php]
 
 
 
-# Download PHP source code. Easiest way is to obtain desired version from GitHub:
+# Download and unpack sources for PHP
+# Source code will be downloaded from following page:
 # https://github.com/php/php-src/releases
 #
-- name: Download PHP source files
+- name: Download PHP source code
   get_url:
-    dest: "{{ php_sources_location }}"
+    dest: "{{ php_sources_path }}"
     url: "https://github.com/php/php-src/archive/php-{{ php_version }}.tar.gz"
-  tags: [php, install]
+  tags: [php]
 
-
-
-# Unpack downloaded PHP sources
-#
-- name: Unpack downloaded PHP sources
+- name: Unpack downloaded PHP source code
   unarchive:
-    src: "{{ php_sources_location }}/php-src-php-{{ php_version }}.tar.gz"
-    dest: "{{ php_sources_location }}"
+    src: "{{ php_sources_path }}/php-src-php-{{ php_version }}.tar.gz"
+    dest: "{{ php_sources_path }}"
     owner: "{{ php_build_user }}"
     group: "{{ php_build_group }}"
     copy: no
-    creates: "{{ php_sources_location }}/php-src-php-{{ php_version }}"
-  tags: [php, install]
+    creates: "{{ php_sources_path }}/php-src-php-{{ php_version }}"
+  tags: [php]
 
 
 
-# Compile PHP
+# Compile and install PHP
 # It will be compiled by using different user than root.
+# Install operation must be executed as sudo user
 #
 - name: Compile PHP
   command: "{{ item }}"
   args:
-    chdir: "{{ php_sources_location }}/php-src-php-{{ php_version }}"
+    chdir: "{{ php_sources_path }}/php-src-php-{{ php_version }}"
   with_items:
     - ./buildconf --force
     - "./configure {{ php_configure_options | join(' ') }}"
-    - make clean
     - make
   become: true
   become_user: "{{ php_build_user }}"
-  tags: [php, install]
+  tags: [php]
 
-
-
-# Install compiled PHP
-# This operation must be executed as sudo user
-#
 - name: Install compiled PHP
   command: make install
   args:
-    chdir: "{{ php_sources_location }}/php-src-php-{{ php_version }}"
-  tags: [php, install]
+    chdir: "{{ php_sources_path }}/php-src-php-{{ php_version }}"
+  tags: [php]
 
 
 
@@ -89,14 +65,14 @@
 #
 - name: Copy php.ini file to installation path
   copy:
-    src: "{{ php_sources_location }}/php-src-php-{{ php_version }}/php.ini-production"
-    dest: "{{ php_ini_file_path }}"
+    src: "{{ php_sources_path }}/php-src-php-{{ php_version }}/php.ini-production"
+    dest: "{{ php_install_path }}/lib/php.ini"
     remote_src: yes
     force: no
     owner: root
     group: root
     mode: 0644
-  tags: [php, install]
+  tags: [php]
 
 
 
@@ -107,15 +83,13 @@
     path: "{{ item }}"
     state: absent
   with_items:
-    - "{{ php_sources_location }}/php-src-php-{{ php_version }}.tar.gz"
-    - "{{ php_sources_location }}/php-src-php-{{ php_version }}"
-  when: "php_cleanup_after_install == true"
-  tags: [php, install]
+    - "{{ php_sources_path }}/php-src-php-{{ php_version }}.tar.gz"
+    - "{{ php_sources_path }}/php-src-php-{{ php_version }}"
+  tags: [php]
 
 
 
 # Add PHP executables to PATH
-# It'll be easier to execute some commands without typing full path
 #
 - name: Add PHP executables to PATH
   template:
@@ -124,7 +98,7 @@
     owner: root
     group: root
     mode: 0644
-  tags: [php, install]
+  tags: [php]
 
 
 
@@ -138,4 +112,4 @@
     owner: root
     group: root
     mode: 0644
-  tags: [php, install]
+  tags: [php]
