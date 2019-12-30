@@ -24,13 +24,6 @@
 
 
 
-# Configure PHP-FPM and Pools
-#
-- import_tasks: fpm.yml
-  when: "php_manage_fpm == true"
-
-
-
 # Install PHP extensions
 #
 - import_tasks: extensions.yml

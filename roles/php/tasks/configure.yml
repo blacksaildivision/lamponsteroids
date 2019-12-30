@@ -36,3 +36,35 @@
     insertafter: "[MySQLi]"
   notify: restart php-fpm
   tags: [php]
+
+
+
+# Configure php-fpm.conf file
+#
+- name: Create php-fpm.conf file if not present
+  copy:
+    src: "{{ php_install_path }}/etc/php-fpm.conf.default"
+    dest: "{{ php_install_path }}/etc/php-fpm.conf"
+    remote_src: yes
+    force: no
+    owner: root
+    group: root
+    mode: 0644
+  tags: [php]
+
+- name: Configure PHP-FPM pid
+  lineinfile:
+    dest: "{{ php_install_path }}/etc/php-fpm.conf"
+    line: "pid = run/php-fpm.pid"
+    regexp: '^;?pid'
+  notify: restart php-fpm
+  tags: [php]
+
+- name: Add example configuration file
+  template:
+    src: example.conf.j2
+    dest: "{{ php_install_path }}/etc/php-fpm.d/example.conf-disabled"
+    owner: root
+    group: root
+    mode: 0644
+  tags: [php2]
