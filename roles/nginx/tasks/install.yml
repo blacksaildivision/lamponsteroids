@@ -9,7 +9,7 @@
 
 
 # Download and unpack sources for nginx, PCRE, OpenSSL, Zlib and Brotli
-# Source code will be downloaded from following pages page:
+# Source code will be downloaded from following pages:
 # nginx -> https://nginx.org/en/download.html
 # PCRE -> https://ftp.pcre.org/pub/pcre/
 # OpenSSL -> https://github.com/openssl/openssl/releases
