@@ -21,7 +21,6 @@
 # Configure PHP
 #
 - import_tasks: configure.yml
-  when: "php_manage_configuration == true"
 
 
 

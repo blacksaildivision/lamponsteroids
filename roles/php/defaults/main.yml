@@ -36,10 +36,26 @@ php_configure_options:
  - --without-pdo-sqlite
  - --with-pdo-mysql
 
-####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
+# List of key - value items that should be present in php.ini file in [PHP] section
+php_ini_config_option_php_section:
+ short_open_tag: "Off"
+ expose_php: "Off"
+ max_execution_time: "30"
+ memory_limit: "128M"
+ error_reporting: "E_ALL"
+ display_errors: "Off"
+ display_startup_errors: "Off"
+ log_errors: "On"
+ post_max_size: "8M"
+ upload_max_filesize: "2M"
 
-# Should this role use configure tasks to configure php.ini?
-php_manage_configuration: yes
+# Configure PHP Date Timezone
+php_date_timezone: UTC
+
+# Configure MySQL socket path
+php_mysql_socket: /var/lib/mysql/mysql.sock
+
+####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
 
 # Should this role use fpm tasks to configure PHP-FPM and setup FPM Pools?
 php_manage_fpm: yes
@@ -71,53 +87,7 @@ php_composer_install_path: /usr/local/bin
 # Path to php.ini file
 php_ini_file_path: "{{ php_install_path }}/lib/php.ini"
 
-# Should short open tags be enabled ("On") or disabled ("Off")
-php_short_open_tag: "Off"
 
-# Should php version be present in headers?
-php_expose_php: "Off"
-
-# Maximum execution time for PHP scripts
-php_max_execution_time: 30
-
-# Maximum input time for PHP requests
-php_max_input_time: 60
-
-# Maximum memory limit for PHP scripts
-php_memory_limit: 128M
-
-# Level of error reporting
-php_error_reporting: E_ALL
-
-# Configure displaying errors
-php_display_errors: "Off"
-
-# Configure displaying startup errors
-php_display_startup_errors: "Off"
-
-# Should errors be logged or not?
-php_log_errors: "On"
-
-# Maximum size of POST data
-php_post_max_size: 8M
-
-# Maximum size of uploaded data
-php_upload_max_filesize: 2M
-
-# Allow opening files by url
-php_allow_url_fopen: "On"
-
-# Configure PHP Date Timezone
-php_date_timezone: UTC
-
-# Configure MySQL socket path
-php_mysql_socket: /var/lib/mysql/mysql.sock
-
-# Configure realpath cache size
-php_realpath_cache_size: 4096k
-
-# Configure realpath cache TTL
-php_realpath_cache_ttl: 600
 
 
 
@@ -153,7 +123,10 @@ php_fpm_pools:
   php_admin_values: [
       { key: error_log, value: /var/log/fpm-php.www.log },
       { key: open_basedir, value: /var },
-      { key: disable_functions, value: "exec,passthru,shell_exec,system" }
+      { key: disable_functions, value: "exec,passthru,shell_exec,system" },
+      { key: max_input_vars, value: "1000" },
+      { key: allow_url_fopen, value: "Off" },
+      { key: max_execution_time, value: "30" }
     ]
  }
 
