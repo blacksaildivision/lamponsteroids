@@ -18,17 +18,11 @@
 
 
 
-# Configure PHP, install extensions
+# Configure PHP, install extensions and composer
 #
 - import_tasks: configure.yml
 - import_tasks: extensions.yml
-
-
-
-# Install Composer
-#
 - import_tasks: composer.yml
-  when: "php_manage_composer == true"
 
 
 

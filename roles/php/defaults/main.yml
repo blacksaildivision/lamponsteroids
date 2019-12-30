@@ -66,20 +66,9 @@ php_zend_extensions:
 
 ####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
 
-# Should this role use composer tasks to install composer?
-php_manage_composer: yes
-
 # Should this role configure and enable OPcache?
 php_manage_opcache: yes
 
-
-
-
-
-####### INSTALL TASKS CONFIGURATION #######
-
-# Path where to install composer bin
-php_composer_install_path: /usr/local/bin
 
 
 
