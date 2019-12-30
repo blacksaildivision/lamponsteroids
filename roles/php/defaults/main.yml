@@ -55,10 +55,16 @@ php_date_timezone: UTC
 # Configure MySQL socket path
 php_mysql_socket: /var/lib/mysql/mysql.sock
 
-####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
+# List of PECL extensions that should be installed and enabled
+php_extensions:
+ - mongodb
+ - redis
 
-# Should this role use extensions tasks to install PECL extensions?
-php_manage_extensions: yes
+# List of Zend Extensions that should be installed and enabled
+php_zend_extensions:
+ - xdebug
+
+####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
 
 # Should this role use composer tasks to install composer?
 php_manage_composer: yes
@@ -83,19 +89,6 @@ php_composer_install_path: /usr/local/bin
 
 # Path to php.ini file
 php_ini_file_path: "{{ php_install_path }}/lib/php.ini"
-
-
-
-
-
-
-####### EXTENSION TASKS CONFIGURATION #######
-
-# List of PECL extensions that should be installed
-php_extensions:
-  - mongodb
-  - redis
-  - xdebug
 
 
 

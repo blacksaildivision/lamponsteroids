@@ -18,16 +18,10 @@
 
 
 
-# Configure PHP
+# Configure PHP, install extensions
 #
 - import_tasks: configure.yml
-
-
-
-# Install PHP extensions
-#
 - import_tasks: extensions.yml
-  when: "php_manage_extensions == true"
 
 
 

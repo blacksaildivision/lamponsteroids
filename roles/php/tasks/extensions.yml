@@ -1,22 +1,36 @@
 # Install PECL extensions
 #
 - name: Install PECL extensions
-  command: "{{ php_install_path }}/bin/pecl upgrade {{ item }}"
+  shell: "no | {{ php_install_path }}/bin/pecl upgrade {{ item }}"
   with_items: "{{ php_extensions }}"
   register: php_extensions_upgrade
   changed_when: "php_extensions_upgrade.stdout != 'Nothing to upgrade'"
-  tags: [php, extensions]
+  tags: [php]
+
+- name: Install Zend extensions
+  shell: "no | {{ php_install_path }}/bin/pecl upgrade {{ item }}"
+  with_items: "{{ php_zend_extensions }}"
+  register: php_zend_extensions_upgrade
+  changed_when: "php_zend_extensions_upgrade.stdout != 'Nothing to upgrade'"
+  tags: [php]
 
 
-
-# Update PHP with installed extensions
+# Enable extensions in php.ini
 #
 - name: Enable installed PECL extensions
   lineinfile:
-    dest: "{{ php_ini_file_path }}"
+    path: "{{ php_install_path }}/lib/php.ini"
     line: "extension = {{ item }}.so"
-    state: present
     insertafter: "[PHP]"
   with_items: "{{ php_extensions }}"
   notify: restart php-fpm
-  tags: [php, extensions]
+  tags: [php]
+
+- name: Enable installed Zend extensions
+  lineinfile:
+    path: "{{ php_install_path }}/lib/php.ini"
+    line: "zend_extension = {{ item }}.so"
+    insertafter: "[PHP]"
+  with_items: "{{ php_zend_extensions }}"
+  notify: restart php-fpm
+  tags: [php]
