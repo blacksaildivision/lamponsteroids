@@ -1,8 +1,8 @@
-# Location for PHP installation
-php_install_path: /usr/local/php
-
 # Version of PHP to install
 php_version: "7.4.1"
+
+# Location for PHP installation
+php_install_path: /usr/local/php
 
 # Path where to download and unpack PHP sources
 php_sources_path: /usr/src
@@ -71,16 +71,3 @@ php_extensions:
 # List of Zend Extensions that should be installed and enabled
 php_zend_extensions:
  - xdebug
-
-
-
-
-
-
-
-####### CONFIGURE TASKS CONFIGURATION #######
-
-# Path to php.ini file
-php_ini_file_path: "{{ php_install_path }}/lib/php.ini"
-
-
