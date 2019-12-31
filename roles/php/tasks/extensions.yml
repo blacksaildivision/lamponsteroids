@@ -34,3 +34,11 @@
   with_items: "{{ php_zend_extensions }}"
   notify: restart php-fpm
   tags: [php]
+
+- name: Enable opcache extension
+  lineinfile:
+    path: "{{ php_install_path }}/lib/php.ini"
+    line: "zend_extension = opcache.so"
+    insertafter: "[PHP]"
+  notify: restart php-fpm
+  tags: [php, opcache]

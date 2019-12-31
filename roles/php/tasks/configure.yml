@@ -39,6 +39,20 @@
 
 
 
+# Configure opcache in php.ini
+#
+- name: Configure php.ini file - [opcache] section
+  lineinfile:
+    path: "{{ php_install_path }}/lib/php.ini"
+    line: "opcache.{{ item.key }}={{ item.value }}"
+    regexp: "^;?opcache\\.{{ item.key }}"
+    insertafter: "[opcache]"
+  with_dict: "{{ php_ini_config_option_opcache_section }}"
+  notify: restart php-fpm
+  tags: [php]
+
+
+
 # Configure php-fpm.conf file
 #
 - name: Create php-fpm.conf file if not present

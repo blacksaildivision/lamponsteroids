@@ -49,6 +49,14 @@ php_ini_config_option_php_section:
  post_max_size: "8M"
  upload_max_filesize: "2M"
 
+# List of key - value items that should be present in php.ini file in [opcache] section (keys without "opcache." prefix)
+php_ini_config_option_opcache_section:
+ enable: "1"
+ memory_consumption: "128"
+ interned_strings_buffer: "8"
+ max_accelerated_files: "20000"
+ validate_timestamps: "1"
+
 # Configure PHP Date Timezone
 php_date_timezone: UTC
 
@@ -64,10 +72,6 @@ php_extensions:
 php_zend_extensions:
  - xdebug
 
-####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
-
-# Should this role configure and enable OPcache?
-php_manage_opcache: yes
 
 
 
@@ -80,22 +84,3 @@ php_manage_opcache: yes
 php_ini_file_path: "{{ php_install_path }}/lib/php.ini"
 
 
-
-
-
-####### OPCACHE TASKS CONFIGURATION #######
-
-# Enable OPcache
-php_opcache_enable: "1"
-
-# OPcache memory consumption (in MB)
-php_opcache_memory_consumption: "128"
-
-# Memory size for interned string (in MB)
-php_opcache_interned_strings_buffer: "8"
-
-# Number of accelerated files
-php_opcache_accelerated_files: "20000"
-
-# Validate files timestamp (for dev environment recommended value is 1)
-php_opcache_validated_timestamps: "0"

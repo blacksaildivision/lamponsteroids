@@ -26,13 +26,6 @@
 
 
 
-# Manage OPcache
-#
-- import_tasks: opcache.yml
-  when: "php_manage_opcache == true"
-
-
-
 # Make sure that PHP-FPM service is started and enabled on boot
 #
 - name: Start and enable PHP-FPM service
