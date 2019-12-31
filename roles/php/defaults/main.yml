@@ -41,7 +41,7 @@ php_ini_config_option_php_section:
  short_open_tag: "Off"
  expose_php: "Off"
  max_execution_time: "30"
- memory_limit: "128M"
+ memory_limit: "256M"
  error_reporting: "E_ALL"
  display_errors: "Off"
  display_startup_errors: "Off"
