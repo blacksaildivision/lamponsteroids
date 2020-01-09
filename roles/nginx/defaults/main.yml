@@ -1,5 +1,5 @@
 # Version of nginx that should be installed
-nginx_version: "1.17.6"
+nginx_version: "1.17.7"
 
 # Path where nginx will be installed. NO trailing slash at the end!
 nginx_install_path: /usr/local/nginx
@@ -44,7 +44,6 @@ nginx_configure_options:
   - --without-http_geo_module
   - --without-http_split_clients_module
   - --without-http_referer_module
-  - --without-http_fastcgi_module
   - --without-http_uwsgi_module
   - --without-http_scgi_module
   - --without-http_grpc_module

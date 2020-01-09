@@ -1,53 +1,33 @@
 PHP role
-==========
+========
 
-This role will install PHP with FPM mode server on CentOS.
-PHP will be installed in latest version (7.2.3) and will be compiled from source.
+This role will compile and install [PHP](https://www.php.net/). 
+This role does not directly manage FPM pools. You should set it up using your own custom role or just place a `.conf` file inside `etc/php-fpm.d` directory. 
 
-What you should know?
----------------------
+Variables
+---------
+Here is the list of configurable variables for this role:
 
-**Installation**
-For installing purpose you need to configure two variables
- - `php_build_user`
- - `php_build_group`
+ - `php_version` version of PHP to install.
+
+ - `php_install_path` path where PHP will be installed. By default it's `/usr/local/php`.
+
+ - `php_sources_path` path where PHP source code will be downloaded and unpacked. Make sure that `php_build_user` has access to this directory. By default it's `/usr/src`.
  
-You should set them to an existing user and group it cannot be root. Compiling software from root account can have serious security impacts.
-By default it's set to `developer`. If you are using whole LampOnSteroids project, such user will be created in `centos` role.
-If you only use `php` role, make sure that you set these variables correctly.
-
-**FPM**
-You need to override `php_fpm_pools` variable. There is only an example pool, but probably it won't suit your needs. 
-Good practice is to have one pool per application. Remember that names must be different. 
-
-Also remember to set `user` and `group` to existing values. Like above, if you are using whole project, `developer:www` will exist.
-User should be the same use that owns your application files. 
-
-Here is full example with all available options:
-```
-php_fpm_pools:
- - {
-  name: example.com,
-  user: developer,
-  group: www,
-  port: 9000,
-  status: yes,
-  process_manager: {
-    pm: dynamic,
-    max_children: 5,
-    start_servers: 2,
-    min_spare_servers: 1,
-    max_spare_servers: 3
-  },
-  slow_log: "/var/www/example.com/log/php-fpm.slow.log",
-  slow_log_timeout: 30s,
-  php_admin_flags: [
-    { key: log_errors, value: "On" }
-  ],
-  php_admin_values: [
-      { key: error_log, value: /var/www/example.com/log/php-fpm.error.log },
-      { key: open_basedir, value: "/var/www/example.com/htdocs:/tmp" },
-      { key: disable_functions, value: "exec,passthru,shell_exec,system" }
-    ]
- }
-```
+ - `php_build_user` user that will build the PHP. It's not compiled as root. By default it's `developer`. If you don't have such user or you wish to provide your own, make sure the user exists.
+ 
+ - `php_build_group` group of the user for the build process. By default it's `developer`.
+ 
+ - `php_configure_options` list of arguments for `./configure` command.
+ 
+ - `php_ini_config_option_php_section` list of options that should be set in main section of php.ini [PHP].
+ 
+ - `php_ini_config_option_opcache_section` list of options that should be set in opcache section of php.ini [opcache].
+ 
+ - `php_date_timezone` timezone for PHP. By default it's `UTC`.
+ 
+ - `php_mysql_socket` path to MySQL socket file. By default it's `/var/lib/mysql/mysql.sock`.
+ 
+ - `php_extensions` list of extensions that should be installed with PECL and enabled in php.ini file.
+ 
+ - `php_zend_extensions` list of Zend extensions that should be installed with PECL and enabled in php.ini file.

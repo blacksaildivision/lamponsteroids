@@ -1,90 +1,28 @@
-# Make sure that libselinux-python is installed (required for Ansible templates)
-#
-- name: Make sure that libselinux-python is installed
-  yum:
-    name: libselinux-python
-    state: latest
-  tags: [php]
-
-
-
-# Check if PHP is installed or not and if it should be updated or not
-# Setting PATH is required, because sometimes Ansible doesn't use /etc/profile.d data;/
-#
-- name: Check if PHP is installed
-  command: php -v warn=no
-  register: php_is_installed_test
-  ignore_errors: yes
-  changed_when: false
-  environment:
-    PATH: "{{ ansible_env.PATH }}:{{ php_install_path }}/bin"
-  tags: [php]
-
-- set_fact:
-    php_is_installed: true
-  when: php_is_installed_test.rc != 2
-  tags: [php]
-
-- set_fact:
-    php_is_installed: false
-    php_install_new_version: true
-  when: php_is_installed_test.rc == 2
-  tags: [php]
-
-- set_fact:
-    php_install_new_version: true
-  when: ( php_is_installed == true ) and ( php_is_installed_test.stdout_lines[0].split('cli')[0] | regex_replace('[^0-9.]','') != php_version )
-  tags: [php]
-
-- set_fact:
-    php_install_new_version: false
-  when: ( php_is_installed == true ) and ( php_is_installed_test.stdout_lines[0].split('cli')[0] | regex_replace('[^0-9.]','') == php_version )
-  tags: [php]
-
-
-
-# Install/Update PHP to desired version
+# Install/Update PHP to required version
 # These tasks will be executed when
-#  1. PHP is not installed
+#  1. PHP is not installed from within this role
 #  2. PHP is installed but not in desired version
 #
-- import_tasks: install.yml
-  when: "( php_install_new_version == true and php_manage_installation == true) or php_force_install == true"
+- name: Check if PHP is installed in required version
+  shell: "{{ php_install_path }}/bin/php -v | head -n1 | awk '{print $2}'"
+  args:
+    warn: no
+  ignore_errors: yes
+  changed_when: false
+  register: php_version_test
+  tags: [php]
+
+- include_tasks: install.yml
+  when: "php_version_test.stdout != php_version"
+  tags: [php]
 
 
 
-# Configure PHP
+# Configure PHP, install extensions and composer
 #
 - import_tasks: configure.yml
-  when: "php_manage_configuration == true"
-
-
-
-# Configure PHP-FPM and Pools
-#
-- import_tasks: fpm.yml
-  when: "php_manage_fpm == true"
-
-
-
-# Install PHP extensions
-#
 - import_tasks: extensions.yml
-  when: "php_manage_extensions == true"
-
-
-
-# Install Composer
-#
 - import_tasks: composer.yml
-  when: "php_manage_composer == true"
-
-
-
-# Manage OPcache
-#
-- import_tasks: opcache.yml
-  when: "php_manage_opcache == true"
 
 
 

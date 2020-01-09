@@ -1,10 +1,11 @@
 # Install composer globally
 #
 - name: Install Composer
-  shell: "curl -sS https://getcomposer.org/installer | {{ php_install_path }}/bin/php -- --install-dir={{ php_composer_install_path }} --filename=composer installer warn=no"
+  shell: "curl -sS https://getcomposer.org/installer | {{ php_install_path }}/bin/php -- --install-dir=/usr/local/bin --filename=composer installer"
   args:
     creates: /usr/local/bin/composer
-  tags: [php, composer]
+    warn: no
+  tags: [php]
 
 
 
@@ -14,5 +15,5 @@
   cron:
     name: composer update
     special_time: weekly
-    job: "{{ php_install_path }}/bin/php {{ php_composer_install_path }}/composer self-update"
-  tags: [php, composer]
+    job: "{{ php_install_path }}/bin/php /usr/local/bin/composer self-update"
+  tags: [php]
