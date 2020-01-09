@@ -71,6 +71,26 @@
   notify: restart nginx
   tags: [nginx]
 
+- name: Setup PHP-FPM configuration
+  template:
+    src: php-fpm.conf.j2
+    dest: "{{ nginx_install_path }}/conf/php-fpm.conf"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart nginx
+  tags: [nginx]
+
+- name: Setup general rules for server configuration
+  template:
+    src: general.conf.j2
+    dest: "{{ nginx_install_path }}/conf/general.conf"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart nginx
+  tags: [nginx]
+
 - name: Setup nginx main configuration
   template:
     src: nginx.conf.j2

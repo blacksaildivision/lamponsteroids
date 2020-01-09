@@ -1,0 +1,8 @@
+# This file is managed by Ansible
+
+# Disable access to hidden files
+location ~ /\.(?!well-known).* {
+    deny all;
+    access_log off;
+    log_not_found off;
+}
