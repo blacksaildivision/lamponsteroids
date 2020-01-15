@@ -8,7 +8,7 @@
 
 - name: Install required packages for compiling PHP
   yum:
-    name: [autoconf, gcc, gcc-c++, bison, re2c, libxml2-devel, openssl-devel, bzip2-devel, libcurl-devel, libpng-devel, libwebp-devel, libjpeg-devel, libicu-devel, oniguruma-devel, cmake3]
+    name: [autoconf, gcc, gcc-c++, bison, re2c, libxml2-devel, openssl-devel, bzip2-devel, libcurl-devel, libpng-devel, libwebp-devel, libjpeg-devel, libicu-devel, oniguruma-devel, cmake3, freetype-devel]
     state: latest
   tags: [php]
 
