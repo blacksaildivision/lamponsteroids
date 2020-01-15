@@ -8,9 +8,11 @@
 
 - name: Install required packages for compiling PHP
   yum:
-    name: [autoconf, gcc, gcc-c++, bison, re2c, libxml2-devel, openssl-devel, bzip2-devel, libcurl-devel, libpng-devel, libwebp-devel, libjpeg-devel, libicu-devel, oniguruma-devel]
+    name: [autoconf, gcc, gcc-c++, bison, re2c, libxml2-devel, openssl-devel, bzip2-devel, libcurl-devel, libpng-devel, libwebp-devel, libjpeg-devel, libicu-devel, oniguruma-devel, cmake3, freetype-devel]
     state: latest
   tags: [php]
+
+- import_tasks: libzip.yml
 
 
 
@@ -85,6 +87,8 @@
   with_items:
     - "{{ php_sources_path }}/php-src-php-{{ php_version }}.tar.gz"
     - "{{ php_sources_path }}/php-src-php-{{ php_version }}"
+    - "{{ php_sources_path }}/libzip-{{ php_libzip_version }}.tar.gz"
+    - "{{ php_sources_path }}/libzip-{{ php_libzip_version }}"
   tags: [php]
 
 
