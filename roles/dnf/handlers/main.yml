@@ -1,0 +1,4 @@
+- name: restart dnf-automatic
+  service:
+    name: dnf-automatic-download.timer
+    state: restarted

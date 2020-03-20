@@ -6,7 +6,7 @@
   become: yes
   become_user: root
   roles:
-    - ../roles/yum
+    - ../roles/dnf
     - ../roles/users
     - ../roles/ssh
     - ../roles/ntp

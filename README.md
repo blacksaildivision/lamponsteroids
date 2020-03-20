@@ -42,7 +42,7 @@ ansible-playbook -i hosts playbooks/YOUR_PLAYBOOK_FILE.yml -K
 
 Included roles
 --------------
-**yum** - Handles package management, security features and package installation optimisations. 
+**dnf** - Handles package management, security features and package installation optimisations. 
 
 **users** - Handle users/groups management and enables sudo. 
 

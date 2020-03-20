@@ -1,6 +1,6 @@
 # Here you can override defaults from playbooks
 # Example:
-# centos_yum_additional_tools: []
+# dnf_exclude_packages_to_upgrade: []
 #
 # All .yml files (except of this file) will be ignored from this repository
 
