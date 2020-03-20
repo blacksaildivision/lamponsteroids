@@ -1,13 +1,13 @@
 # Install chrony in latest version. Also make sure that NTP tool is removed from the system
 #
 - name: Remove ntp packages if present
-  yum:
+  dnf:
     name: [ntp, ntpdate]
     state: removed
   tags: [ntp]
 
 - name: Install chrony in latest version
-  yum:
+  dnf:
     name: chrony
     state: latest
   tags: [ntp]
