@@ -50,7 +50,7 @@ Included roles
 
 **ntp** - Takes care of system timezone and NTP server. It uses Chrony for using NTP.
 
-**openssl** - Compile OpenSSL from source (1.1.1c)
+**openssl** - Compile OpenSSL from source
 
 **git** - Compile and install Git from source (2.24.1) 
 

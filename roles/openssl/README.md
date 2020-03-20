@@ -1,7 +1,7 @@
 OpenSSL role
 ============
 
-This role will compile from source latest version of OpenSSL (1.1.1c) on CentOS server.
+This role will compile from source latest version of OpenSSL (1.1.1e) on CentOS 8 server.
 
 Variables
 ---------
