@@ -56,7 +56,7 @@ Included roles
 
 **nginx** - Compile, install and configure nginx from source (1.17.9)
 
-**php** - Compile, install and configure PHP and tools (7.4.1)
+**php** - Compile, install and configure PHP and tools (7.4.4)
 
 **centos** - Takes care of system settings. Set up firewall based on iptables. Disable Transparent Huge Pages.
 You can setup logrotate scripts with this role as well.

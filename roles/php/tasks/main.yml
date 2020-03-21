@@ -20,6 +20,7 @@
 
 # Configure PHP, install extensions and composer
 #
+- import_tasks: shell.yml
 - import_tasks: configure.yml
 - import_tasks: extensions.yml
 - import_tasks: composer.yml

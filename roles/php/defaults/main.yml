@@ -1,5 +1,5 @@
 # Version of PHP to install
-php_version: "7.4.1"
+php_version: "7.4.4"
 
 # Location for PHP installation
 php_install_path: /usr/local/php
@@ -12,9 +12,6 @@ php_build_user: developer
 
 # Group of the user that should compile PHP
 php_build_group: developer
-
-# Version of libzip to be compiled with PHP
-php_libzip_version: "1.5.2"
 
 # List of arguments for ./configure command
 php_configure_options:
@@ -40,6 +37,7 @@ php_configure_options:
  - --with-pdo-mysql
  - --with-zip
  - --with-freetype
+ - --with-pear
 
 # List of key - value items that should be present in php.ini file in [PHP] section
 php_ini_config_option_php_section:
