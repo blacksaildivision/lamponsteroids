@@ -54,7 +54,7 @@ Included roles
 
 **git** - Compile and install Git from source (2.25.2) 
 
-**nginx** - Compile, install and configure nginx from source (1.17.7)
+**nginx** - Compile, install and configure nginx from source (1.17.9)
 
 **php** - Compile, install and configure PHP and tools (7.4.1)
 

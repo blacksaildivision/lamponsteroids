@@ -1,7 +1,7 @@
 # Install required packages for compiling nginx from source
 #
 - name: Install required packages for compiling nginx
-  yum:
+  dnf:
     name: [gcc, gcc-c++, git]
     state: latest
   tags: [nginx]
