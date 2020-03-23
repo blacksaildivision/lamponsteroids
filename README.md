@@ -1,7 +1,7 @@
 LAMP on Steroids
 ================
 
-Setup your server quickly with LAMP on Steroids. This repository is dedicated to `CentOS 7` system.
+Setup your server quickly with LAMP on Steroids. This repository is dedicated to `CentOS 7/8` system.
 Main goal is to setup working LAMP server with latest versions of available tools. 
 Secondary goal is to keep your server secure and up to date. 
 
