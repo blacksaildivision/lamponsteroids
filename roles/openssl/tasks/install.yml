@@ -1,7 +1,7 @@
 # Install required tools for compiling OpenSSL from source
 #
 - name: Install required tools for compiling OpenSSL
-  yum:
+  dnf:
     name: [libtool, perl-core, zlib-devel]
     state: latest
   tags: [openssl]
@@ -67,22 +67,8 @@
 
 
 
-# Link libraries
-#
-- name: Link libraries
-  template:
-    src: openssl.conf.j2
-    dest: "/etc/ld.so.conf.d/openssl-{{ openssl_version }}.conf"
-    owner: root
-    group: root
-    mode: 0644
-  notify: reload ldconfig
-  tags: [openssl]
-
-
-
 # Add new OpenSSL executables to PATH
-# It will fix the issue when OpenSSL compiled from source can be overridden by OpenSSL installed with yum
+# It will fix the issue when OpenSSL compiled from source can be overridden by OpenSSL installed with dnf
 #
 - name: Add OpenSSL executables to PATH
   template:

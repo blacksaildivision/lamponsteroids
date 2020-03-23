@@ -1,2 +1,0 @@
-- name: reload ldconfig
-  shell: ldconfig -v

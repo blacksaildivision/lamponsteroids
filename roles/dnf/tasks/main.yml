@@ -1,0 +1,125 @@
+# Make sure that gpgcheck is enabled in DNF configuration.
+# You should always check package signature before it's installation.
+# Main configuration is located in /etc/dnf/dnf.conf file, but you should also check all files in /etc/yum.repos.d directory
+#
+- name: Make sure that GPG check is enabled in /etc/dnf/dnf.conf file
+  lineinfile:
+    path: /etc/dnf/dnf.conf
+    line: "gpgcheck=1"
+    state: present
+  tags: [dnf]
+
+- name: Find all repo files in /etc/yum.repos.d directory
+  find:
+    paths: /etc/yum.repos.d
+    patterns: "*.repo"
+  register: dnf_repositories
+  tags: [dnf]
+
+- name: Make sure that GPG check is enabled in all repositories inside /etc/yum.repos.d
+  replace:
+    path: "{{ item.path }}"
+    regexp: "gpgcheck=0"
+    replace: "gpgcheck=1"
+  with_items: "{{ dnf_repositories.files }}"
+  tags: [dnf]
+
+
+
+# You can speed up downloading and installing packages dnf-automatic. It will check periodically for new updates and will download them, but without installing.
+# It speeds up installation, since the packages doesn't have to be downloaded on install task - they are already in place.
+#
+- name: Install dnf-automatic
+  dnf:
+    name: dnf-automatic
+    state: latest
+  tags: [dnf]
+
+- name: Make sure that packages are only downloaded without installation by dnf-automatic
+  lineinfile:
+    path: /etc/dnf/automatic.conf
+    line: "apply_updates = no"
+    state: present
+  notify: restart dnf-automatic
+  tags: [dnf]
+
+- name: Start dnf-automatic service and enable it on start
+  service:
+    name: dnf-automatic-download.timer
+    state: started
+    enabled: yes
+  tags: [dnf]
+
+
+
+# Update installed packages to latest versions or install them if they are not present
+# You can exclude certain packages if you don't want to update or install them with this role
+#
+- name: Get the list of packages to upgrade before actual upgrade
+  dnf:
+    list: upgrades
+  register: dnf_packages_before_upgrade
+  tags: [dnf]
+
+- name: Upgrade packages to latest versions
+  dnf:
+    name: "*"
+    state: latest
+    exclude: "{{ dnf_exclude_packages_to_upgrade }}"
+  register: dnf_upgraded_packages
+  tags: [dnf]
+
+- name: Get list of remaining packages to upgrade
+  dnf:
+    list: upgrades
+  register: dnf_packages_after_upgrade
+  when: "dnf_upgraded_packages.changed == true"
+  tags: [dnf]
+
+- set_fact:
+    dnf_packages_after_upgrade: "{{dnf_packages_after_upgrade.results | map(attribute='name') | list }}"
+  when: "dnf_upgraded_packages.changed == true"
+  tags: [dnf]
+
+- debug:
+    msg: "List of upgraded packages: {{ dnf_packages_before_upgrade.results | map(attribute='name') | list | symmetric_difference(dnf_packages_after_upgrade) | join(', ') }}"
+  when: "dnf_upgraded_packages.changed == true"
+  tags: [dnf]
+
+- name: Install additional packages
+  dnf:
+    name: "{{ dnf_packages_to_install }}"
+    state: latest
+  tags: [dnf]
+
+
+
+# Remove packages from the server provided by the user and autoremove packages that are unused on the server
+#
+- name: Remove packages
+  dnf:
+    name: "{{ item }}"
+    state: removed
+  with_items: "{{ dnf_packages_to_remove }}"
+  tags: [dnf]
+
+- name: Autoremove unused packages
+  dnf:
+    autoremove: yes
+  tags: [dnf]
+
+
+
+# Some packages might be excluded from update task and manual update should be performed.
+# List all of such packages here
+#
+- name: Get the list of non-updated packages
+  dnf:
+    list: upgrades
+  register: dnf_not_upgraded
+  tags: [dnf]
+
+- debug:
+    msg: "List of packages available for upgrade: {{ dnf_not_upgraded.results | map(attribute='name') | join(', ') }}"
+  when: "dnf_not_upgraded.results | length > 0"
+  tags: [dnf]

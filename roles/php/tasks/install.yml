@@ -1,19 +1,12 @@
 # Install required packages for compiling PHP from source
 #
-- name: Make sure that epel repository is present
-  yum:
-    name: epel-release
-    state: latest
-  tags: [php]
-
 - name: Install required packages for compiling PHP
-  yum:
-    name: [autoconf, gcc, gcc-c++, bison, re2c, libxml2-devel, openssl-devel, bzip2-devel, libcurl-devel, libpng-devel, libwebp-devel, libjpeg-devel, libicu-devel, oniguruma-devel, cmake3, freetype-devel]
+  dnf:
+    name: [autoconf, gcc, gcc-c++, bison, re2c, libxml2-devel, openssl-devel, bzip2-devel, libcurl-devel, libpng-devel, libwebp-devel, libjpeg-turbo-devel, libicu-devel, oniguruma-devel, freetype-devel, libzip-devel,     ]
     state: latest
+    enablerepo: PowerTools
   tags: [php]
-
-- import_tasks: libzip.yml
-
+#cmake, cmake3
 
 
 # Download and unpack sources for PHP
@@ -87,33 +80,4 @@
   with_items:
     - "{{ php_sources_path }}/php-src-php-{{ php_version }}.tar.gz"
     - "{{ php_sources_path }}/php-src-php-{{ php_version }}"
-    - "{{ php_sources_path }}/libzip-{{ php_libzip_version }}.tar.gz"
-    - "{{ php_sources_path }}/libzip-{{ php_libzip_version }}"
-  tags: [php]
-
-
-
-# Add PHP executables to PATH
-#
-- name: Add PHP executables to PATH
-  template:
-    src: php.sh.j2
-    dest: /etc/profile.d/php.sh
-    owner: root
-    group: root
-    mode: 0644
-  tags: [php]
-
-
-
-# Create PHP systemctl entry
-# It will allow PHP to be manage by systemctl (ie. sudo systemctl start php-fpm).
-#
-- name: Add Systemd entry for PHP-FPM
-  template:
-    src: php-fpm.service.j2
-    dest: /etc/systemd/system/php-fpm.service
-    owner: root
-    group: root
-    mode: 0644
   tags: [php]

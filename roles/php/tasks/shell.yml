@@ -1,0 +1,24 @@
+# Add PHP executables to PATH
+#
+- name: Add PHP executables to PATH
+  template:
+    src: php.sh.j2
+    dest: /etc/profile.d/php.sh
+    owner: root
+    group: root
+    mode: 0644
+  tags: [php]
+
+
+
+# Create PHP systemctl entry
+# It will allow PHP to be manage by systemctl (ie. sudo systemctl start php-fpm).
+#
+- name: Add Systemd entry for PHP-FPM
+  template:
+    src: php-fpm.service.j2
+    dest: /etc/systemd/system/php-fpm.service
+    owner: root
+    group: root
+    mode: 0644
+  tags: [php]

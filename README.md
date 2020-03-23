@@ -1,7 +1,7 @@
 LAMP on Steroids
 ================
 
-Setup your server quickly with LAMP on Steroids. This repository is dedicated to `CentOS 7` system.
+Setup your server quickly with LAMP on Steroids. This repository is dedicated to `CentOS 7/8` system.
 Main goal is to setup working LAMP server with latest versions of available tools. 
 Secondary goal is to keep your server secure and up to date. 
 
@@ -42,7 +42,7 @@ ansible-playbook -i hosts playbooks/YOUR_PLAYBOOK_FILE.yml -K
 
 Included roles
 --------------
-**yum** - Handles package management, security features and package installation optimisations. 
+**dnf** - Handles package management, security features and package installation optimisations. 
 
 **users** - Handle users/groups management and enables sudo. 
 
@@ -50,13 +50,13 @@ Included roles
 
 **ntp** - Takes care of system timezone and NTP server. It uses Chrony for using NTP.
 
-**openssl** - Compile OpenSSL from source (1.1.1c)
+**openssl** - Compile OpenSSL from source (1.1.1e)
 
-**git** - Compile and install Git from source (2.24.1) 
+**git** - Compile and install Git from source (2.25.2) 
 
-**nginx** - Compile, install and configure nginx from source (1.17.7)
+**nginx** - Compile, install and configure nginx from source (1.17.9)
 
-**php** - Compile, install and configure PHP and tools (7.4.1)
+**php** - Compile, install and configure PHP and tools (7.4.4)
 
 **centos** - Takes care of system settings. Set up firewall based on iptables. Disable Transparent Huge Pages.
 You can setup logrotate scripts with this role as well.

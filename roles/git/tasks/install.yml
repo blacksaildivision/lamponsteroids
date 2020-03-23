@@ -1,7 +1,7 @@
 # Install required packages for compiling Git from source
 #
 - name: Install required packages for compiling Git
-  yum:
+  dnf:
     name: [autoconf, expat-devel, gcc, gettext-devel, libcurl-devel, openssl-devel, perl-devel, zlib-devel]
     state: latest
   tags: [git]
@@ -69,7 +69,7 @@
 
 
 # Add Git executables to PATH
-# It will fix the issue when git compiled from source can be overridden by git installed with yum
+# It will fix the issue when git compiled from source can be overridden by git installed with dnf
 #
 - name: Add Git executables to $PATH
   template:
