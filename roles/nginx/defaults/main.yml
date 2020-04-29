@@ -1,5 +1,5 @@
 # Version of nginx that should be installed
-nginx_version: "1.17.9"
+nginx_version: "1.17.10"
 
 # Path where nginx will be installed. NO trailing slash at the end!
 nginx_install_path: /usr/local/nginx
