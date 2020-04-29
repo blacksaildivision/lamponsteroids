@@ -12,6 +12,7 @@
   with_items: "{{ php_zend_extensions }}"
   register: php_zend_extensions_upgrade
   changed_when: "php_zend_extensions_upgrade.stdout != 'Nothing to upgrade'"
+  failed_when: "'Build process completed successfully' not in php_zend_extensions_upgrade.stdout"
   tags: [php]
 
 
@@ -41,4 +42,4 @@
     line: "zend_extension = opcache.so"
     insertafter: "[PHP]"
   notify: restart php-fpm
-  tags: [php, opcache]
+  tags: [php]
