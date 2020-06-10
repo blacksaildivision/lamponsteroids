@@ -52,11 +52,11 @@ Included roles
 
 **openssl** - Compile OpenSSL from source (1.1.1g)
 
-**git** - Compile and install Git from source (2.26.2) 
+**git** - Compile and install Git from source (2.27.0) 
 
-**nginx** - Compile, install and configure nginx from source (1.17.10)
+**nginx** - Compile, install and configure nginx from source (1.19.0)
 
-**php** - Compile, install and configure PHP and tools (7.4.5)
+**php** - Compile, install and configure PHP and tools (7.4.7)
 
 **centos** - Takes care of system settings. Set up firewall based on iptables. Disable Transparent Huge Pages.
 You can setup logrotate scripts with this role as well.
