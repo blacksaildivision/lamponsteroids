@@ -50,6 +50,42 @@
 - name: Set zone for interfaces with zone different than default zone
   shell: "/usr/bin/firewall-cmd --zone={{ firewalld_default_zone }} --change-interface={{ item }} --permanent"
   loop: "{{ firewalld_all_interfaces | difference(firewalld_default_zone_interfaces) }}"
+  notify: reload firewalld
+  tags: [firewalld]
+
+
+# Allow incoming traffic for given services
+#
+- name: Add services to default zone
+  firewalld:
+    immediate: yes
+    permanent: yes
+    service: "{{ item }}"
+    state: enabled
+    zone: "{{ firewalld_default_zone }}"
+  loop: "{{ firewalld_incoming_traffic_services }}"
+  notify: reload firewalld
+  tags: [firewalld]
+
+- name: Get all enabled services for firewalld
+  shell: "/usr/bin/firewall-cmd --zone={{ firewalld_default_zone }} --list-services"
+  register: firewalld_default_zone_services_result
+  changed_when: false
+  tags: [firewalld]
+
+- set_fact:
+    firewalld_default_zone_services: "{{ firewalld_default_zone_services_result.stdout.split() }}"
+  tags: [firewalld]
+
+- name: Remove unused services from default zone
+  firewalld:
+    immediate: yes
+    permanent: yes
+    service: "{{ item }}"
+    state: disabled
+    zone: "{{ firewalld_default_zone }}"
+  loop: "{{ firewalld_default_zone_services | difference(firewalld_incoming_traffic_services) }}"
+  notify: reload firewalld
   tags: [firewalld]
 
 
