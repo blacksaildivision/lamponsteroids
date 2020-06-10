@@ -1,0 +1,2 @@
+# Default zone that should be applied to all interfaces
+firewalld_default_zone: dmz

@@ -1,0 +1,64 @@
+# Make sure that firewalld package is installed
+#
+- name: Install firewalld
+  dnf:
+    name: firewalld
+    state: latest
+  tags: [firewalld]
+
+
+
+# Set default zone if not already set
+#
+- name: Check default firewalld zone
+  shell: /usr/bin/firewall-cmd --get-default-zone
+  register: firewalld_current_default_zone
+  changed_when: false
+  tags: [firewalld]
+
+- name: Change default zone
+  shell: "/usr/bin/firewall-cmd --set-default-zone={{ firewalld_default_zone }}"
+  when: "firewalld_current_default_zone.stdout != firewalld_default_zone"
+  register: firewalld_new_default_zone
+  failed_when: "firewalld_new_default_zone.stdout != 'success'"
+  tags: [firewalld]
+
+
+
+# Make sure that all interfaces are assigned to default zone
+#
+- name: Get all interfaces
+  shell: "/usr/bin/firewall-cmd --list-all-zones | grep 'interfaces:' | sed -e 's/  interfaces: //' | sed -r '/^\\s*$/d'"
+  register: firewalld_all_interfaces_results
+  changed_when: false
+  tags: [firewalld]
+
+- set_fact:
+    firewalld_all_interfaces: "{{ firewalld_all_interfaces_results.stdout.split() }}"
+  tags: [firewalld]
+
+- name: Get interfaces assigned to default zone
+  shell: "/usr/bin/firewall-cmd --list-interfaces --zone={{ firewalld_default_zone }}"
+  register: firewalld_default_zone_interfaces_result
+  changed_when: false
+  tags: [firewalld]
+
+- set_fact:
+    firewalld_default_zone_interfaces: "{{ firewalld_default_zone_interfaces_result.stdout.split() }}"
+  tags: [firewalld]
+
+- name: Set zone for interfaces with zone different than default zone
+  shell: "/usr/bin/firewall-cmd --zone={{ firewalld_default_zone }} --change-interface={{ item }} --permanent"
+  loop: "{{ firewalld_all_interfaces | difference(firewalld_default_zone_interfaces) }}"
+  tags: [firewalld]
+
+
+
+# Make sure that firewalld service is started and enabled on boot
+#
+- name: Start and enable firewalld service
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+  tags: [firewalld]
