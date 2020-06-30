@@ -58,6 +58,8 @@ Included roles
 
 **php** - Compile, install and configure PHP and tools (7.4.7)
 
+**firewalld** - Setup firewalld as base firewall
+
 **centos** - Takes care of system settings. Set up firewall based on iptables. Disable Transparent Huge Pages.
 You can setup logrotate scripts with this role as well.
 
