@@ -8,6 +8,17 @@
 
 
 
+# Make sure that firewalld service is started and enabled on boot
+#
+- name: Start and enable firewalld service
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+  tags: [firewalld]
+
+
+
 # Set default zone if not already set
 #
 - name: Check default firewalld zone
@@ -54,7 +65,8 @@
   tags: [firewalld]
 
 
-# Allow incoming traffic for given services
+
+# Allow incoming traffic for given services and remove all other services that should not be present in default zone
 #
 - name: Add services to default zone
   firewalld:
@@ -86,15 +98,4 @@
     zone: "{{ firewalld_default_zone }}"
   loop: "{{ firewalld_default_zone_services | difference(firewalld_incoming_traffic_services) }}"
   notify: reload firewalld
-  tags: [firewalld]
-
-
-
-# Make sure that firewalld service is started and enabled on boot
-#
-- name: Start and enable firewalld service
-  service:
-    name: firewalld
-    state: started
-    enabled: yes
   tags: [firewalld]
