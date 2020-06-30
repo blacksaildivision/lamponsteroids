@@ -50,13 +50,15 @@ Included roles
 
 **ntp** - Takes care of system timezone and NTP server. It uses Chrony for using NTP.
 
-**openssl** - Compile OpenSSL from source (1.1.1e)
+**openssl** - Compile OpenSSL from source (1.1.1g)
 
-**git** - Compile and install Git from source (2.25.2) 
+**git** - Compile and install Git from source (2.27.0) 
 
-**nginx** - Compile, install and configure nginx from source (1.17.9)
+**nginx** - Compile, install and configure nginx from source (1.19.0)
 
-**php** - Compile, install and configure PHP and tools (7.4.4)
+**php** - Compile, install and configure PHP and tools (7.4.7)
+
+**firewalld** - Setup firewalld as base firewall
 
 **centos** - Takes care of system settings. Set up firewall based on iptables. Disable Transparent Huge Pages.
 You can setup logrotate scripts with this role as well.

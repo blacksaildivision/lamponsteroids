@@ -19,7 +19,7 @@
 - name: Make sure that GPG check is enabled in all repositories inside /etc/yum.repos.d
   replace:
     path: "{{ item.path }}"
-    regexp: "gpgcheck=0"
+    regexp: "^gpgcheck=0"
     replace: "gpgcheck=1"
   with_items: "{{ dnf_repositories.files }}"
   tags: [dnf]

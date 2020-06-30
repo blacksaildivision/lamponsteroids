@@ -1,0 +1,8 @@
+# Default zone that should be applied to all interfaces
+firewalld_default_zone: dmz
+
+# List of services that should be added to default zone
+firewalld_incoming_traffic_services:
+  - http
+  - https
+  - ssh
