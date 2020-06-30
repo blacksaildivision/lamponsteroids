@@ -1,7 +1,7 @@
-####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
+# Version of MySQL that should be installed
+mysql_version: "8.0.20"
 
-# Should this role use install tasks for installing/updating MySQL Community server??
-mysql_manage_installation: yes
+####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
 
 # Should this role set root password?
 mysql_manage_root_password: yes
@@ -18,12 +18,6 @@ mysql_install_mysqltuner: yes
 # Should this role perform databases backups?
 mysql_manage_backup: yes
 
-
-
-####### INSTALL TASKS CONFIGURATION #######
-
-# MySQL version. Tested only on version 5.7.x. This role won't work for 5.6.* MySQL version
-mysql_version: "5.7.19"
 
 
 
@@ -90,7 +84,8 @@ mysql_databases:
  - {
   database: example,
   user: example,
-  password: "+;GPS,uP6%MXYTFo2k8bpo57v"
+  password: "+;GPS,uP6%MXYTFo2k8bpo57v",
+  host: localhost
  }
 
 # Enable Datadog integration
