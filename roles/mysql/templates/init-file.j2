@@ -1,0 +1,2 @@
+ALTER USER IF EXISTS 'root'@'localhost' IDENTIFIED BY '{{ mysql_root_password }}';
+ALTER USER IF EXISTS 'root'@'{{ mysql_root_host }}' IDENTIFIED BY '{{ mysql_root_password }}';

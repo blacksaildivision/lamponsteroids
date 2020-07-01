@@ -15,10 +15,20 @@
 
 
 
-# Set MySQL root password
+# Make sure that MySQL server service is started and enabled on boot
 #
-- include: root-password.yml
-  when: "mysql_manage_root_password == true"
+- name: Start and enable MySQL server service
+  service:
+    name: mysqld
+    state: started
+    enabled: yes
+  tags: [mysql]
+
+
+
+# Manage tools, databases, accounts and backups
+#
+- import_tasks: root-password.yml
 
 
 
@@ -33,18 +43,6 @@
 #
 - include: databases.yml
   when: "mysql_manage_databases_and_users == true"
-
-
-
-# Make sure that MySQL server service is started and enabled on boot
-#
-- name: Start and enable MySQL server service
-  service:
-    name: mysqld
-    state: started
-    enabled: yes
-  tags: [mysql, healthcheck]
-
 
 
 # Install MySQLTuner tool

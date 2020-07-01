@@ -1,13 +1,16 @@
 # Version of MySQL that should be installed
 mysql_version: "8.0.20"
 
+# MySQL root password
+mysql_root_password: "rKp#rX3EP?Y2JGug*q,s>F,)@Hbuf9KCH#Z8odF44!)vH7MmrwJ3"
+
+# MySQL root login host
+mysql_root_host: "127.0.0.1"
+
 ####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
 
-# Should this role set root password?
-mysql_manage_root_password: yes
-
 # Should this role configure MySQL?
-mysql_manage_configuration: yes
+mysql_manage_configuration: no
 
 # Should this role setup database and users?
 mysql_manage_databases_and_users: yes
@@ -17,19 +20,6 @@ mysql_install_mysqltuner: yes
 
 # Should this role perform databases backups?
 mysql_manage_backup: yes
-
-
-
-
-
-
-####### ROOT-PASSWORD TASKS CONFIGURATION #######
-
-# MySQL root password. Please check out README.md in this role if you want to know how to change current root password
-mysql_root_password: "r8gyl5#a:xHT12a7R_IgC]HZx"
-
-# MySQL current root password. Include this variable only if you want to change current root password
-# mysql_root_old_password: "oldRooTpasswordHere"
 
 
 
