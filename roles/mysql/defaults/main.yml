@@ -15,9 +15,6 @@ mysql_manage_configuration: no
 # Should this role setup database and users?
 mysql_manage_databases_and_users: yes
 
-# Should this role install MySQLTuner?
-mysql_install_mysqltuner: yes
-
 # Should this role perform databases backups?
 mysql_manage_backup: yes
 

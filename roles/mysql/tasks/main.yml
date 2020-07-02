@@ -29,6 +29,7 @@
 # Manage tools, databases, accounts and backups
 #
 - import_tasks: root-password.yml
+- import_tasks: mysqltuner.yml
 
 
 
@@ -43,12 +44,6 @@
 #
 - include: databases.yml
   when: "mysql_manage_databases_and_users == true"
-
-
-# Install MySQLTuner tool
-#
-- include: mysqltuner.yml
-  when: "mysql_install_mysqltuner == true"
 
 
 
