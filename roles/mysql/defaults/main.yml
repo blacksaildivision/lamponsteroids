@@ -25,34 +25,17 @@ mysql_user_configuration: []
 mysql_group_users:
   - developer
 
-####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
+# List of databases that should be created. Each database should have separate user
+mysql_databases:
+  example:
+    user: example
+    passowrd: "+;GPS,uP6%MXYTFo2k8bpo57v"
+    host: "127.0.0.1"
 
-# Should this role setup database and users?
-mysql_manage_databases_and_users: yes
+####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
 
 # Should this role perform databases backups?
 mysql_manage_backup: yes
-
-
-
-
-
-####### DATABASES TASKS CONFIGURATION #######
-
-# List of databases that should be created. Each database should have separate user
-mysql_databases:
- - {
-  database: example,
-  user: example,
-  password: "+;GPS,uP6%MXYTFo2k8bpo57v",
-  host: localhost
- }
-
-# Enable Datadog integration
-mysql_datadog_integration: yes
-
-# Password for datadog user
-mysql_datadog_user_password: "sZ9TxYbRrwmEJNGWEbtUDFCj"
 
 
 

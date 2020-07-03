@@ -31,14 +31,7 @@
 - import_tasks: root-password.yml
 - import_tasks: mysqltuner.yml
 - import_tasks: configuration.yml
-
-
-
-
-# Setup databases and database users
-#
-- include: databases.yml
-  when: "mysql_manage_databases_and_users == true"
+- import_tasks: databases.yml
 
 
 
