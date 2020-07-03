@@ -26,17 +26,12 @@
 
 
 
-# Manage tools, databases, accounts and backups
+# Manage tools, configuration, databases, accounts and backups
 #
 - import_tasks: root-password.yml
 - import_tasks: mysqltuner.yml
+- import_tasks: configuration.yml
 
-
-
-# Configure MySQL server
-#
-- include: configure.yml
-  when: "mysql_manage_configuration == true"
 
 
 

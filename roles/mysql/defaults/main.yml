@@ -5,12 +5,27 @@ mysql_version: "8.0.20"
 mysql_root_password: "rKp#rX3EP?Y2JGug*q,s>F,)@Hbuf9KCH#Z8odF44!)vH7MmrwJ3"
 
 # MySQL root login host
-mysql_root_host: "127.0.0.1"
+mysql_root_host: 127.0.0.1
+
+# Path to configuration file
+mysql_config_file: "/etc/my.cnf"
+
+# List of default secure config options for /etc/ssh/sshd_config file
+mysql_default_configuration:
+  log-error: "/var/log/mysqld.log"
+  slow_query_log: "1"
+  slow_query_log_file: "/var/lib/mysql/slow-query.log"
+  long_query_time: "5"
+  skip-name-resolve: "1"
+
+# Custom user settings to be applied to {{ mysql_config_file }} file. Please refer to README.md in this role how to use it
+mysql_user_configuration: []
+
+# List of users that should be added to mysql group in order to access log files
+mysql_group_users:
+  - developer
 
 ####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
-
-# Should this role configure MySQL?
-mysql_manage_configuration: no
 
 # Should this role setup database and users?
 mysql_manage_databases_and_users: yes
@@ -22,49 +37,7 @@ mysql_manage_backup: yes
 
 
 
-####### CONFIGURE TASKS CONFIGURATION #######
-
-# Path to configuration file
-mysql_config_file: /etc/my.cnf
-
-# Size of temporary in-memory tables
-mysql_tmp_table_size: 32M
-
-# Maximum size of user-created MEMORY tables
-mysql_max_heap_table_size: 32M
-
-# Turn or no Off Cache mechanism
-mysql_query_cache_type: 1
-
-# Set query cache size
-mysql_query_cache_size: 32M
-
-# Configure number of InnoDB pool instances
-mysql_innodb_buffer_pool_instances: 1
-
-# Set single InnoDB pool instance size
-mysql_innodb_buffer_pool_size: 128M
-
-# Enable or disable logging slow queries
-mysql_slow_query_log: 1
-
-# Path to log file with slow queries
-mysql_slow_query_log_file: /var/lib/mysql/localhost-slow-query.log
-
-# Enable new behaviour of TIMESTAMP field handling
-mysql_explicit_defaults_for_timestamp: 1
-
-# Turn off resolving host name
-mysql_skip_name_resolve: 1
-
-
-
-
 ####### DATABASES TASKS CONFIGURATION #######
-
-# List of users that should be added to mysql group
-mysql_group_users:
-  - developer
 
 # List of databases that should be created. Each database should have separate user
 mysql_databases:
