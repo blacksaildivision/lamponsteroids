@@ -1,26 +1,17 @@
-# Installing AWS CLI is the simplest via PIP.
-# Pip package is in epel repository so you need to make sure that you have both installed
-# libselinux-python is required for Ansible templates
+# Install or update MySQL server to required version
+# This task will be executed if MySQL is not installed or it's installed in different version
 #
-- name: Make sure that pip is installed
-  yum:
-    name: "{{ item }}"
-    state: latest
-  with_items:
-    - epel-release
-    - libselinux-python
-    - python2-pip # Dependencies python-backports python-backports-ssl_match_hostname python-setuptools
+- name: Check if AWS CLI is installed in required version
+  shell: /usr/local/bin/aws --version | awk -F'/' '{print $2}' | awk '{print $1}'
+  args:
+    warn: no
+  ignore_errors: yes
+  changed_when: false
+  register: awscli_version_test
   tags: [awscli]
 
-
-
-# Install AWS CLI command line tool
-#
-- name: Install AWS CLI
-  pip:
-    name: awscli
-    state: latest
-  tags: [awscli]
+- include: install.yml
+  when: "awscli_version_test.stdout != awscli_version"
 
 
 

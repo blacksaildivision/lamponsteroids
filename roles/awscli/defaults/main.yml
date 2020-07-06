@@ -1,3 +1,9 @@
+# Version of AWS CLI to install
+awscli_version: 2.0.28
+
+# Where to download AWS CLI zip file
+awscli_zip_file_location: /usr/src
+
 # List of users to give access to CLI:
 awscli_users:
   - developer
