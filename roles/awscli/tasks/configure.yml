@@ -1,0 +1,46 @@
+# Create AWS config directory for storing credentials and config files
+#
+- set_fact:
+    awscli_user_path: "{{ awscli_users | map('regex_replace', '(.*)', '\\1:/home/\\1/.aws') | map('regex_replace', 'root:/home/root/.aws', 'root:/root/.aws') | list }}"
+  tags: [awscli]
+
+- set_fact:
+    awscli_configuration: "{{ awscli_configuration|default([]) + [{item.split(':')[0]: item.split(':')[1] }] }}"
+  with_items: "{{ awscli_user_path }}"
+  tags: [awscli]
+
+- name: Create AWS config directory
+  file:
+    path: "{{ item.value }}"
+    state: directory
+    owner: "{{ item.key }}"
+    group: "{{ item.key }}"
+    mode: 0775
+  with_dict: "{{ awscli_configuration }}"
+  tags: [awscli]
+
+
+
+
+# Setup credentials file with aws_access_key_id and aws_secret_access_key
+# and config file with region and output
+#
+- name: Add AWS credentials file
+  template:
+    src: credentials.j2
+    dest: "{{ item.value }}/credentials"
+    owner: "{{ item.key }}"
+    group: "{{ item.key }}"
+    mode: 0600
+  with_dict: "{{ awscli_configuration }}"
+  tags: [awscli]
+
+- name: Add AWS config file
+  template:
+    src: config.j2
+    dest: "{{ item.value }}/config"
+    owner: "{{ item.key }}"
+    group: "{{ item.key }}"
+    mode: 0600
+  with_dict: "{{ awscli_configuration }}"
+  tags: [awscli]

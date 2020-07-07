@@ -4,12 +4,10 @@ awscli_version: 2.0.28
 # Where to download AWS CLI zip file
 awscli_zip_file_location: /usr/src
 
-# List of users to give access to CLI:
+# List of users with credentials and config files
 awscli_users:
   - developer
-
-# Should credential files and defaults be also set up for root account?
-awscli_users_root: yes
+  - root
 
 # AWS Access Key ID
 awscli_aws_access_key_id: AKIAI44QH8DHBEXAMPLE
