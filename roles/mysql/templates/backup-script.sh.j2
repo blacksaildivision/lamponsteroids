@@ -1,13 +1,13 @@
 #!/bin/bash
 
 ##### CONFIGURATION PART ######
-databaseName="{{ item.database }}"
-backupDirectory="{{ item.backup_directory }}"
+databaseName="{{ item.key }}"
+backupDirectory="{{ item.value.backup_directory }}"
 compressBackup=true
-uploadToS3={{ 'true' if item.s3_bucket is defined else 'false' }}
-s3BucketName="{{ item.s3_bucket if item.s3_bucket is defined else '' }}"
+uploadToS3={{ 'true' if item.value.s3_bucket is defined else 'false' }}
+s3BucketName="{{ item.value.s3_bucket if item.value.s3_bucket is defined else '' }}"
 backupsRotate=true
-rotate={{ item.rotate }}
+rotate={{ item.value.rotate | default(30) }}
 
 ##### EXECUTION PART #####
 backupFileName="$databaseName.$(date +'%Y-%m-%d_%H-%M').sql"

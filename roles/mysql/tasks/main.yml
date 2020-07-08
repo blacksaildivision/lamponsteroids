@@ -32,10 +32,4 @@
 - import_tasks: mysqltuner.yml
 - import_tasks: configuration.yml
 - import_tasks: databases.yml
-
-
-
-# Setup backup script
-#
-- include: backup.yml
-  when: "mysql_manage_backup == true"
+- import_tasks: backup.yml
