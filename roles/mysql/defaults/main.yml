@@ -2,7 +2,7 @@
 mysql_version: "8.0.20"
 
 # MySQL root password
-mysql_root_password: "rKp#rX3EP?Y2JGug*q,s>F,)@Hbuf9KCH#Z8odF44!)vH7MmrwJ3"
+mysql_root_password: "rKp#rX3EP?Y2JGug*q,s>F,)@Hbuf9KCH#Z8odF44!)vH7MmrwJ4"
 
 # MySQL root login host
 mysql_root_host: 127.0.0.1
@@ -17,6 +17,12 @@ mysql_default_configuration:
   slow_query_log_file: "/var/lib/mysql/slow-query.log"
   long_query_time: "5"
   skip-name-resolve: "1"
+  ssl-ca: "ca.pem"
+  ssl-cert: "server-cert.pem"
+  ssl-key: "server-key.pem"
+  tls_version: "TLSv1.3"
+  require_secure_transport: "1"
+  bind-address: "0.0.0.0"
 
 # Custom user settings to be applied to {{ mysql_config_file }} file. Please refer to README.md in this role how to use it
 mysql_user_configuration: []

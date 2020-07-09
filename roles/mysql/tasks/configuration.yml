@@ -1,3 +1,15 @@
+# Add users to mysql group so they will be able to read log files
+#
+- name: Add users to mysql group
+  user:
+    name: "{{ item }}"
+    append: yes
+    groups: mysql
+  with_items: "{{ mysql_group_users }}"
+  tags: [mysql]
+
+
+
 # Configure MySQL config file
 #
 - name: Merge default and user config
@@ -14,16 +26,4 @@
     regexp: "^{{ item.key }}="
   with_dict: "{{ mysql_configuration }}"
   notify: restart mysqld
-  tags: [mysql]
-
-
-
-# Add users to mysql group so they will be able to read log files
-#
-- name: Add users to mysql group
-  user:
-    name: "{{ item }}"
-    append: yes
-    groups: mysql
-  with_items: "{{ mysql_group_users }}"
   tags: [mysql]

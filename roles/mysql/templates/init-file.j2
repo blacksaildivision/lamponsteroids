@@ -1,5 +1,5 @@
 DROP USER IF EXISTS 'root'@'localhost';
 DROP USER IF EXISTS 'root'@'{{ mysql_root_host }}';
-CREATE USER 'root'@'{{ mysql_root_host }}' IDENTIFIED WITH 'mysql_native_password' BY '{{ mysql_root_password }}';
+CREATE USER 'root'@'{{ mysql_root_host }}' IDENTIFIED WITH 'mysql_native_password' BY '{{ mysql_root_password }}' REQUIRE SSL;
 GRANT ALL PRIVILEGES ON *.* TO 'root'@'{{ mysql_root_host }}' WITH GRANT OPTION;
 FLUSH PRIVILEGES;

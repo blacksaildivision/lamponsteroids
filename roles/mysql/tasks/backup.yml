@@ -12,28 +12,11 @@
 #
 - name: Create user for backups
   mysql_user:
-    login_user: root
-    login_host: "{{ mysql_root_host }}"
-    login_password: "{{ mysql_root_password }}"
     name: "{{ mysql_backup_user }}"
     password: "{{ mysql_backup_user_password }}"
     state: present
     priv: "{{ mysql_backup_databases | map(attribute='key') |  map('regex_replace', '(.*)', '\\1.*:SELECT') | list | join('/') }}"
   no_log: true
-  when: "mysql_backup_databases is defined"
-  tags: [mysql]
-
-
-
-# Create .my.cnf file with backup user database credentials
-#
-- name: Create .my.cnf with database backup user credentials
-  template:
-    src: my.cnf.j2
-    dest: "/root/.my.cnf"
-    owner: root
-    group: root
-    mode: 0600
   when: "mysql_backup_databases is defined"
   tags: [mysql]
 

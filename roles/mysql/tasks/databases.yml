@@ -2,9 +2,6 @@
 #
 - name: Create databases
   mysql_db:
-    login_host: "{{ mysql_root_host }}"
-    login_password: "{{ mysql_root_password }}"
-    login_user: root
     name: "{{ item.key }}"
     state: present
   with_dict: "{{ mysql_databases }}"
@@ -12,10 +9,6 @@
 
 - name: Create users and assign them to databases
   mysql_user:
-    host: "{{ item.value.host }}"
-    login_host: "{{ mysql_root_host }}"
-    login_password: "{{ mysql_root_password }}"
-    login_user: root
     name: "{{ item.value.user }}"
     password: "{{ item.value.password }}"
     priv: "{{ item.key }}.*:ALL"
