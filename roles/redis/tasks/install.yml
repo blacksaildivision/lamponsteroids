@@ -1,116 +1,90 @@
-# Install required software for compiling redis from source
+# Install required software for compiling Redis from source
 #
-- name: Install required tools for compiling redis
-  yum:
-    name: "{{ item }}"
+- name: Install required tools for compiling Redis
+  dnf:
+    name: [gcc, make]
     state: latest
-  with_items:
-    - gcc # Dependencies: cpp glibc-devel glibc-headers kernel-headers libmpc mpfr
-  tags: [redis, install]
+  tags: [redis]
 
 
 
-# Download source code for building redis.
-# Easiest method it to download it from redis download page:
+# Download and unpack source code for building Redis.
+# Easiest method it to download it from Redis download page:
 # https://redis.io/download
 #
-- name: Download required source files
+- name: Download Redis source files
   get_url:
-    dest: "{{ redis_sources_location }}"
+    dest: "{{ redis_sources_path }}"
     url: "http://download.redis.io/releases/redis-{{ redis_version }}.tar.gz"
-  tags: [redis, install]
+  tags: [redis]
 
-
-
-# Unpack downloaded redis sources
-#
-- name: Unpack downloaded redis sources
+- name: Unpack downloaded Redis sources
   unarchive:
-    src: "{{ redis_sources_location }}/redis-{{ redis_version }}.tar.gz"
-    dest: "{{ redis_sources_location }}"
+    src: "{{ redis_sources_path }}/redis-{{ redis_version }}.tar.gz"
+    dest: "{{ redis_sources_path }}"
     owner: "{{ redis_build_user }}"
     group: "{{ redis_build_group }}"
     copy: no
-    creates: "{{ redis_sources_location }}/redis-{{ redis_version }}"
-  tags: [redis, install]
+    creates: "{{ redis_sources_path }}/redis-{{ redis_version }}"
+  tags: [redis]
 
 
 
-# Compile redis
+# Compile and install Redis
 # It will be compiled by using different user than root.
 #
-- name: Compile redis
+- name: Compile Redis
   command: make MALLOC=libc
   args:
-    chdir: "{{ redis_sources_location }}/redis-{{ redis_version }}"
+    chdir: "{{ redis_sources_path }}/redis-{{ redis_version }}"
   become: true
   become_user: "{{ redis_build_user }}"
-  tags: [redis, install]
+  tags: [redis]
 
-
-
-# Install compiled redis
-# This operation must be executed as sudo user
-#
-- name: Install compiled redis
-  command: make install
-  args:
-    chdir: "{{ redis_sources_location }}/redis-{{ redis_version }}"
-  tags: [redis, install]
-
-
-
-# Make sure that directory for configuration is created
-#
-- name: Make sure that redis configuration directory exists
+- name: Make sure that Redis installation directory exists
   file:
-    path: "{{ redis_config_directory }}"
+    path: "{{ redis_install_path }}"
     state: directory
     mode: 0755
     owner: root
     group: root
-  tags: [redis, install]
+  tags: [redis]
 
-
-
-# Copy fresh config copy to redis directory
-# Fresh file with default config is in uncompressed directory with source code
-#
-- name: Create redis.conf file if not present
+- name: Copy compiled binaries to installation directory
   copy:
-    src: "{{ redis_sources_location }}/redis-{{ redis_version }}/redis.conf"
-    dest: "{{ redis_conf_path }}"
+    src: "{{ redis_sources_path }}/redis-{{ redis_version }}/src/{{ item }}"
+    dest: "{{ redis_install_path }}"
     remote_src: yes
-    force: no
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - redis-benchmark
+    - redis-check-aof
+    - redis-check-rdb
+    - redis-cli
+    - redis-server
+  tags: [redis]
+
+- name: Copy redis.conf file from sources to installation path
+  copy:
+    src: "{{ redis_sources_path }}/redis-{{ redis_version }}/redis.conf"
+    dest: "{{ redis_install_path }}"
+    remote_src: yes
     owner: root
     group: root
     mode: 0644
-  tags: [redis, install]
+  tags: [redis]
 
 
 
 # Remove downloaded sources after installation
 #
-- name: Cleanup downloaded sources
+- name: Cleanup files after installation
   file:
     path: "{{ item }}"
     state: absent
   with_items:
-    - "{{ redis_sources_location }}/redis-{{ redis_version }}.tar.gz"
-    - "{{ redis_sources_location }}/redis-{{ redis_version }}"
-  when: "redis_cleanup_after_install == true"
-  tags: [redis, install]
-
-
-
-# Create redis systemctl entry
-# It will allow redis to be manage by systemctl (ie. sudo systemctl start redis).
-#
-- name: Add systemd entry for redis
-  template:
-    src: redis.service.j2
-    dest: /etc/systemd/system/redis.service
-    owner: root
-    group: root
-    mode: 0644
-  tags: [redis, install]
+    - "{{ redis_sources_path }}/redis-{{ redis_version }}.tar.gz"
+    - "{{ redis_sources_path }}/redis-{{ redis_version }}"
+  tags: [redis]

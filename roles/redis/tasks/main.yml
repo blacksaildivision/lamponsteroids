@@ -1,70 +1,35 @@
-# Make sure that libselinux-python is installed (required for Ansible templates)
+# Install/Update Redis to desired version
+# These tasks will be executed when
+#  1. Redis is not installed from within this role
+#  2. Redis is installed but not in desired version
 #
-- name: Make sure that libselinux-python is installed
-  yum:
-    name: libselinux-python
-    state: latest
-  tags: [redis]
-
-
-
-# Check if redis is installed or not and if it should be updated or not
-# Setting PATH is required, because sometimes Ansible doesn't use /etc/profile.d data;/
-#
-- name: Check if redis is installed
-  command: redis-cli --version warn=no
-  register: redis_is_installed_test
+- name: Check if Redis is installed in required version
+  shell: "{{ redis_install_path }}/redis-cli --version | awk '{print $2}'"
+  args:
+    warn: no
   ignore_errors: yes
   changed_when: false
-  environment:
-    PATH: "{{ ansible_env.PATH }}:/usr/local/bin"
+  register: redis_version_test
   tags: [redis]
 
-- set_fact:
-    redis_is_installed: true
-  when: redis_is_installed_test.rc != 2
+- include_tasks: install.yml
+  when: "redis_version_test.stdout != redis_version"
   tags: [redis]
-
-- set_fact:
-    redis_is_installed: false
-    redis_install_new_version: true
-  when: redis_is_installed_test.rc == 2
-  tags: [redis]
-
-- set_fact:
-    redis_install_new_version: true
-  when: ( redis_is_installed == true ) and ( redis_is_installed_test.stdout | replace('redis-cli ','') != redis_version )
-  tags: [redis]
-
-- set_fact:
-    redis_install_new_version: false
-  when: ( redis_is_installed == true ) and ( redis_is_installed_test.stdout | replace('redis-cli ','') == redis_version )
-  tags: [redis]
-
-
-
-# Install/Update redis to desired version
-# These tasks will be executed when
-#  1. redis is not installed
-#  2. redis is installed but not in desired version
-#
-- include: install.yml
-  when: "redis_install_new_version == true and redis_manage_installation == true"
 
 
 
 # Configure redis
 #
-- include: configure.yml
-  when: "redis_manage_configuration == true"
+#- include: configure.yml
+#  when: "redis_manage_configuration == true"
 
 
 
 # Make sure that redis service is started and enabled on boot
 #
-- name: Start and enable redis service
-  service:
-    name: redis
-    state: started
-    enabled: yes
-  tags: [redis, healthcheck]
+##- name: Start and enable redis service
+#  service:
+#    name: redis
+#    state: started
+#    enabled: yes
+#  tags: [redis, healthcheck]
