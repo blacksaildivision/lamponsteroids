@@ -2,7 +2,7 @@
 #
 - name: Install required tools for compiling Redis
   dnf:
-    name: [gcc, make]
+    name: [gcc, make, systemd-devel]
     state: latest
   tags: [redis]
 
@@ -43,7 +43,7 @@
 
 - name: Make sure that Redis installation directory exists
   file:
-    path: "{{ redis_install_path }}"
+    path: "{{ redis_install_path }}/bin"
     state: directory
     mode: 0755
     owner: root
@@ -53,7 +53,7 @@
 - name: Copy compiled binaries to installation directory
   copy:
     src: "{{ redis_sources_path }}/redis-{{ redis_version }}/src/{{ item }}"
-    dest: "{{ redis_install_path }}"
+    dest: "{{ redis_install_path }}/bin"
     remote_src: yes
     owner: root
     group: root

@@ -1,23 +1,73 @@
-# Set Redis port
+# Make sure that dedicated redis daemon user and group exists
 #
-- name: Set redis port
-  lineinfile:
-    dest: "{{ redis_conf_path }}"
-    line: "port {{ redis_port }}"
+- name: Create dedicated redis group
+  group:
+    name: redis
     state: present
-    regexp: '^#?port'
-  notify: restart redis
-  tags: [redis, configure]
+  tags: [redis]
+
+- name: Create dedicated redis user
+  user:
+    name: redis
+    createhome: no
+    group: redis
+    state: present
+    shell: /sbin/nologin
+  tags: [redis]
 
 
 
-# Set path to Redis PID file
+# Configure /usr/local/redis/redis.conf file
 #
-- name: Set redis PID path
+- name: Merge default and user config
+  set_fact:
+    redis_configuration: "{{ redis_default_configuration | combine(redis_user_configuration) }}"
+  tags: [redis]
+
+- name: Create directory for redis database and log files
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: "2755"
+    owner: redis
+    group: redis
+  with_items:
+    - "{{ redis_database_dir }}"
+    - "{{ redis_logs_dir }}"
+  tags: [redis]
+
+- name: Configure /usr/local/redis/redis.conf file
   lineinfile:
-    dest: "{{ redis_conf_path }}"
-    line: "pidfile {{ redis_pid_file_path }}"
-    state: present
-    regexp: '^#?pidfile'
+    path: /usr/local/redis/redis.conf
+    line: "{{ item.key }} {{ item.value }}"
+    regexp: "^#?{{ item.key }}"
+  with_dict: "{{ redis_configuration }}"
   notify: restart redis
-  tags: [redis, configure]
+  tags: [redis]
+
+
+
+# Create Redis systemctl entry
+# It will allow Redis to be manage by systemctl (ie. sudo systemctl start redis).
+#
+- name: Add systemd entry for Redis
+  template:
+    src: redis.service.j2
+    dest: /etc/systemd/system/redis.service
+    owner: root
+    group: root
+    mode: 0644
+  tags: [redis]
+
+
+
+# Add Redis executables to PATH
+#
+- name: Add Redis executables to PATH
+  template:
+    src: redis.sh.j2
+    dest: /etc/profile.d/redis.sh
+    owner: root
+    group: root
+    mode: 0644
+  tags: [redis]

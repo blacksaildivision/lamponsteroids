@@ -13,22 +13,22 @@ redis_build_user: developer
 # Group of the build user
 redis_build_group: developer
 
-####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
+# Where redis should store database files
+redis_database_dir: /var/lib/redis
 
-# Should this role use configure tasks for redis configuration?
-redis_manage_configuration: yes
+# Directory where Redis should store logs
+redis_logs_dir: /usr/local/redis/logs
 
+# List of default secure config options for /usr/local/redis/redis.conf file
+redis_default_configuration:
+  bind: "127.0.0.1"
+  port: "6379"
+  daemonize: "no"
+  supervised: "systemd"
+  loglevel: "notice"
+  logfile: "{{ redis_logs_dir }}/redis.log"
+  requirepass: ">mU=*be^GEd%d^M&Hd_}VKTm.&3gX3^@ue%8zmw#,zU#X&,befAMq#Vn@Hf}"
+  dir: "{{ redis_database_dir }}"
 
-
-
-
-####### CONFIGURE TASKS CONFIGURATION #######
-
-# redis.conf path
-redis_conf_path: "/etc/redis/redis.conf"
-
-# redis PID file path
-redis_pid_file_path: "/var/run/redis.pid"
-
-# Redis port
-redis_port: 6379
+# Custom user settings to be applied to /usr/local/redis/redis.conf file. Please refer to README.md in this role
+redis_user_configuration: []

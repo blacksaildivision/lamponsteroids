@@ -4,7 +4,7 @@
 #  2. Redis is installed but not in desired version
 #
 - name: Check if Redis is installed in required version
-  shell: "{{ redis_install_path }}/redis-cli --version | awk '{print $2}'"
+  shell: "{{ redis_install_path }}/bin/redis-cli --version | awk '{print $2}'"
   args:
     warn: no
   ignore_errors: yes
@@ -20,16 +20,15 @@
 
 # Configure redis
 #
-#- include: configure.yml
-#  when: "redis_manage_configuration == true"
+- import_tasks: configure.yml
 
 
 
 # Make sure that redis service is started and enabled on boot
 #
-##- name: Start and enable redis service
-#  service:
-#    name: redis
-#    state: started
-#    enabled: yes
-#  tags: [redis, healthcheck]
+- name: Start and enable Redis service
+  service:
+    name: redis
+    state: started
+    enabled: yes
+  tags: [redis]

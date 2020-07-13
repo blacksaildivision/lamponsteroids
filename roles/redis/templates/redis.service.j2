@@ -1,13 +1,17 @@
+# This file is managed by Ansible
 [Unit]
-Description=Redis Datastore Server
+Description=Redis data structure server
 Documentation=https://redis.io/documentation
-After=network.target
+AssertPathExists={{ redis_database_dir }}
 
 [Service]
-PIDFile={{ redis_pid_file_path }}
-ExecStart=/usr/local/bin/redis-server {{ redis_conf_path }}
-ExecStop=/bin/kill -s TERM $MAINPID
-ExecReload=/bin/kill -s HUP $MAINPID
+ExecStart=/usr/local/redis/bin/redis-server /usr/local/redis/redis.conf
+ExecStop=/usr/local/redis/bin/redis-cli -a "$(grep "^requirepass" /usr/local/redis/redis.conf | awk '{print $2}')" shutdown
+Type=notify
+User=redis
+Group=redis
+TimeoutStartSec=5
+TimeoutStopSec=5
 
 [Install]
 WantedBy=multi-user.target
