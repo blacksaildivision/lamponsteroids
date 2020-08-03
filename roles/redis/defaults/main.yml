@@ -27,7 +27,7 @@ redis_default_configuration:
   supervised: "systemd"
   loglevel: "notice"
   logfile: "{{ redis_logs_dir }}/redis.log"
-  requirepass: ">mU=*be^GEd%d^M&Hd_}VKTm.&3gX3^@ue%8zmw#,zU#X&,befAMq#Vn@Hf}"
+  requirepass: "a-rgU!Uf3H}ktBiizEVKA]yM^qDCUW3Un#iL_3A&tpUx=>Zk"
   dir: "{{ redis_database_dir }}"
 
 # Custom user settings to be applied to /usr/local/redis/redis.conf file. Please refer to README.md in this role
