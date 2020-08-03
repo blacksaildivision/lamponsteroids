@@ -14,4 +14,5 @@
   dnf:
     name: "mysql-community-server-{{ mysql_version }}"
     state: latest
+    disablerepo: AppStream
   tags: [mysql]
