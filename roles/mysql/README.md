@@ -23,16 +23,16 @@ Here is the list of configurable variables for this role:
 - `mysql_group_users` list of users that should be added to mysql group.
 
 - `mysql_databases` dictionary of databases that should be present in the system. Key is the database name. Here is the list of available options:
- - `user` user that should have access to given database.
- - `password` password of the user.
- - `host` host of the user.
- - `requireX509` whether the user should be created with REQUIRE X509 permission.
- - `backup` when backup is set to yes, additional user with access to selected database will be created.
- - `backup_directory` directory where to store compressed backup files.
- - `backup_directory_owner` owner of the backup directory. `root` is the default.
- - `backup_directory_group` group of the backup directory. `root` is the default.
- - `rotate` number of backup files that should be kept on the server. `30` is default.
- - `s3_bucket` when this variable is set, backup script will try to push compressed dump to S3 bucket. 
+  - `user` user that should have access to given database.
+  - `password` password of the user.
+  - `host` host of the user.
+  - `requireX509` whether the user should be created with REQUIRE X509 permission.
+  - `backup` when backup is set to yes, additional user with access to selected database will be created.
+  - `backup_directory` directory where to store compressed backup files.
+  - `backup_directory_owner` owner of the backup directory. `root` is the default.
+  - `backup_directory_group` group of the backup directory. `root` is the default.
+  - `rotate` number of backup files that should be kept on the server. `30` is default.
+  - `s3_bucket` when this variable is set, backup script will try to push compressed dump to S3 bucket. 
  
  - `mysql_backup_user` name of the user for backups. Defaults to `backup`.
  
