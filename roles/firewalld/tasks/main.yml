@@ -66,7 +66,7 @@
 
 
 
-# Allow incoming traffic for given services and remove all other services that should not be present in default zone
+# Allow all incoming traffic for given services and remove all other services that should not be present in default zone
 #
 - name: Add services to default zone
   firewalld:
@@ -75,7 +75,7 @@
     service: "{{ item }}"
     state: enabled
     zone: "{{ firewalld_default_zone }}"
-  loop: "{{ firewalld_incoming_traffic_services }}"
+  loop: "{{ firewalld_all_incoming_traffic_services }}"
   notify: reload firewalld
   tags: [firewalld]
 
@@ -96,6 +96,75 @@
     service: "{{ item }}"
     state: disabled
     zone: "{{ firewalld_default_zone }}"
-  loop: "{{ firewalld_default_zone_services | difference(firewalld_incoming_traffic_services) }}"
+  loop: "{{ firewalld_default_zone_services | difference(firewalld_all_incoming_traffic_services) }}"
+  notify: reload firewalld
+  tags: [firewalld]
+
+
+
+# Internal zone is good candidate to allow traffic only from whitelisted IP addresses
+# This part specifies list of available services and sources (IP addresses) that will have access to them
+#
+- name: Add services that can be accessed from whitelisted IP addresses to internal zone
+  firewalld:
+    immediate: yes
+    permanent: yes
+    service: "{{ item }}"
+    state: enabled
+    zone: internal
+  loop: "{{ firewalld_internal_zone_services }}"
+  notify: reload firewalld
+  tags: [firewalld]
+
+- name: Get all enabled services for internal zone
+  shell: "/usr/bin/firewall-cmd --zone=internal --list-services"
+  register: firewalld_internal_zone_services_result
+  changed_when: false
+  tags: [firewalld]
+
+- set_fact:
+    firewalld_internal_zone_enabled_services: "{{ firewalld_internal_zone_services_result.stdout.split() }}"
+  tags: [firewalld]
+
+- name: Remove unused services from internal zone
+  firewalld:
+    immediate: yes
+    permanent: yes
+    service: "{{ item }}"
+    state: disabled
+    zone: internal
+  loop: "{{ firewalld_internal_zone_enabled_services | difference(firewalld_internal_zone_services) }}"
+  notify: reload firewalld
+  tags: [firewalld]
+
+- name: Add sources to internal zone
+  firewalld:
+    immediate: yes
+    permanent: yes
+    source: "{{ item }}"
+    state: enabled
+    zone: internal
+  with_items: "{{ firewalld_internal_zone_sources }}"
+  notify: reload firewalld
+  tags: [firewalld]
+
+- name: Get list of allowed sources that can access internal zone
+  shell: "/usr/bin/firewall-cmd --zone=internal --list-sources"
+  register: firewalld_internal_zone_sources_result
+  changed_when: false
+  tags: [firewalld]
+
+- set_fact:
+    firewalld_internal_zone_enabled_sources: "{{ firewalld_internal_zone_sources_result.stdout.split() }}"
+  tags: [firewalld]
+
+- name: Remove unused sources from internal zone
+  firewalld:
+    immediate: yes
+    permanent: yes
+    source: "{{ item }}"
+    state: disabled
+    zone: internal
+  loop: "{{ firewalld_internal_zone_enabled_sources | difference(firewalld_internal_zone_sources) }}"
   notify: reload firewalld
   tags: [firewalld]
