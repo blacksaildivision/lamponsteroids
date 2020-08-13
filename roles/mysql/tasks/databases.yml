@@ -22,14 +22,14 @@
 # Enable require x509 for given users
 #
 - set_fact:
-    mysql_users_with_x509: "{{ mysql_backup_databases|default([]) + [item] }}"
+    mysql_users_with_x509: "{{ mysql_users_with_x509|default([]) + [item] }}"
   with_dict: "{{ mysql_databases }}"
   when: "item.value.requireX509 | default(false) == true"
   no_log: yes
   tags: [mysql]
 
 - name: Require x509 connection for selected users
-  shell: "/usr/bin/mysql --execute 'ALTER USER '{{ item.value.user }}'@'{{ item.value.host }}' REQUIRE X509; FLUSH PRIVILEGES;'"
+  shell: "/usr/bin/mysql --execute 'ALTER USER \"{{ item.value.user }}\"@\"{{ item.value.host }}\" REQUIRE X509; FLUSH PRIVILEGES;'"
   with_items: "{{ mysql_users_with_x509 }}"
   changed_when: false
   when: "mysql_users_with_x509 is defined"

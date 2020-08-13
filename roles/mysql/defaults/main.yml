@@ -35,7 +35,7 @@ mysql_group_users:
 mysql_databases:
   example:
     user: example
-    passowrd: "+;GPS,uP6%MXYTFo2k8bpo57v"
+    password: "+;GPS,uP6%MXYTFo2k8bpo57v"
     host: "127.0.0.1"
     backup: yes
     requireX509: yes

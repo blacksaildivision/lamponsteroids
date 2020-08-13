@@ -14,4 +14,6 @@
   git:
     repo: https://github.com/major/MySQLTuner-perl.git
     dest: /usr/local/mysqltuner
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/usr/local/git/bin"
   tags: [mysql]
