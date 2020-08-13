@@ -1,5 +1,5 @@
-# Install or update MySQL server to required version
-# This task will be executed if MySQL is not installed or it's installed in different version
+# Install or update AWS CLI to required version
+# This task will be executed if AWS CLI is not installed or it's installed in different version
 #
 - name: Check if AWS CLI is installed in required version
   shell: /usr/local/bin/aws --version | awk -F'/' '{print $2}' | awk '{print $1}'
