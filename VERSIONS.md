@@ -8,4 +8,6 @@ Each package have it's own release cycle. Here is the list of URLs that we check
 * [Git](https://github.com/git/git/releases) 2.27.0
 * [nginx](https://nginx.org/en/download.html) 1.19.0
 * [PHP](https://github.com/php/php-src/releases) 7.4.7
+* [MySQL](https://dev.mysql.com/downloads/mysql/) 8.0.21
+* [AWS CLI](https://github.com/aws/aws-cli/releases) 2.0.28
 * [HTTPD](https://github.com/apache/httpd/releases) 2.4.33

@@ -1,20 +1,17 @@
 # Make sure that required Perl packages for MySQL tuner are installed
 #
 - name: Install required tools for MySQL Tuner
-  yum:
-    name: perl-Data-Dumper
+  dnf:
+    name: [perl-Data-Dumper, git]
     state: latest
-  tags: [mysql, mysqltuner]
+  tags: [mysql]
 
 
 
-# Download MySQL tuner script and make it executable
+# Clone MySQLTuner repository with script, basic password list and vulnerabilities
 #
-- name: Download MySQL tuner script
-  get_url:
-    dest: "/usr/bin/mysqltuner"
-    url: "http://mysqltuner.pl/"
-    owner: root
-    group: root
-    mode: 0715
-  tags: [mysql, mysqltuner]
+- name: Clone MySQLtuner repository
+  git:
+    repo: https://github.com/major/MySQLTuner-perl.git
+    dest: /usr/local/mysqltuner
+  tags: [mysql]

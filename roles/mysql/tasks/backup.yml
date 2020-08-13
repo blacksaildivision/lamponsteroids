@@ -1,41 +1,40 @@
+# Get list of databases with backup enabled
+#
+- set_fact:
+    mysql_backup_databases: "{{ mysql_backup_databases|default([]) + [item] }}"
+  with_dict: "{{ mysql_databases }}"
+  when: "item.value.backup | default(false) == true"
+  tags: [mysql]
+
+
+
 # Create database backup user and grand him permissions to database for backup
 #
 - name: Create user for backups
   mysql_user:
-    login_user: root
-    login_password: "{{ mysql_root_password }}"
     name: "{{ mysql_backup_user }}"
     password: "{{ mysql_backup_user_password }}"
+    host: "{{ mysql_root_host }}"
     state: present
-    priv: "{{ mysql_backup_databases|map(attribute='database') | map('regex_replace', '(.*)', '\\1.*:SELECT') | join('/') }}"
-  tags: [mysql, backup]
+    priv: "{{ mysql_backup_databases | map(attribute='key') |  map('regex_replace', '(.*)', '\\1.*:SELECT') | list | join('/') }}"
+  no_log: true
+  when: "mysql_backup_databases is defined"
+  tags: [mysql]
 
 
 
-# Create .my.cnf file with backup user database credentials
-#
-- name: Create .my.cnf with database backup user credentials
-  template:
-    src: my.cnf.j2
-    dest: "/root/.my.cnf"
-    owner: root
-    group: root
-    mode: 0600
-  tags: [mysql, backup]
-
-
-
-# Make sure that backup directory exists
+# Make sure that backup directories exists
 #
 - name: Make sure that backup directory exists
   file:
-    path: "{{ item.backup_directory }}"
+    path: "{{ item.value.backup_directory }}"
     state: directory
     mode: "2775"
-    owner: "{{ item.backup_directory_owner }}"
-    group: "{{ item.backup_directory_group }}"
+    owner: "{{ item.value.backup_directory_owner | default('root') }}"
+    group: "{{ item.value.backup_directory_group | default('root') }}"
   with_items: "{{ mysql_backup_databases }}"
-  tags: [mysql, backup]
+  when: "mysql_backup_databases is defined"
+  tags: [mysql]
 
 
 
@@ -44,12 +43,13 @@
 - name: Setup backup scripts
   template:
     src: backup-script.sh.j2
-    dest: "{{ item.backup_directory }}/{{ item.database }}-backup.sh"
-    owner: "{{ item.backup_directory_owner }}"
-    group: "{{ item.backup_directory_group }}"
+    dest: "{{ item.value.backup_directory }}/{{ item.key }}-backup.sh"
+    owner: "{{ item.value.backup_directory_owner | default('root') }}"
+    group: "{{ item.value.backup_directory_group | default('root') }}"
     mode: 0700
   with_items: "{{ mysql_backup_databases }}"
-  tags: [mysql, backup]
+  when: "mysql_backup_databases is defined"
+  tags: [mysql]
 
 
 
@@ -57,8 +57,9 @@
 #
 - name: Setup crontab for periodical backups
   cron:
-    name: "{{ item.database }} backup"
-    special_time: "{{ item.backup_frequency }}"
-    job: "bash {{ item.backup_directory }}/{{ item.database }}-backup.sh >> {{ item.backup_directory }}/{{ item.database }}-backup.log 2>&1"
+    name: "{{ item.key }} mysql backup"
+    special_time: "{{ item.value.backup_frequency | default('daily') }}"
+    job: "bash {{ item.value.backup_directory }}/{{ item.key }}-backup.sh >> {{ item.value.backup_directory }}/{{ item.key }}-backup.log 2>&1"
   with_items: "{{ mysql_backup_databases }}"
-  tags: [mysql, backup]
+  when: "mysql_backup_databases is defined"
+  tags: [mysql]

@@ -1,94 +1,20 @@
-# Installing AWS CLI is the simplest via PIP.
-# Pip package is in epel repository so you need to make sure that you have both installed
-# libselinux-python is required for Ansible templates
+# Install or update AWS CLI to required version
+# This task will be executed if AWS CLI is not installed or it's installed in different version
 #
-- name: Make sure that pip is installed
-  yum:
-    name: "{{ item }}"
-    state: latest
-  with_items:
-    - epel-release
-    - libselinux-python
-    - python2-pip # Dependencies python-backports python-backports-ssl_match_hostname python-setuptools
+- name: Check if AWS CLI is installed in required version
+  shell: /usr/local/bin/aws --version | awk -F'/' '{print $2}' | awk '{print $1}'
+  args:
+    warn: no
+  ignore_errors: yes
+  changed_when: false
+  register: awscli_version_test
   tags: [awscli]
 
+- include: install.yml
+  when: "awscli_version_test.stdout != awscli_version"
 
 
-# Install AWS CLI command line tool
+
+# Import remaining tasks
 #
-- name: Install AWS CLI
-  pip:
-    name: awscli
-    state: latest
-  tags: [awscli]
-
-
-
-# Create AWS config directory for storing credentials and config
-#
-- name: Create AWS config directory
-  file:
-    path: "/home/{{ item }}/.aws"
-    state: directory
-    owner: "{{ item }}"
-    group: "{{ item }}"
-    mode: 0775
-  with_items: "{{ awscli_users }}"
-  tags: [awscli]
-
-- name: Create AWS config directory for root
-  file:
-    path: /root/.aws
-    state: directory
-    owner: root
-    group: root
-    mode: 0775
-  when: "awscli_users_root == true"
-  tags: [awscli]
-
-
-
-# Setup credentials file with Access Key and Secret
-#
-- name: Add AWS credentials file
-  template:
-    src: credentials.j2
-    dest: "/home/{{ item }}/.aws/credentials"
-    owner: "{{ item }}"
-    group: "{{ item }}"
-    mode: 0600
-  with_items: "{{ awscli_users }}"
-  tags: [awscli]
-
-- name: Add AWS credentials file for root
-  template:
-    src: credentials.j2
-    dest: /root/.aws/credentials
-    owner: root
-    group: root
-    mode: 0600
-  when: "awscli_users_root == true"
-  tags: [awscli]
-
-
-# Setup config file with default region and output
-#
-- name: Add AWS config file
-  template:
-    src: config.j2
-    dest: "/home/{{ item }}/.aws/config"
-    owner: "{{ item }}"
-    group: "{{ item }}"
-    mode: 0600
-  with_items: "{{ awscli_users }}"
-  tags: [awscli]
-
-- name: Add AWS config file for root
-  template:
-    src: config.j2
-    dest: /root/.aws/config"
-    owner: root
-    group: root
-    mode: 0600
-  when: "awscli_users_root == true"
-  tags: [awscli]
+- import_tasks: configure.yml

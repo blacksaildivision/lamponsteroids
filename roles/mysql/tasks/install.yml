@@ -1,25 +1,18 @@
-# MySQL comes with it's own repository. Add repo file to Yum here
+# Install MySQL RPM from remote repository
 #
-- name: Make sure that MySQL repository is available
-  template:
-    src: mysql-community.repo.j2
-    dest: /etc/yum.repos.d/mysql-community.repo
-    owner: root
-    group: root
-    mode: 0644
-  tags: [mysql, install]
+- name: Install MySQL RPM
+  dnf:
+    name: "https://dev.mysql.com/get/mysql80-community-release-el8-1.noarch.rpm"
+    state: latest
+  tags: [mysql]
 
 
 
-# Install MySQL Community server
+# Install MySQL packages
 #
 - name: Install MySQL community server
-  yum:
-    name: "{{ item }}"
+  dnf:
+    name: "mysql-community-server-{{ mysql_version }}"
     state: latest
-  with_items:
-    - "mysql-community-server-{{ mysql_version }}" # Dependencies: mysql-community-libs mysql-community-libs-compat mysql-community-client mysql-community-common net-tools perl perl-Carp perl-Encode perl-Exporter perl-File-Path perl-File-Temp perl-Filter perl-Getopt-Long perl-HTTP-Tiny perl-PathTools perl-Pod-Escapes perl-Pod-Perldoc perl-Pod-Simple perl-Pod-Usage perl-Scalar-List-Utils perl-Socket perl-Storable perl-Text-ParseWords perl-Time-HiRes perl-Time-Local perl-constant perl-libs perl-macros perl-parent perl-podlators perl-threads perl-threads-shared
-    - "mysql-community-client-{{ mysql_version }}"
-    - "mysql-community-libs-{{ mysql_version }}"
-    - "mysql-community-libs-compat-{{ mysql_version }}"
-  tags: [mysql, install]
+    disablerepo: AppStream
+  tags: [mysql]

@@ -2,7 +2,14 @@
 firewalld_default_zone: dmz
 
 # List of services that should be added to default zone
-firewalld_incoming_traffic_services:
+firewalld_all_incoming_traffic_services:
   - http
   - https
   - ssh
+
+# List of services that should be available from whitelisted IP addresses
+firewalld_internal_zone_services: []
+
+# List of IP addresses that should have access to given services
+firewalld_internal_zone_sources: []
+
