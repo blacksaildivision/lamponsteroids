@@ -60,6 +60,10 @@ Included roles
 
 **firewalld** - Setup firewalld as base firewall
 
+**mysql** - Install and configure MySQL community server (8.0.21). Create databases and users. Install MySQLTuner and setup backups.
+
+**awscli** - Install and configure AWS CLI command line tool (2.0.28)
+
 **centos** - Takes care of system settings. Set up firewall based on iptables. Disable Transparent Huge Pages.
 You can setup logrotate scripts with this role as well.
 
@@ -68,10 +72,6 @@ You can setup logrotate scripts with this role as well.
 **nodejs** - Install latest version of Node.js (8.3.0) and NPM
 
 **datadog** - Install and configure DataDog agent with multiple integrations.
-
-**mysql** - Install and configure MySQL community server (5.7.19). Create databases and users. Install MySQLTuner
-
-**awscli** - Install and configure AWS CLI command line tool
 
 **mongodb** - Install and configure MongoDB (3.4.7) with authentication
 

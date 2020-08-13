@@ -1,0 +1,53 @@
+# Make sure that unzip command is present in the system
+# It is required for unzipping downloaded AWS CLI archive
+#
+- name: Install unzip command
+  dnf:
+    name: unzip
+    state: latest
+  tags: [awscli]
+
+
+
+# Download and unzip archive containing binary with AWS CLI
+#
+- name: Download AWS CLI zip file
+  get_url:
+    dest: "{{ awscli_zip_file_location }}"
+    url: "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-{{ awscli_version }}.zip"
+  tags: [awscli]
+
+- name: Unpack downloaded AWS CLI binary
+  unarchive:
+    src: "{{ awscli_zip_file_location }}/awscli-exe-linux-x86_64-{{ awscli_version }}.zip"
+    dest: "{{ awscli_zip_file_location }}"
+    copy: no
+    creates: "{{ awscli_zip_file_location }}/aws"
+  tags: [awscli]
+
+
+
+# Run the install script for AWS CLI for fresh installations or update the existing one if already installed
+#
+- name: Install AWS CLI
+  shell: "bash {{ awscli_zip_file_location }}/aws/install"
+  when: '"No such file or directory" in awscli_version_test.stderr'
+  tags: [awscli]
+
+- name: Update AWS CLI
+  shell: "bash {{ awscli_zip_file_location }}/aws/install --update"
+  when: 'awscli_version_test.stderr == ""'
+  tags: [awscli]
+
+
+
+# Remove downloaded sources after installation
+#
+- name: Cleanup downloaded sources
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ awscli_zip_file_location }}/awscli-exe-linux-x86_64-{{ awscli_version }}.zip"
+    - "{{ awscli_zip_file_location }}/aws"
+  tags: [awscli]

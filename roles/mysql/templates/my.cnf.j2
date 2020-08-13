@@ -1,3 +1,17 @@
+[client]
+user="root"
+password="{{ mysql_root_password }}"
+host="{{ mysql_root_host }}"
+ssl-cert="/var/lib/mysql/client-cert.pem"
+ssl-key="/var/lib/mysql/client-key.pem"
+tls-version="TLSv1.3"
+ssl-mode="REQUIRED"
+
 [mysqldump]
 user="{{ mysql_backup_user }}"
+host="{{ mysql_root_host }}"
 password="{{ mysql_backup_user_password }}"
+ssl-cert="/var/lib/mysql/client-cert.pem"
+ssl-key="/var/lib/mysql/client-key.pem"
+tls-version="TLSv1.3"
+ssl-mode="REQUIRED"

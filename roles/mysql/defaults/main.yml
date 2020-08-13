@@ -1,135 +1,48 @@
-####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
+# Version of MySQL that should be installed
+mysql_version: "8.0.21"
 
-# Should this role use install tasks for installing/updating MySQL Community server??
-mysql_manage_installation: yes
+# MySQL root password
+mysql_root_password: "rKp#rX3EP?Y2JGug*q,s>F,)@Hbuf9KCH#Z8odF44!)vH7MmrwJ4"
 
-# Should this role set root password?
-mysql_manage_root_password: yes
-
-# Should this role configure MySQL?
-mysql_manage_configuration: yes
-
-# Should this role setup database and users?
-mysql_manage_databases_and_users: yes
-
-# Should this role install MySQLTuner?
-mysql_install_mysqltuner: yes
-
-# Should this role perform databases backups?
-mysql_manage_backup: yes
-
-
-
-####### INSTALL TASKS CONFIGURATION #######
-
-# MySQL version. Tested only on version 5.7.x. This role won't work for 5.6.* MySQL version
-mysql_version: "5.7.19"
-
-
-
-
-
-####### ROOT-PASSWORD TASKS CONFIGURATION #######
-
-# MySQL root password. Please check out README.md in this role if you want to know how to change current root password
-mysql_root_password: "r8gyl5#a:xHT12a7R_IgC]HZx"
-
-# MySQL current root password. Include this variable only if you want to change current root password
-# mysql_root_old_password: "oldRooTpasswordHere"
-
-
-
-
-
-####### CONFIGURE TASKS CONFIGURATION #######
+# MySQL root login host
+mysql_root_host: 127.0.0.1
 
 # Path to configuration file
-mysql_config_file: /etc/my.cnf
+mysql_config_file: "/etc/my.cnf"
 
-# Size of temporary in-memory tables
-mysql_tmp_table_size: 32M
+# List of default secure config options for /etc/ssh/sshd_config file
+mysql_default_configuration:
+  log-error: "/var/log/mysqld.log"
+  slow_query_log: "1"
+  slow_query_log_file: "/var/lib/mysql/slow-query.log"
+  long_query_time: "5"
+  skip-name-resolve: "1"
+  ssl-ca: "ca.pem"
+  ssl-cert: "server-cert.pem"
+  ssl-key: "server-key.pem"
+  tls_version: "TLSv1.3"
+  require_secure_transport: "1"
+  bind-address: "0.0.0.0"
 
-# Maximum size of user-created MEMORY tables
-mysql_max_heap_table_size: 32M
+# Custom user settings to be applied to {{ mysql_config_file }} file. Please refer to README.md in this role how to use it
+mysql_user_configuration: []
 
-# Turn or no Off Cache mechanism
-mysql_query_cache_type: 1
-
-# Set query cache size
-mysql_query_cache_size: 32M
-
-# Configure number of InnoDB pool instances
-mysql_innodb_buffer_pool_instances: 1
-
-# Set single InnoDB pool instance size
-mysql_innodb_buffer_pool_size: 128M
-
-# Enable or disable logging slow queries
-mysql_slow_query_log: 1
-
-# Path to log file with slow queries
-mysql_slow_query_log_file: /var/lib/mysql/localhost-slow-query.log
-
-# Enable new behaviour of TIMESTAMP field handling
-mysql_explicit_defaults_for_timestamp: 1
-
-# Turn off resolving host name
-mysql_skip_name_resolve: 1
-
-
-
-
-####### DATABASES TASKS CONFIGURATION #######
-
-# List of users that should be added to mysql group
+# List of users that should be added to mysql group in order to access log files
 mysql_group_users:
   - developer
 
 # List of databases that should be created. Each database should have separate user
 mysql_databases:
- - {
-  database: example,
-  user: example,
-  password: "+;GPS,uP6%MXYTFo2k8bpo57v"
- }
+  example:
+    user: example
+    password: "+;GPS,uP6%MXYTFo2k8bpo57v"
+    host: "127.0.0.1"
+    backup: yes
+    backup_directory: /var/mysql-backup
+    requireX509: yes
 
-# Enable Datadog integration
-mysql_datadog_integration: yes
-
-# Password for datadog user
-mysql_datadog_user_password: "sZ9TxYbRrwmEJNGWEbtUDFCj"
-
-
-
-
-
-####### BACKUP TASKS CONFIGURATION #######
-
-# Name of the user that will perform backups
+# Name of the user for backups
 mysql_backup_user: backup
 
 # Password for mysql backup user
 mysql_backup_user_password: "J2AW9oRZT?wO@C^S1!Qxsq03d8r"
-
-# List of database to backup
-# Here is full example with all options:
-#
-# mysql_backup_databases:
-#  - {
-#    database: example, # database name to backup
-#    backup_directory: /var/www/example.com/db, # directory for storing backups
-#    backup_directory_owner: developer, # directory owner
-#    backup_directory_group: developer, # directory group
-#    rotate: 30, # number of files to rotate
-#    backup_frequency: daily, # how often should backups be performed (daily, weekly, etc)
-#    s3_bucket: mysql-backup # name of the s3 bucket that backup should be pushed through. it requires having awscli up and running
-# }
-mysql_backup_databases:
- - {
-    database: example,
-    backup_directory: /var/db,
-    backup_directory_owner: root,
-    backup_directory_group: root,
-    rotate: 30,
-    backup_frequency: daily
- }
