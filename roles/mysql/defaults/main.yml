@@ -38,6 +38,7 @@ mysql_databases:
     password: "+;GPS,uP6%MXYTFo2k8bpo57v"
     host: "127.0.0.1"
     backup: yes
+    backup_directory: /var/mysql-backup
     requireX509: yes
 
 # Name of the user for backups

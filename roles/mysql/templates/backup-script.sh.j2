@@ -15,7 +15,7 @@ backupFilePath="$backupDirectory/$backupFileName"
 echo "Backup of \"$databaseName\" database started at $(date +'%d/%m/%Y %T')"
 
 echo "Dumping database..."
-mysqldump --single-transaction --quick "$databaseName" > "$backupFilePath"
+mysqldump --single-transaction --no-tablespaces --quick "$databaseName" > "$backupFilePath"
 
 if [ "$compressBackup" = true ] ; then
     echo "Compressing backup file..."
