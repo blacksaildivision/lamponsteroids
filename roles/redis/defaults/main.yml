@@ -1,5 +1,5 @@
 # Redis version to be installed
-redis_version: "6.0.5"
+redis_version: "6.0.6"
 
 # Location where redis should be installed
 redis_install_path: /usr/local/redis
@@ -22,13 +22,18 @@ redis_logs_dir: /usr/local/redis/logs
 # List of default secure config options for /usr/local/redis/redis.conf file
 redis_default_configuration:
   bind: "127.0.0.1"
-  port: "6379"
+  port: "0"
+  tls-port: "6379"
   daemonize: "no"
   supervised: "systemd"
   loglevel: "notice"
   logfile: "{{ redis_logs_dir }}/redis.log"
   requirepass: "a-rgU!Uf3H}ktBiizEVKA]yM^qDCUW3Un#iL_3A&tpUx=>Zk"
   dir: "{{ redis_database_dir }}"
+  tls-cert-file: "{{ redis_install_path }}/tls/redis.crt"
+  tls-key-file: "{{ redis_install_path }}/tls/redis.key"
+  tls-ca-cert-file: "{{ redis_install_path }}/tls/ca.crt"
+  tls-dh-params-file: "{{ redis_install_path }}/tls/redis.dh"
 
 # Custom user settings to be applied to /usr/local/redis/redis.conf file. Please refer to README.md in this role
 redis_user_configuration: []

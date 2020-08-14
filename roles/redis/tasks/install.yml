@@ -34,20 +34,23 @@
 # It will be compiled by using different user than root.
 #
 - name: Compile Redis
-  command: make MALLOC=libc
+  command: make MALLOC=libc BUILD_TLS=yes
   args:
     chdir: "{{ redis_sources_path }}/redis-{{ redis_version }}"
   become: true
   become_user: "{{ redis_build_user }}"
   tags: [redis]
 
-- name: Make sure that Redis installation directory exists
+- name: Create Redis directories
   file:
-    path: "{{ redis_install_path }}/bin"
+    path: "{{ item }}"
     state: directory
     mode: 0755
     owner: root
     group: root
+  with_items:
+    - "{{ redis_install_path }}/bin"
+    - "{{ redis_install_path }}/tls"
   tags: [redis]
 
 - name: Copy compiled binaries to installation directory
@@ -74,6 +77,32 @@
     owner: root
     group: root
     mode: 0644
+  tags: [redis]
+
+
+
+# Generate and copy SSL certificates for TLS connection
+#
+- name: Generate SSL certificates
+  shell: /usr/bin/bash gen-test-certs.sh
+  args:
+    chdir: "{{ redis_sources_path }}/redis-{{ redis_version }}/utils"
+  tags: [redis]
+
+- name: Copy generated SSL certificates to installation directory
+  copy:
+    src: "{{ redis_sources_path }}/redis-{{ redis_version }}/utils/tests/tls/{{ item }}"
+    dest: "{{ redis_install_path }}/tls"
+    remote_src: yes
+    owner: redis
+    group: redis
+    mode: 0600
+    force: no
+  with_items:
+    - redis.crt
+    - redis.key
+    - ca.crt
+    - redis.dh
   tags: [redis]
 
 

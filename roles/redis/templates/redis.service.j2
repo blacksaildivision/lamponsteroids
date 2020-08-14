@@ -6,7 +6,7 @@ AssertPathExists={{ redis_database_dir }}
 
 [Service]
 ExecStart=/usr/local/redis/bin/redis-server /usr/local/redis/redis.conf
-ExecStop=/usr/local/redis/bin/redis-cli -a "$(grep "^requirepass" /usr/local/redis/redis.conf | awk '{print $2}')" shutdown
+ExecStop=/usr/local/redis/bin/redis-cli --tls --cert {{ redis_install_path }}/tls/redis.crt --key {{ redis_install_path }}/tls/redis.key --cacert {{ redis_install_path }}/tls/ca.crt -a "$(grep "^requirepass" /usr/local/redis/redis.conf | awk '{print $2}')" shutdown
 Type=notify
 User=redis
 Group=redis
