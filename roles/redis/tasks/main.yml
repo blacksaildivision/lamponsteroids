@@ -13,7 +13,7 @@
   tags: [redis]
 
 - include_tasks: install.yml
-  #when: "redis_version_test.stdout != redis_version"
+  when: "redis_version_test.stdout != redis_version"
   tags: [redis]
 
 

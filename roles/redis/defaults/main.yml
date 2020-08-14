@@ -37,3 +37,12 @@ redis_default_configuration:
 
 # Custom user settings to be applied to /usr/local/redis/redis.conf file. Please refer to README.md in this role
 redis_user_configuration: []
+
+# Value for maximum backlog in kernel net.core.somaxconn
+redis_net_core_somaxconn: "1024"
+
+# Value for overcommit_memory
+redis_overcommit_memory: "1"
+
+# Whether to disable or enable transparent huge pages on system boot
+redis_disable_transparent_huge_pages: yes

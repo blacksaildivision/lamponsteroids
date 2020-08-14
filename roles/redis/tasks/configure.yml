@@ -71,3 +71,44 @@
     group: root
     mode: 0644
   tags: [redis]
+
+
+
+# Tune kernel variables and disable Transparent Huge Pages
+#
+- name: Set sysctl settings for somaxconn
+  sysctl:
+    name: net.core.somaxconn
+    reload: yes
+    value: "{{ redis_net_core_somaxconn }}"
+    sysctl_file: /etc/sysctl.d/00-redis.conf
+  notify: restart redis
+  tags: [redis]
+
+- name: Set sysctl settings for overcommit_memory
+  sysctl:
+    name: vm.overcommit_memory
+    reload: yes
+    value: "{{ redis_overcommit_memory }}"
+    sysctl_file: /etc/sysctl.d/00-redis.conf
+  notify: restart redis
+  tags: [redis]
+
+- name: Setup script for disabling Transparent Huge Pages
+  template:
+    src: disable-transparent-huge-pages.service.j2
+    dest: /etc/systemd/system/disable-transparent-huge-pages.service
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart redis
+  when: "redis_disable_transparent_huge_pages == true"
+  tags: [redis]
+
+- name: Start and enable script for disabling Transparent Huge Pages
+  service:
+    name: disable-transparent-huge-pages
+    state: started
+    enabled: yes
+  when: "redis_disable_transparent_huge_pages == true"
+  tags: [redis]
