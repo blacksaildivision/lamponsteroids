@@ -1,23 +1,95 @@
-# Set Redis port
+# Configure /usr/local/redis/redis.conf file
 #
-- name: Set redis port
+- name: Merge default and user config
+  set_fact:
+    redis_configuration: "{{ redis_default_configuration | combine(redis_user_configuration) }}"
+  tags: [redis]
+
+- name: Create directory for redis database and log files
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: "2755"
+    owner: redis
+    group: redis
+  with_items:
+    - "{{ redis_database_dir }}"
+    - "{{ redis_logs_dir }}"
+  tags: [redis]
+
+- name: Configure /usr/local/redis/redis.conf file
   lineinfile:
-    dest: "{{ redis_conf_path }}"
-    line: "port {{ redis_port }}"
-    state: present
-    regexp: '^#?port'
+    path: /usr/local/redis/redis.conf
+    line: "{{ item.key }} {{ item.value }}"
+    regexp: "^#?{{ item.key }}"
+  with_dict: "{{ redis_configuration }}"
   notify: restart redis
-  tags: [redis, configure]
+  tags: [redis]
 
 
 
-# Set path to Redis PID file
+# Create Redis systemctl entry
+# It will allow Redis to be manage by systemctl (ie. sudo systemctl start redis).
 #
-- name: Set redis PID path
-  lineinfile:
-    dest: "{{ redis_conf_path }}"
-    line: "pidfile {{ redis_pid_file_path }}"
-    state: present
-    regexp: '^#?pidfile'
+- name: Add systemd entry for Redis
+  template:
+    src: redis.service.j2
+    dest: /etc/systemd/system/redis.service
+    owner: root
+    group: root
+    mode: 0644
+  tags: [redis]
+
+
+
+# Add Redis executables to PATH
+#
+- name: Add Redis executables to PATH
+  template:
+    src: redis.sh.j2
+    dest: /etc/profile.d/redis.sh
+    owner: root
+    group: root
+    mode: 0644
+  tags: [redis]
+
+
+
+# Tune kernel variables and disable Transparent Huge Pages
+#
+- name: Set sysctl settings for somaxconn
+  sysctl:
+    name: net.core.somaxconn
+    reload: yes
+    value: "{{ redis_net_core_somaxconn }}"
+    sysctl_file: /etc/sysctl.d/00-redis.conf
   notify: restart redis
-  tags: [redis, configure]
+  tags: [redis]
+
+- name: Set sysctl settings for overcommit_memory
+  sysctl:
+    name: vm.overcommit_memory
+    reload: yes
+    value: "{{ redis_overcommit_memory }}"
+    sysctl_file: /etc/sysctl.d/00-redis.conf
+  notify: restart redis
+  tags: [redis]
+
+- name: Setup script for disabling Transparent Huge Pages
+  template:
+    src: disable-transparent-huge-pages.service.j2
+    dest: /etc/systemd/system/disable-transparent-huge-pages.service
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart redis
+  when: "redis_disable_transparent_huge_pages == true"
+  tags: [redis]
+
+- name: Start and enable script for disabling Transparent Huge Pages
+  service:
+    name: disable-transparent-huge-pages
+    state: started
+    enabled: yes
+  when: "redis_disable_transparent_huge_pages == true"
+  tags: [redis]

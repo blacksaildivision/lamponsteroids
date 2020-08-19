@@ -1,0 +1,13 @@
+# This file is managed by Ansible
+[Unit]
+Description=Disable Transparent Huge Pages (THP)
+DefaultDependencies=no
+After=sysinit.target local-fs.target
+Before=redis.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c "echo 'never' > /sys/kernel/mm/transparent_hugepage/enabled && echo 'never' > /sys/kernel/mm/transparent_hugepage/defrag"
+
+[Install]
+WantedBy=basic.target

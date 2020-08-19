@@ -10,4 +10,5 @@ Each package have it's own release cycle. Here is the list of URLs that we check
 * [PHP](https://github.com/php/php-src/releases) 7.4.7
 * [MySQL](https://dev.mysql.com/downloads/mysql/) 8.0.21
 * [AWS CLI](https://github.com/aws/aws-cli/releases) 2.0.28
+* [Redis](https://redis.io/download) 6.0.6
 * [HTTPD](https://github.com/apache/httpd/releases) 2.4.33

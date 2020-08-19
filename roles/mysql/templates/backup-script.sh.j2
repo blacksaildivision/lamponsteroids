@@ -25,7 +25,7 @@ fi
 
 if [ "$uploadToS3" = true ] ; then
     echo "Uploading to S3 bucket..."
-    aws s3 cp --storage-class STANDARD_IA "$backupFilePath" s3://"$s3BucketName"
+    /usr/local/bin/aws s3 cp --storage-class STANDARD_IA "$backupFilePath" s3://"$s3BucketName"
 fi
 
 if [ "$backupsRotate" = true ] ; then

@@ -1,45 +1,51 @@
-####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
+# Redis version to be installed
+redis_version: "6.0.6"
 
-# Should this role use install tasks for compiling redis?
-redis_manage_installation: yes
-
-# Should this role use configure tasks for redis configuration?
-redis_manage_configuration: yes
-
-
-
-
-
-####### INSTALL TASKS CONFIGURATION #######
-
-# Version of redis that should be present in the system
-redis_version: "4.0.1"
+# Location where redis should be installed
+redis_install_path: /usr/local/redis
 
 # Location of files for redis sources
-redis_sources_location: /usr/src
+redis_sources_path: /usr/src
 
-# User that will build redis. Please never use root account for compiling software. It can lead to serious security issues
+# User that will build redis from sources
 redis_build_user: developer
 
-# Group of the build user.
+# Group of the build user
 redis_build_group: developer
 
-# Remove downloaded sources after installation
-redis_cleanup_after_install: yes
+# Where redis should store database files
+redis_database_dir: /var/lib/redis
 
-# Redis config directory
-redis_config_directory: /etc/redis
+# Directory where Redis should store logs
+redis_logs_dir: /usr/local/redis/logs
 
+# IP address for Redis
+redis_bind: "127.0.0.1"
 
+# List of default secure config options for /usr/local/redis/redis.conf file
+redis_default_configuration:
+  bind: "{{ redis_bind }}"
+  port: "0"
+  tls-port: "6379"
+  daemonize: "no"
+  supervised: "systemd"
+  loglevel: "notice"
+  logfile: "{{ redis_logs_dir }}/redis.log"
+  requirepass: "a-rgU!Uf3H}ktBiizEVKA]yM^qDCUW3Un#iL_3A&tpUx=>Zk"
+  dir: "{{ redis_database_dir }}"
+  tls-cert-file: "{{ redis_install_path }}/tls/redis.crt"
+  tls-key-file: "{{ redis_install_path }}/tls/redis.key"
+  tls-ca-cert-file: "{{ redis_install_path }}/tls/ca.crt"
+  tls-dh-params-file: "{{ redis_install_path }}/tls/redis.dh"
 
+# Custom user settings to be applied to /usr/local/redis/redis.conf file. Please refer to README.md in this role
+redis_user_configuration: []
 
-####### CONFIGURE TASKS CONFIGURATION #######
+# Value for maximum backlog in kernel net.core.somaxconn
+redis_net_core_somaxconn: "1024"
 
-# redis.conf path
-redis_conf_path: "{{ redis_config_directory }}/redis.conf"
+# Value for overcommit_memory
+redis_overcommit_memory: "1"
 
-# redis PID file path
-redis_pid_file_path: "/var/run/redis.pid"
-
-# Redis port
-redis_port: 6379
+# Whether to disable or enable transparent huge pages on system boot
+redis_disable_transparent_huge_pages: yes
