@@ -64,6 +64,8 @@ Included roles
 
 **awscli** - Install and configure AWS CLI command line tool (2.0.28)
 
+**redis** - Install and configure Redis with TLS support (6.0.6)
+
 **centos** - Takes care of system settings. Set up firewall based on iptables. Disable Transparent Huge Pages.
 You can setup logrotate scripts with this role as well.
 
@@ -76,8 +78,6 @@ You can setup logrotate scripts with this role as well.
 **mongodb** - Install and configure MongoDB (3.4.7) with authentication
 
 **letsencrypt** - Install Certbot and obtain certificates from Let's Encrypt
-
-**redis** - Install and configure latest version of redis (4.0.1)
 
 Changelog
 ---------

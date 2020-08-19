@@ -1,22 +1,3 @@
-# Make sure that dedicated redis daemon user and group exists
-#
-- name: Create dedicated redis group
-  group:
-    name: redis
-    state: present
-  tags: [redis]
-
-- name: Create dedicated redis user
-  user:
-    name: redis
-    createhome: no
-    group: redis
-    state: present
-    shell: /sbin/nologin
-  tags: [redis]
-
-
-
 # Configure /usr/local/redis/redis.conf file
 #
 - name: Merge default and user config

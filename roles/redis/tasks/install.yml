@@ -81,6 +81,25 @@
 
 
 
+# Make sure that dedicated redis daemon user and group exists
+#
+- name: Create dedicated redis group
+  group:
+    name: redis
+    state: present
+  tags: [redis]
+
+- name: Create dedicated redis user
+  user:
+    name: redis
+    createhome: no
+    group: redis
+    state: present
+    shell: /sbin/nologin
+  tags: [redis]
+
+
+
 # Generate and copy SSL certificates for TLS connection
 #
 - name: Generate SSL certificates

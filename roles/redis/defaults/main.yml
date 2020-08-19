@@ -19,9 +19,12 @@ redis_database_dir: /var/lib/redis
 # Directory where Redis should store logs
 redis_logs_dir: /usr/local/redis/logs
 
+# IP address for Redis
+redis_bind: "127.0.0.1"
+
 # List of default secure config options for /usr/local/redis/redis.conf file
 redis_default_configuration:
-  bind: "127.0.0.1"
+  bind: "{{ redis_bind }}"
   port: "0"
   tls-port: "6379"
   daemonize: "no"

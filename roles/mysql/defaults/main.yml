@@ -23,6 +23,8 @@ mysql_default_configuration:
   tls_version: "TLSv1.3"
   require_secure_transport: "1"
   bind-address: "0.0.0.0"
+  innodb_buffer_pool_size: "128M"
+  innodb_log_file_size: "48M"
 
 # Custom user settings to be applied to {{ mysql_config_file }} file. Please refer to README.md in this role how to use it
 mysql_user_configuration: []
