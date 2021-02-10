@@ -52,7 +52,7 @@ Included roles
 
 **openssl** - Compile OpenSSL from source (1.1.1i)
 
-**git** - Compile and install Git from source (2.27.0) 
+**git** - Compile and install Git from source (2.30.1) 
 
 **nginx** - Compile, install and configure nginx from source (1.19.0)
 
