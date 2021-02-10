@@ -48,7 +48,7 @@
     name: dnf-automatic-download.timer
     state: started
     enabled: yes
-  tags: [dnf]
+  tags: [dnf, skip-on-local]
 
 
 
@@ -120,6 +120,6 @@
   tags: [dnf]
 
 - debug:
-    msg: "List of packages available for upgrade: {{ dnf_not_upgraded.results | map(attribute='name') | join(', ') }}"
+    msg: "List of packages available for upgrade: {{ dnf_not_upgraded.results | map(attribute='name') | unique | join(', ') }}"
   when: "dnf_not_upgraded.results | length > 0"
   tags: [dnf]
