@@ -64,7 +64,7 @@ Included roles
 
 **awscli** - Install and configure AWS CLI command line tool (2.1.25)
 
-**redis** - Install and configure Redis with TLS support (6.0.6)
+**redis** - Install and configure Redis with TLS support (6.0.10)
 
 **centos** - Takes care of system settings. Set up firewall based on iptables. Disable Transparent Huge Pages.
 You can setup logrotate scripts with this role as well.
