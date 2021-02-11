@@ -6,7 +6,7 @@ Each package have it's own release cycle. Here is the list of URLs that we check
 * [CentOS](https://wiki.centos.org/Manuals/ReleaseNotes) 8.3.2011
 * [OpenSSL](https://github.com/openssl/openssl/releases) 1.1.1i
 * [Git](https://github.com/git/git/releases) 2.30.1
-* [nginx](https://nginx.org/en/download.html) 1.19.0
+* [nginx](https://nginx.org/en/download.html) 1.19.6
 * [PHP](https://github.com/php/php-src/releases) 7.4.7
 * [MySQL](https://dev.mysql.com/downloads/mysql/) 8.0.21
 * [AWS CLI](https://github.com/aws/aws-cli/releases) 2.0.28
