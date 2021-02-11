@@ -1,5 +1,5 @@
 # Version of AWS CLI to install
-awscli_version: 2.0.28
+awscli_version: 2.1.25
 
 # Where to download AWS CLI zip file
 awscli_zip_file_location: /usr/src
