@@ -22,7 +22,7 @@
     name: mysqld
     state: started
     enabled: yes
-  tags: [mysql]
+  tags: [mysql, local]
 
 
 

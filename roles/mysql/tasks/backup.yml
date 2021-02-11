@@ -62,4 +62,4 @@
     job: "bash {{ item.value.backup_directory }}/{{ item.key }}-backup.sh >> {{ item.value.backup_directory }}/{{ item.key }}-backup.log 2>&1"
   with_items: "{{ mysql_backup_databases }}"
   when: "mysql_backup_databases is defined"
-  tags: [mysql]
+  tags: [mysql, local]
