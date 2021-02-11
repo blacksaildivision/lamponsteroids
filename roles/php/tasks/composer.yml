@@ -16,4 +16,4 @@
     name: composer update
     special_time: weekly
     job: "{{ php_install_path }}/bin/php /usr/local/bin/composer self-update"
-  tags: [php]
+  tags: [php, local]

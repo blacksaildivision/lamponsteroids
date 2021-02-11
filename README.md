@@ -56,7 +56,7 @@ Included roles
 
 **nginx** - Compile, install and configure nginx from source (1.19.6)
 
-**php** - Compile, install and configure PHP and tools (7.4.7)
+**php** - Compile, install and configure PHP and tools (8.0.2)
 
 **firewalld** - Setup firewalld as base firewall
 
