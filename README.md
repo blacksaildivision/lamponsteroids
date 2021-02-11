@@ -66,12 +66,12 @@ Included roles
 
 **redis** - Install and configure Redis with TLS support (6.0.10)
 
+**nodejs** - Install Node.js and NPM (15.8.0)
+
 **centos** - Takes care of system settings. Set up firewall based on iptables. Disable Transparent Huge Pages.
 You can setup logrotate scripts with this role as well.
 
 **httpd** - Compile and configure Apache httpd from source with OpenSSL (2.4.33)
-
-**nodejs** - Install latest version of Node.js (8.3.0) and NPM
 
 **datadog** - Install and configure DataDog agent with multiple integrations.
 

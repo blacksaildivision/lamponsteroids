@@ -1,30 +1,20 @@
-# Make sure that libselinux-python is installed (required for Ansible templates)
-#
-- name: Make sure that libselinux-python is installed
-  yum:
-    name: libselinux-python
-    state: latest
-  tags: [nodejs, install]
-
-
-
 # Node.js has it's own repository. In order to have it available we need to add it to Yum repositories
 #
 - name: Make sure that Node.js repository is available
   template:
-    src: nodesource-el7.repo.j2
-    dest: /etc/yum.repos.d/nodejs.repo
+    src: nodesource-el8.repo.j2
+    dest: /etc/yum.repos.d/nodesource-el8.repo
     owner: root
     group: root
     mode: 0644
-  tags: [nodejs, install]
+  tags: [nodejs]
 
 
 
 # Install Node.js and NPM
 #
 - name: Install Node.js and NPM
-  yum:
+  dnf:
     name: "nodejs-{{ nodejs_version }}"
-    state: present
-  tags: [nodejs, install]
+    state: latest
+  tags: [nodejs]

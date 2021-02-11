@@ -18,7 +18,7 @@
 
 
 
-# Install global NPM packages like gulp, grunt etc
+# Install global NPM packages like gulp, grunt, forever, pm2 etc
 #
 - name: Install global NPM packages
   npm:
