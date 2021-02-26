@@ -31,4 +31,4 @@
     name: redis
     state: started
     enabled: yes
-  tags: [redis]
+  tags: [redis, local]

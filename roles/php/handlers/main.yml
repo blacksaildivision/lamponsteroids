@@ -2,3 +2,4 @@
   service:
     name: php-fpm
     state: restarted
+  tags: [local]

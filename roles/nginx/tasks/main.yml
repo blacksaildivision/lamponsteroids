@@ -31,4 +31,4 @@
     name: nginx
     state: started
     enabled: yes
-  tags: [nginx, healthcheck]
+  tags: [nginx, healthcheck, local]

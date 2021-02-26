@@ -2,3 +2,4 @@
   service:
     name: nginx
     state: restarted
+    tags: [local]

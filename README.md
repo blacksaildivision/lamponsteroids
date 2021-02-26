@@ -50,28 +50,28 @@ Included roles
 
 **ntp** - Takes care of system timezone and NTP server. It uses Chrony for using NTP.
 
-**openssl** - Compile OpenSSL from source (1.1.1g)
+**openssl** - Compile OpenSSL from source (1.1.1i)
 
-**git** - Compile and install Git from source (2.27.0) 
+**git** - Compile and install Git from source (2.30.1) 
 
-**nginx** - Compile, install and configure nginx from source (1.19.0)
+**nginx** - Compile, install and configure nginx from source (1.19.6)
 
-**php** - Compile, install and configure PHP and tools (7.4.7)
+**php** - Compile, install and configure PHP and tools (8.0.2)
 
 **firewalld** - Setup firewalld as base firewall
 
-**mysql** - Install and configure MySQL community server (8.0.21). Create databases and users. Install MySQLTuner and setup backups.
+**mysql** - Install and configure MySQL community server (8.0.23). Create databases and users. Install MySQLTuner and setup backups.
 
-**awscli** - Install and configure AWS CLI command line tool (2.0.28)
+**awscli** - Install and configure AWS CLI command line tool (2.1.25)
 
-**redis** - Install and configure Redis with TLS support (6.0.6)
+**redis** - Install and configure Redis with TLS support (6.0.10)
+
+**nodejs** - Install Node.js and NPM (15.9.0)
 
 **centos** - Takes care of system settings. Set up firewall based on iptables. Disable Transparent Huge Pages.
 You can setup logrotate scripts with this role as well.
 
 **httpd** - Compile and configure Apache httpd from source with OpenSSL (2.4.33)
-
-**nodejs** - Install latest version of Node.js (8.3.0) and NPM
 
 **datadog** - Install and configure DataDog agent with multiple integrations.
 
