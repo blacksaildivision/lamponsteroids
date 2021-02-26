@@ -15,5 +15,5 @@
   cron:
     name: composer update
     special_time: weekly
-    job: "{{ php_install_path }}/bin/php /usr/local/bin/composer self-update"
+    job: "{{ php_install_path }}/bin/php /usr/local/bin/composer self-update --2"
   tags: [php, local]

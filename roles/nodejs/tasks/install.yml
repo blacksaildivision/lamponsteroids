@@ -11,10 +11,21 @@
 
 
 
+# Import RPM key
+#
+- name: Import NodeSource RPM key
+  rpm_key:
+    key: https://rpm.nodesource.com/pub/el/NODESOURCE-GPG-SIGNING-KEY-EL
+    state: present
+  tags: [nodejs]
+
+
+
 # Install Node.js and NPM
 #
 - name: Install Node.js and NPM
   dnf:
     name: "nodejs-{{ nodejs_version }}"
     state: latest
+    disablerepo: appstream
   tags: [nodejs]

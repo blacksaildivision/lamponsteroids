@@ -24,6 +24,6 @@
   npm:
     name: "{{ item }}"
     global: yes
-    state: present
+    state: latest
   with_items: "{{ nodejs_global_packages }}"
   tags: [nodejs]

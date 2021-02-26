@@ -66,7 +66,7 @@ Included roles
 
 **redis** - Install and configure Redis with TLS support (6.0.10)
 
-**nodejs** - Install Node.js and NPM (15.8.0)
+**nodejs** - Install Node.js and NPM (15.9.0)
 
 **centos** - Takes care of system settings. Set up firewall based on iptables. Disable Transparent Huge Pages.
 You can setup logrotate scripts with this role as well.

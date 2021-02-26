@@ -11,5 +11,5 @@ Each package have it's own release cycle. Here is the list of URLs that we check
 * [MySQL](https://dev.mysql.com/downloads/mysql/) 8.0.23
 * [AWS CLI](https://github.com/aws/aws-cli/releases) 2.1.25
 * [Redis](https://redis.io/download) 6.0.10
-* [NodeJs](https://nodejs.org/en/) 15.8.0
+* [NodeJs](https://nodejs.org/en/) 15.9.0
 * [HTTPD](https://github.com/apache/httpd/releases) 2.4.33
