@@ -10,6 +10,9 @@ firewalld_all_incoming_traffic_services:
 # List of services that should be available from whitelisted IP addresses
 firewalld_internal_zone_services: []
 
+# List of all ports that should be available from whitelisted IP addresses
+firewalld_internal_zone_ports: []
+
 # List of IP addresses that should have access to given services
 firewalld_internal_zone_sources: []
 

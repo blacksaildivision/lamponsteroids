@@ -103,7 +103,7 @@
 
 
 # Internal zone is good candidate to allow traffic only from whitelisted IP addresses
-# This part specifies list of available services and sources (IP addresses) that will have access to them
+# This part specifies list of available services or ports and sources (IP addresses) that will have access to them
 #
 - name: Add services that can be accessed from whitelisted IP addresses to internal zone
   firewalld:
@@ -134,6 +134,38 @@
     state: disabled
     zone: internal
   loop: "{{ firewalld_internal_zone_enabled_services | difference(firewalld_internal_zone_services) }}"
+  notify: reload firewalld
+  tags: [firewalld]
+
+- name: Add ports that can be accessed from whitelisted IP addresses to internal zone
+  firewalld:
+    immediate: yes
+    permanent: yes
+    port: "{{ item }}"
+    state: enabled
+    zone: internal
+  loop: "{{ firewalld_internal_zone_ports }}"
+  notify: reload firewalld
+  tags: [firewalld]
+
+- name: Get all enabled ports for internal zone
+  shell: "/usr/bin/firewall-cmd --zone=internal --list-ports"
+  register: firewalld_internal_zone_ports_result
+  changed_when: false
+  tags: [firewalld]
+
+- set_fact:
+    firewalld_internal_zone_enabled_ports: "{{ firewalld_internal_zone_ports_result.stdout.split() }}"
+  tags: [firewalld]
+
+- name: Remove unused ports from internal zone
+  firewalld:
+    immediate: yes
+    permanent: yes
+    port: "{{ item }}"
+    state: disabled
+    zone: internal
+  loop: "{{ firewalld_internal_zone_enabled_ports | difference(firewalld_internal_zone_ports) }}"
   notify: reload firewalld
   tags: [firewalld]
 
