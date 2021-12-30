@@ -3,8 +3,6 @@ Current Versions
 
 Each package have it's own release cycle. Here is the list of URLs that we check for new versions:
 
-* [PHP](https://github.com/php/php-src/tags) 8.0.9
-* [MySQL](https://dev.mysql.com/downloads/mysql/) 8.0.26
 * [AWS CLI](https://github.com/aws/aws-cli/releases) 2.2.31
 * [Redis](https://redis.io/download) 6.2.5
 * [NodeJs](https://nodejs.org/en/) 16.7.0
