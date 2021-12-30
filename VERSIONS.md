@@ -3,8 +3,6 @@ Current Versions
 
 Each package have it's own release cycle. Here is the list of URLs that we check for new versions:
 
-* [CentOS](https://wiki.centos.org/Manuals/ReleaseNotes) 8.4.2105
-* [OpenSSL](https://github.com/openssl/openssl/releases) 1.1.1k
 * [Git](https://github.com/git/git/releases) 2.33.0
 * [nginx](https://nginx.org/en/download.html) 1.21.1
 * [PHP](https://github.com/php/php-src/releases) 8.0.9

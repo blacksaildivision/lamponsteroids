@@ -9,37 +9,38 @@
 
 
 # Download and unpack sources
-# It's the best to download them from GitHub releases:
-# https://github.com/openssl/openssl/releases
+# The source code will be downloaded from the OpenSSL website
+# https://www.openssl.org/source/
 #
 - name: Download required source files
   get_url:
     dest: "{{ openssl_sources_location }}"
-    url: "https://github.com/openssl/openssl/archive/OpenSSL_{{ openssl_version | replace( '.', '_' ) }}.tar.gz"
+    url: "https://www.openssl.org/source/openssl-{{ openssl_version }}.tar.gz"
   tags: [openssl]
 
 - name: Unpack downloaded OpenSSL sources
   unarchive:
-    src: "{{ openssl_sources_location }}/openssl-OpenSSL_{{ openssl_version | replace( '.', '_' ) }}.tar.gz"
+    src: "{{ openssl_sources_location }}/openssl-{{ openssl_version }}.tar.gz"
     dest: "{{ openssl_sources_location }}"
     owner: "{{ openssl_build_user }}"
     group: "{{ openssl_build_group }}"
     copy: no
-    creates: "{{ openssl_sources_location }}/openssl-OpenSSL_{{ openssl_version | replace( '.', '_' ) }}"
+    creates: "{{ openssl_sources_location }}/openssl-{{ openssl_version }}"
   tags: [openssl]
 
 
 
-# Compile and install OpenSSL
+# Compile and install OpenSSL. Create symbolic links for libraries.
 # It will be compiled by using different user than root.
 # Install operation  must be executed as sudo user
+# Symbolic links for
 #
 - name: Compile OpenSSL
   command: "{{ item }}"
   args:
-    chdir: "{{ openssl_sources_location }}/openssl-OpenSSL_{{ openssl_version | replace( '.', '_' ) }}"
+    chdir: "{{ openssl_sources_location }}/openssl-{{ openssl_version }}"
   with_items:
-    - "./config --prefix={{ openssl_install_path }} --openssldir={{ openssl_install_path }} shared zlib"
+    - "./Configure --prefix={{ openssl_install_path }} --openssldir={{ openssl_install_path }}"
     - make
     - make test
   become: true
@@ -49,7 +50,19 @@
 - name: Install compiled OpenSSL
   command: make install
   args:
-    chdir: "{{ openssl_sources_location }}/openssl-OpenSSL_{{ openssl_version | replace( '.', '_' ) }}"
+    chdir: "{{ openssl_sources_location }}/openssl-{{ openssl_version }}"
+  tags: [openssl]
+
+- name: Create symbolic links for OpenSSL libraries
+  file:
+    src: "{{ openssl_install_path }}/lib64/{{ item }}"
+    path: "/usr/lib64/{{ item }}"
+    owner: root
+    group: root
+    state: link
+  with_items:
+    - libssl.so.3
+    - libcrypto.so.3
   tags: [openssl]
 
 
@@ -61,8 +74,8 @@
     path: "{{ item }}"
     state: absent
   with_items:
-    - "{{ openssl_sources_location }}/openssl-OpenSSL_{{ openssl_version | replace( '.', '_' ) }}.tar.gz"
-    - "{{ openssl_sources_location }}/openssl-OpenSSL_{{ openssl_version | replace( '.', '_' ) }}"
+    - "{{ openssl_sources_location }}/openssl-{{ openssl_version }}.tar.gz"
+    - "{{ openssl_sources_location }}/openssl-{{ openssl_version }}"
   tags: [openssl]
 
 

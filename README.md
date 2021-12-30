@@ -1,14 +1,14 @@
 LAMP on Steroids
 ================
 
-Setup your server quickly with LAMP on Steroids. This repository is dedicated to `CentOS 7/8` system.
-Main goal is to setup working LAMP server with latest versions of available tools. 
-Secondary goal is to keep your server secure and up to date. 
+Setup your server quickly with LAMP on Steroids. This repository is dedicated to the `CentOS 7/8` system.
+The main goal is to set up a working LAMP server with the latest versions of available tools.
+The secondary goal is to keep your server secure and up to date.
 
 How to use?
 -----------
 
-Make sure that you have Ansible installed. Minimal version required for the included roles and playbooks is `2.0`.
+Make sure that you have Ansible installed. The minimal version required for the included roles and playbooks is `2.9`.
 
 First create your Inventory file. You can work entirely in this repository. Name your Inventory file `hosts` (this file is in .gitignore) and setup all required connections there.
 
@@ -42,15 +42,15 @@ ansible-playbook -i hosts playbooks/YOUR_PLAYBOOK_FILE.yml -K
 
 Included roles
 --------------
-**dnf** - Handles package management, security features and package installation optimisations. 
+**dnf** - Handle [CentOS](https://wiki.centos.org/Manuals/ReleaseNotes) package management, security features, and package installation optimizations.
 
-**users** - Handle users/groups management and enables sudo. 
+**users** - Handle users/groups management and enables sudo.
 
 **ssh** - SSHD hardening.
 
-**ntp** - Takes care of system timezone and NTP server. It uses Chrony for using NTP.
+**ntp** - Take care of system timezone and NTP server. It uses Chrony for using NTP.
 
-**openssl** - Compile OpenSSL from source (1.1.1k)
+**openssl** - Compile [OpenSSL](https://github.com/openssl/openssl/tags) from source (3.0.1)
 
 **git** - Compile and install Git from source (2.33.0) 
 
