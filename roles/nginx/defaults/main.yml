@@ -1,5 +1,5 @@
 # Version of nginx that should be installed
-nginx_version: "1.21.1"
+nginx_version: "1.21.5"
 
 # Path where nginx will be installed. NO trailing slash at the end!
 nginx_install_path: /usr/local/nginx
@@ -13,11 +13,11 @@ nginx_build_user: developer
 # Group of the build user
 nginx_build_group: developer
 
-# Version of PCRE that will be compiled with nginx
-nginx_pcre_version: "8.45"
+# Version of PCRE2 that will be compiled with nginx
+nginx_pcre2_version: "10.39"
 
 # Version of OpenSSL that will be compiled with nginx
-nginx_openssl_version: "1.1.1k"
+nginx_openssl_version: "3.0.1"
 
 # Version of Zlib that will be compiled with nginx
 nginx_zlib_version: "1.2.11"
@@ -25,8 +25,8 @@ nginx_zlib_version: "1.2.11"
 # List of configuration options for nginx
 nginx_configure_options:
   - "--prefix={{ nginx_install_path }}"
-  - "--with-pcre=../pcre-{{ nginx_pcre_version }}"
-  - "--with-openssl=../openssl-OpenSSL_{{ nginx_openssl_version | replace( '.', '_' ) }}"
+  - "--with-pcre=../pcre2-{{ nginx_pcre2_version }}"
+  - "--with-openssl=../openssl-{{ nginx_openssl_version }}"
   - "--with-zlib=../zlib-{{ nginx_zlib_version }}"
   - --add-module=../ngx_brotli
   - --with-threads

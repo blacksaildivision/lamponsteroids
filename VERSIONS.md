@@ -3,7 +3,6 @@ Current Versions
 
 Each package have it's own release cycle. Here is the list of URLs that we check for new versions:
 
-* [nginx](https://nginx.org/en/download.html) 1.21.1
 * [PHP](https://github.com/php/php-src/releases) 8.0.9
 * [MySQL](https://dev.mysql.com/downloads/mysql/) 8.0.26
 * [AWS CLI](https://github.com/aws/aws-cli/releases) 2.2.31
