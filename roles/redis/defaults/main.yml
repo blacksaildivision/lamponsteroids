@@ -1,5 +1,5 @@
 # Redis version to be installed
-redis_version: "6.2.5"
+redis_version: "6.2.6"
 
 # Location where redis should be installed
 redis_install_path: /usr/local/redis
@@ -17,7 +17,7 @@ redis_build_group: developer
 redis_database_dir: /var/lib/redis
 
 # Directory where Redis should store logs
-redis_logs_dir: /usr/local/redis/logs
+redis_logs_dir: "{{ redis_install_path }}/logs"
 
 # IP address for Redis
 redis_bind: "127.0.0.1"

@@ -64,7 +64,7 @@ Included roles
 
 **awscli** - Install and configure [AWS CLI](https://github.com/aws/aws-cli/tags) command line tool (2.4.7)
 
-**redis** - Install and configure Redis with TLS support (6.2.5)
+**redis** - Install and configure [Redis](https://redis.io/download) with TLS support (6.2.6)
 
 **nodejs** - Install Node.js and NPM (16.7.0)
 
