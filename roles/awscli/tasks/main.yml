@@ -10,10 +10,9 @@
   register: awscli_version_test
   tags: [awscli]
 
-- include: install.yml
+- include_tasks: install.yml
   when: "awscli_version_test.stdout != awscli_version"
-
-
+  tags: [awscli]
 
 # Import remaining tasks
 #

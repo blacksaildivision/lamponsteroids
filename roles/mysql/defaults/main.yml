@@ -1,5 +1,5 @@
 # Version of MySQL that should be installed
-mysql_version: "8.0.26"
+mysql_version: "8.0.27"
 
 # MySQL root password
 mysql_root_password: "rKp#rX3EP?Y2JGug*q,s>F,)@Hbuf9KCH#Z8odF44!)vH7MmrwJ4"

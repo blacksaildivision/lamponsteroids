@@ -11,8 +11,8 @@
 # Download and unpack sources for nginx, PCRE, OpenSSL, Zlib and Brotli
 # Source code will be downloaded from following pages:
 # nginx -> https://nginx.org/en/download.html
-# PCRE -> https://ftp.pcre.org/pub/pcre/
-# OpenSSL -> https://github.com/openssl/openssl/releases
+# PCRE2 -> https://github.com/PhilipHazel/pcre2/releases
+# OpenSSL -> https://www.openssl.org/source/
 # Zlib -> https://www.zlib.net
 # Brotli -> https://github.com/google/ngx_brotli
 #
@@ -22,8 +22,8 @@
     url: "{{ item }}"
   with_items:
     - "https://nginx.org/download/nginx-{{ nginx_version }}.tar.gz"
-    - "https://ftp.pcre.org/pub/pcre/pcre-{{ nginx_pcre_version }}.tar.gz"
-    - "https://github.com/openssl/openssl/archive/OpenSSL_{{ nginx_openssl_version | replace( '.', '_' ) }}.tar.gz"
+    - "https://github.com/PhilipHazel/pcre2/releases/download/pcre2-{{ nginx_pcre2_version }}/pcre2-{{ nginx_pcre2_version }}.tar.gz"
+    - "https://www.openssl.org/source/openssl-{{ nginx_openssl_version }}.tar.gz"
     - "https://www.zlib.net/zlib-{{ nginx_zlib_version }}.tar.gz"
   tags: [nginx]
 
@@ -37,24 +37,24 @@
     creates: "{{ nginx_sources_path }}/nginx-{{ nginx_version }}"
   tags: [nginx]
 
-- name: Unpack downloaded PCRE source code
+- name: Unpack downloaded PCRE2 source code
   unarchive:
-    src: "{{ nginx_sources_path }}/pcre-{{ nginx_pcre_version }}.tar.gz"
+    src: "{{ nginx_sources_path }}/pcre2-{{ nginx_pcre2_version }}.tar.gz"
     dest: "{{ nginx_sources_path }}"
     owner: "{{ nginx_build_user }}"
     group: "{{ nginx_build_group }}"
     copy: no
-    creates: "{{ nginx_sources_path }}/pcre-{{ nginx_pcre_version }}"
+    creates: "{{ nginx_sources_path }}/pcre2-{{ nginx_pcre2_version }}"
   tags: [nginx]
 
 - name: Unpack downloaded OpenSSL sources
   unarchive:
-    src: "{{ nginx_sources_path }}/openssl-OpenSSL_{{ nginx_openssl_version | replace( '.', '_' ) }}.tar.gz"
+    src: "{{ nginx_sources_path }}/openssl-{{ nginx_openssl_version }}.tar.gz"
     dest: "{{ nginx_sources_path }}"
     owner: "{{ nginx_build_user }}"
     group: "{{ nginx_build_user }}"
     copy: no
-    creates: "{{ nginx_sources_path }}/openssl-OpenSSL_{{ nginx_openssl_version | replace( '.', '_' ) }}"
+    creates: "{{ nginx_sources_path }}/openssl-{{ nginx_openssl_version }}"
   tags: [nginx]
 
 - name: Unpack downloaded Zlib sources
@@ -107,10 +107,10 @@
   with_items:
     - "{{ nginx_sources_path }}/nginx-{{ nginx_version }}.tar.gz"
     - "{{ nginx_sources_path }}/nginx-{{ nginx_version }}"
-    - "{{ nginx_sources_path }}/pcre-{{ nginx_pcre_version }}.tar.gz"
-    - "{{ nginx_sources_path }}/pcre-{{ nginx_pcre_version }}"
-    - "{{ nginx_sources_path }}/openssl-OpenSSL_{{ nginx_openssl_version | replace( '.', '_' ) }}.tar.gz"
-    - "{{ nginx_sources_path }}/openssl-OpenSSL_{{ nginx_openssl_version | replace( '.', '_' ) }}"
+    - "{{ nginx_sources_path }}/pcre2-{{ nginx_pcre2_version }}.tar.gz"
+    - "{{ nginx_sources_path }}/pcre2-{{ nginx_pcre2_version }}"
+    - "{{ nginx_sources_path }}/openssl-{{ nginx_openssl_version }}.tar.gz"
+    - "{{ nginx_sources_path }}/openssl-{{ nginx_openssl_version }}"
     - "{{ nginx_sources_path }}/zlib-{{ nginx_zlib_version }}.tar.gz"
     - "{{ nginx_sources_path }}/zlib-{{ nginx_zlib_version }}"
     - "{{ nginx_sources_path }}/ngx_brotli"
