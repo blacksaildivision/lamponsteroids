@@ -15,7 +15,7 @@
 - name: Download Redis source files
   get_url:
     dest: "{{ redis_sources_path }}"
-    url: "http://download.redis.io/releases/redis-{{ redis_version }}.tar.gz"
+    url: "https://download.redis.io/releases/redis-{{ redis_version }}.tar.gz"
   tags: [redis]
 
 - name: Unpack downloaded Redis sources
