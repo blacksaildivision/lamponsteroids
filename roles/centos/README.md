@@ -1,5 +1,8 @@
-CentOS role
+CentOS role (Deprecated)
 ==========
+
+** THIS ROLE WILL BE REMOVED SOON **
+------------------------------------
 
 This role will install and configure CentOS to version 7.4
 There are multiple tasks and scenarios this role can do:
