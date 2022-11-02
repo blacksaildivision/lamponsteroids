@@ -42,7 +42,7 @@ ansible-playbook -i hosts playbooks/YOUR_PLAYBOOK_FILE.yml -K
 
 Included roles
 --------------
-**dnf** - Handle [CentOS](https://wiki.centos.org/Manuals/ReleaseNotes) package management, security features, and package installation optimizations.
+**dnf** - Handle [RockyLinux](https://rockylinux.org/news/) package management, security features, and package installation optimizations.
 
 **users** - Handle users/groups management and enables sudo.
 
@@ -62,7 +62,7 @@ Included roles
 
 **mysql** - Install and configure [MySQL](https://dev.mysql.com/downloads/mysql/) community server (8.0.27). Create databases and users. Install MySQLTuner and set up backups.
 
-**awscli** - Install and configure [AWS CLI](https://github.com/aws/aws-cli/tags) command line tool (2.4.7)
+**awscli** - Install and configure [AWS CLI](https://github.com/aws/aws-cli/tags) command line tool (2.8.7)
 
 **redis** - Install and configure [Redis](https://redis.io/download) with TLS support (6.2.6)
 
