@@ -60,7 +60,7 @@ Included roles
 
 **firewalld** - Setup firewalld as base firewall
 
-**mysql** - Install and configure [MySQL](https://dev.mysql.com/downloads/mysql/) community server (8.0.27). Create databases and users. Install MySQLTuner and set up backups.
+**mysql** - Install and configure [MySQL](https://dev.mysql.com/downloads/mysql/) community server (8.0.31). Create databases and users. Install MySQLTuner and set up backups.
 
 **awscli** - Install and configure [AWS CLI](https://github.com/aws/aws-cli/tags) command line tool (2.8.7)
 
