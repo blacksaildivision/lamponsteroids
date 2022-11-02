@@ -19,11 +19,11 @@ Here is the list of configurable variables for this role:
  
  - `nginx_build_group` group of the user for the build process. By default it's `developer`.
 
- - `nginx_pcre2_version` version of PCRE2 to download and compile with nginx. It will not override PCRE binaries on CentOS.
+ - `nginx_pcre2_version` version of PCRE2 to download and compile with nginx. It will not override PCRE binaries on RockyLinux.
  
- - `nginx_openssl_version` version of OpenSSL to download and compile with nginx. It will not override OpenSSL binaries on CentOS.
+ - `nginx_openssl_version` version of OpenSSL to download and compile with nginx. It will not override OpenSSL binaries on RockyLinux.
  
- - `nginx_zlib_version` version of Zlib to download and compile with nginx. It will not override Zlib binaries on CentOS.
+ - `nginx_zlib_version` version of Zlib to download and compile with nginx. It will not override Zlib binaries on RockyLinux.
  
  - `nginx_configure_options` list of arguments for `./configure` command.
  
