@@ -1,4 +1,4 @@
-OpenSSL role
+OpenSSL role (Deprecated)
 ============
 
 This role will compile OpenSSL from source on CentOS 8 server.
