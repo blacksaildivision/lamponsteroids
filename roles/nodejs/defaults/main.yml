@@ -1,5 +1,5 @@
 # Node.js version
-nodejs_version: "17.3.0"
+nodejs_version: "19.0.0"
 
 # Global packages (list of packages installed with -g option)
 nodejs_global_packages: []

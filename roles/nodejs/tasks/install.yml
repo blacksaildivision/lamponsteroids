@@ -2,8 +2,8 @@
 #
 - name: Make sure that Node.js repository is available
   template:
-    src: nodesource-el8.repo.j2
-    dest: /etc/yum.repos.d/nodesource-el8.repo
+    src: nodesource-el9.repo.j2
+    dest: /etc/yum.repos.d/nodesource-el9.repo
     owner: root
     group: root
     mode: 0644
