@@ -56,7 +56,7 @@ Included roles
 
 **nginx** - Compile, install and configure [nginx](https://nginx.org/en/download.html) from source (1.23.2)
 
-**php** - Compile, install and configure [PHP](https://github.com/php/php-src/tags) and tools (8.0.14)
+**php** - Compile, install and configure [PHP](https://github.com/php/php-src/tags) and tools (8.1.12)
 
 **firewalld** - Setup firewalld as base firewall
 
