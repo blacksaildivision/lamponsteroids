@@ -1,8 +1,7 @@
-# List of default secure config options for /etc/ssh/sshd_config file
+# List of default secure config options for /etc/ssh/sshd_config.d file
 ssh_sshd_default_config_options:
   PubkeyAuthentication: "yes"
   PasswordAuthentication : "no"
-  ChallengeResponseAuthentication: "no"
   GSSAPIAuthentication: "no"
   KerberosAuthentication: "no"
   PermitRootLogin: "no"
@@ -17,7 +16,7 @@ ssh_sshd_default_config_options:
   Ciphers: "chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr"
   MACs: "hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com"
 
-# Custom user settings to be applied to /etc/ssh/sshd_config file. Please refer to README.md in this role
+# Custom user settings to be applied to /etc/ssh/sshd_config.d file. Please refer to README.md in this role
 ssh_sshd_user_config_options: []
 
 # List of host keys to be active in /etc/ssh/sshd_config file
