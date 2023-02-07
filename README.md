@@ -52,7 +52,7 @@ Included roles
 
 **openssl** - Compile [OpenSSL](https://github.com/openssl/openssl/tags) from source (3.0.1)
 
-**git** - Compile and install [Git](https://github.com/git/git/tags) from source (2.38.1) 
+**git** - Compile and install [Git](https://github.com/git/git/tags) from source (2.39.1) 
 
 **nginx** - Compile, install and configure [nginx](https://nginx.org/en/download.html) from source (1.23.2)
 
