@@ -1,10 +1,17 @@
 # Install required packages for compiling PHP from source
 #
+- name: Install epel-release
+  dnf:
+    name: epel-release
+    state: latest
+  tags: [php]
+
 - name: Install required packages for compiling PHP
   dnf:
     name: [autoconf, gcc, gcc-c++, bison, re2c, libxml2-devel, openssl-devel, bzip2-devel, libcurl-devel, libpng-devel, libwebp-devel, libjpeg-turbo-devel, libicu-devel, oniguruma-devel, freetype-devel, libzip-devel]
     state: latest
     enablerepo: crb
+    update_cache: true
   tags: [php]
 
 
