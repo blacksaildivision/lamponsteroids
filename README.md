@@ -54,7 +54,7 @@ Included roles
 
 **git** - Compile and install [Git](https://github.com/git/git/tags) from source (2.39.1) 
 
-**nginx** - Compile, install and configure [nginx](https://nginx.org/en/download.html) from source (1.23.2)
+**nginx** - Compile, install and configure [nginx](https://nginx.org/en/download.html) from source (1.23.3)
 
 **php** - Compile, install and configure [PHP](https://github.com/php/php-src/tags) and tools (8.1.12)
 

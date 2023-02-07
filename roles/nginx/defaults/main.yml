@@ -1,5 +1,5 @@
 # Version of nginx that should be installed
-nginx_version: "1.23.2"
+nginx_version: "1.23.3"
 
 # Path where nginx will be installed. NO trailing slash at the end!
 nginx_install_path: /usr/local/nginx
@@ -14,7 +14,7 @@ nginx_build_user: developer
 nginx_build_group: developer
 
 # Version of PCRE2 that will be compiled with nginx
-nginx_pcre2_version: "10.40"
+nginx_pcre2_version: "10.42"
 
 # Version of OpenSSL that will be compiled with nginx
 nginx_openssl_version: "3.0.7"
