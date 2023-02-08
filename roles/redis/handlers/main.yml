@@ -2,4 +2,3 @@
   service:
     name: redis
     state: restarted
-  tags: [local]
