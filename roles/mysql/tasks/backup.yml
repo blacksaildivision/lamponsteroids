@@ -17,6 +17,7 @@
     host: "{{ mysql_root_host }}"
     state: present
     priv: "{{ mysql_backup_databases | map(attribute='key') |  map('regex_replace', '(.*)', '\\1.*:SELECT') | list | join('/') }}"
+    login_host: "{{ mysql_root_host }}"
   no_log: true
   when: "mysql_backup_databases is defined"
   tags: [mysql]
@@ -62,4 +63,4 @@
     job: "bash {{ item.value.backup_directory }}/{{ item.key }}-backup.sh >> {{ item.value.backup_directory }}/{{ item.key }}-backup.log 2>&1"
   with_items: "{{ mysql_backup_databases }}"
   when: "mysql_backup_databases is defined"
-  tags: [mysql, local]
+  tags: [mysql]

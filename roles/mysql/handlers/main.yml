@@ -2,4 +2,3 @@
   service:
     name: mysqld
     state: restarted
-  tags: [local]

@@ -48,7 +48,7 @@
     name: dnf-automatic-download.timer
     state: started
     enabled: yes
-  tags: [dnf, local]
+  tags: [dnf]
 
 
 

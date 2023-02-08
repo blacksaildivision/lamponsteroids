@@ -2,16 +2,17 @@
 # This task will be executed if MySQL is not installed or it's installed in different version
 #
 - name: Check if MySQL is installed in required version
-  shell: mysql --version | awk '{print $3}'
+  shell: mysqld --version | awk '{print $3}'
   args:
     warn: no
   ignore_errors: yes
   changed_when: false
   register: mysql_version_test
-  tags: [mysql]
+  tags: [ mysql ]
 
-- include: install.yml
+- include_tasks: install.yml
   when: "mysql_version_test.stdout != mysql_version"
+  tags: [ mysql ]
 
 
 
@@ -22,7 +23,7 @@
     name: mysqld
     state: started
     enabled: yes
-  tags: [mysql, local]
+  tags: [ mysql ]
 
 
 

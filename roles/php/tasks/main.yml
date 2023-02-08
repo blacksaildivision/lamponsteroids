@@ -34,4 +34,4 @@
     name: php-fpm
     state: started
     enabled: yes
-  tags: [php, healthcheck, local]
+  tags: [php, healthcheck]
