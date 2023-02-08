@@ -62,7 +62,7 @@ Included roles
 
 **mysql** - Install and configure [MySQL](https://dev.mysql.com/downloads/mysql/) community server (8.0.32). Create databases and users. Install MySQLTuner and set up backups.
 
-**awscli** - Install and configure [AWS CLI](https://github.com/aws/aws-cli/tags) command line tool (2.8.7)
+**awscli** - Install and configure [AWS CLI](https://github.com/aws/aws-cli/tags) command line tool (2.9.21)
 
 **redis** - Install and configure [Redis](https://redis.io/download) with TLS support (7.0.8)
 
