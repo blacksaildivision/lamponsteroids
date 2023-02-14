@@ -1,9 +1,9 @@
 LAMP on Steroids
 ================
 
-Setup your server quickly with LAMP on Steroids. This repository is dedicated to the `CentOS 7/8` system.
-The main goal is to set up a working LAMP server with the latest versions of available tools.
-The secondary goal is to keep your server secure and up to date.
+**LAMP On Steroids** contains a set of Ansible roles that help set up a modern RHEL web server. We test it out mainly on
+the `RockyLinux 9` system, but it should also work on `CentOS Stream 9` and other RHEL-based systems.
+The primary purpose is to set up a working and secure web server for PHP/Node.js applications.
 
 How to use?
 -----------
