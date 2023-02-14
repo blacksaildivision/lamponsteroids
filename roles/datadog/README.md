@@ -1,5 +1,8 @@
-Datadog role
+Datadog role (Deprecated)
 ============
+
+** THIS ROLE WILL BE REMOVED SOON **
+------------------------------------
 
 This role will install and configure Datadog agent
 

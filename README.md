@@ -1,9 +1,9 @@
 LAMP on Steroids
 ================
 
-Setup your server quickly with LAMP on Steroids. This repository is dedicated to the `CentOS 7/8` system.
-The main goal is to set up a working LAMP server with the latest versions of available tools.
-The secondary goal is to keep your server secure and up to date.
+**LAMP On Steroids** contains a set of Ansible roles that help set up a modern RHEL web server. We test it out mainly on
+the `RockyLinux 9` system, but it should also work on `CentOS Stream 9` and other RHEL-based systems.
+The primary purpose is to set up a working and secure web server for PHP/Node.js applications.
 
 How to use?
 -----------
@@ -42,7 +42,7 @@ ansible-playbook -i hosts playbooks/YOUR_PLAYBOOK_FILE.yml -K
 
 Included roles
 --------------
-**dnf** - Handle [CentOS](https://wiki.centos.org/Manuals/ReleaseNotes) package management, security features, and package installation optimizations.
+**dnf** - Handle [RockyLinux](https://rockylinux.org/news/) package management, security features, and package installation optimizations.
 
 **users** - Handle users/groups management and enables sudo.
 
@@ -52,21 +52,21 @@ Included roles
 
 **openssl** - Compile [OpenSSL](https://github.com/openssl/openssl/tags) from source (3.0.1)
 
-**git** - Compile and install [Git](https://github.com/git/git/tags) from source (2.34.1) 
+**git** - Compile and install [Git](https://github.com/git/git/tags) from source (2.39.1) 
 
-**nginx** - Compile, install and configure [nginx](https://nginx.org/en/download.html) from source (1.21.5)
+**nginx** - Compile, install and configure [nginx](https://nginx.org/en/download.html) from source (1.23.3)
 
-**php** - Compile, install and configure [PHP](https://github.com/php/php-src/tags) and tools (8.0.14)
+**php** - Compile, install and configure [PHP](https://github.com/php/php-src/tags) and tools (8.2.2)
 
 **firewalld** - Setup firewalld as base firewall
 
-**mysql** - Install and configure [MySQL](https://dev.mysql.com/downloads/mysql/) community server (8.0.27). Create databases and users. Install MySQLTuner and set up backups.
+**mysql** - Install and configure [MySQL](https://dev.mysql.com/downloads/mysql/) community server (8.0.32). Create databases and users. Install MySQLTuner and set up backups.
 
-**awscli** - Install and configure [AWS CLI](https://github.com/aws/aws-cli/tags) command line tool (2.4.7)
+**awscli** - Install and configure [AWS CLI](https://github.com/aws/aws-cli/tags) command line tool (2.9.21)
 
-**redis** - Install and configure [Redis](https://redis.io/download) with TLS support (6.2.6)
+**redis** - Install and configure [Redis](https://redis.io/download) with TLS support (7.0.8)
 
-**nodejs** - Install [NodeJs](https://nodejs.org/en/) and NPM (17.3.0)
+**nodejs** - Install [NodeJs](https://nodejs.org/en/) and NPM (19.6.0)
 
 **centos** - Takes care of system settings. Set up firewall based on iptables. Disable Transparent Huge Pages.
 You can setup logrotate scripts with this role as well.

@@ -1,9 +1,22 @@
 # Install MySQL RPM from remote repository
 #
+- name: Import RPM key
+  rpm_key:
+    key: https://repo.mysql.com/RPM-GPG-KEY-mysql-2022
+    state: present
+  tags: [mysql]
+
+- name: Download RPM package
+  shell: curl -O -L https://dev.mysql.com/get/mysql80-community-release-el9-1.noarch.rpm
+  args:
+    chdir: /usr/src
+    creates: /usr/src/mysql80-community-release-el9-1.noarch.rpm
+  tags: [mysql]
+
 - name: Install MySQL RPM
-  dnf:
-    name: "https://dev.mysql.com/get/mysql80-community-release-el8-1.noarch.rpm"
-    state: latest
+  yum:
+    name: /usr/src/mysql80-community-release-el9-1.noarch.rpm
+    state: present
   tags: [mysql]
 
 

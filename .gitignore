@@ -5,3 +5,4 @@ playbooks/*
 !playbooks/example-playbook.yml
 vars/*.yml
 !vars/example-vars.yml
+.idea

@@ -1,10 +1,22 @@
 # Install PECL extensions
+# If the server is already configured and PHP is upgraded to next version, from instance 8.1 -> 8.2, extensions must be reinstalled to avoid configuration errors:
+# Remove extensions first and install them back in
 #
+- name: Remove old PECL extensions
+  shell: "{{ php_install_path }}/bin/pecl uninstall {{ item }}"
+  with_items: "{{ php_extensions }}"
+  tags: [php]
+
 - name: Install PECL extensions
   shell: "no | {{ php_install_path }}/bin/pecl upgrade {{ item }}"
   with_items: "{{ php_extensions }}"
   register: php_extensions_upgrade
   changed_when: "php_extensions_upgrade.stdout != 'Nothing to upgrade'"
+  tags: [php]
+
+- name: Remove old Zend extensions
+  shell: "{{ php_install_path }}/bin/pecl uninstall {{ item }}"
+  with_items: "{{ php_zend_extensions }}"
   tags: [php]
 
 - name: Install Zend extensions

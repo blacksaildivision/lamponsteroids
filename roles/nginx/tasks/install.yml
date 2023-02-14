@@ -2,7 +2,7 @@
 #
 - name: Install required packages for compiling nginx
   dnf:
-    name: [gcc, gcc-c++, git]
+    name: [gcc, gcc-c++, git, perl-FindBin, perl-IPC-Cmd]
     state: latest
   tags: [nginx]
 

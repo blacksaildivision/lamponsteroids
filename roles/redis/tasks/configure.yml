@@ -92,4 +92,4 @@
     state: started
     enabled: yes
   when: "redis_disable_transparent_huge_pages == true"
-  tags: [redis, local]
+  tags: [redis]

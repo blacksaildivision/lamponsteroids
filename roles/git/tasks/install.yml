@@ -2,8 +2,9 @@
 #
 - name: Install required packages for compiling Git
   dnf:
-    name: [autoconf, expat-devel, gcc, gettext-devel, libcurl-devel, openssl-devel, perl-devel, zlib-devel]
+    name: [autoconf, expat-devel, gcc, gettext-devel, libcurl-devel, openssl-devel, perl-devel, zlib-devel, tar]
     state: latest
+    enablerepo: powertools
   tags: [git]
 
 

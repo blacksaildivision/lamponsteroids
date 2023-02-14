@@ -3,16 +3,24 @@
 - name: Merge default and user config
   set_fact:
     ssh_sshd_config: "{{ ssh_sshd_default_config_options | combine(ssh_sshd_user_config_options) }}"
-  tags: [ssh]
+  tags: [ ssh ]
 
-- name: Configure /etc/ssh/sshd_config file
+- name: Add a file with additional sshd rules
+  template:
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config.d/25-ansible.conf
+    owner: root
+    group: root
+    mode: 0600
+  tags: [ ssh ]
+
+- name: Ensure that sshd includes additional configs
   lineinfile:
     path: /etc/ssh/sshd_config
-    line: "{{ item.key }} {{ item.value }}"
-    regexp: "^#?{{ item.key }}"
-  with_dict: "{{ ssh_sshd_config }}"
+    line: "Include /etc/ssh/sshd_config.d/*.conf"
+    state: present
   notify: restart sshd
-  tags: [ssh]
+  tags: [ ssh ]
 
 - name: Enable HostKeys in /etc/ssh/sshd_config
   lineinfile:
@@ -21,7 +29,7 @@
     state: present
   with_items: "{{ ssh_sshd_host_keys }}"
   notify: restart sshd
-  tags: [ssh]
+  tags: [ ssh ]
 
 - name: Disable all other HostKeys in /etc/ssh/sshd_config
   lineinfile:
@@ -29,15 +37,15 @@
     regexp: "HostKey /etc/ssh/(?!{{ ssh_sshd_host_keys | join('|') }})"
     state: absent
   notify: restart sshd
-  tags: [ssh]
+  tags: [ ssh ]
 
 
 
-# Make sure that sshd service is started and enabled on boot
+# Make sure that the sshd service is started and enabled on boot
 #
-- name: Make sure that sshd service is started and enabled on boot
+- name: Make sure that the sshd service is started and enabled on boot
   service:
     name: sshd
     state: started
     enabled: yes
-  tags: [ssh]
+  tags: [ ssh ]

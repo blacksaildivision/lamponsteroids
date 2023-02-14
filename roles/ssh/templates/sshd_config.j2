@@ -1,0 +1,4 @@
+# This file is managed by Ansible
+{% for key in ssh_sshd_config %}
+{{ key }} {{ ssh_sshd_config[key] }}
+{% endfor %}
