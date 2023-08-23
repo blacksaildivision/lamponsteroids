@@ -5,10 +5,17 @@ LAMP on Steroids
 the `RockyLinux 9` system, but it should also work on `CentOS Stream 9` and other RHEL-based systems.
 The primary purpose is to set up a working and secure web server for PHP/Node.js applications.
 
+Prerequisites
+-------------
+
+You must have the Ansible installed in your system. If you don't have it, please follow this
+guide - [Installing Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html).
+
+It is best to use the latest version of Ansible. We tested the roles in this repository on Ansible **8.3.0** (core
+version **2.15.3**). If you are running an older version, we recommend updating to the newer version of Ansible.
+
 How to use?
 -----------
-
-Make sure that you have Ansible installed. The minimal version required for the included roles and playbooks is `2.9`.
 
 First create your Inventory file. You can work entirely in this repository. Name your Inventory file `hosts` (this file is in .gitignore) and setup all required connections there.
 
