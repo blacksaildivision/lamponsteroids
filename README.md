@@ -80,8 +80,6 @@ You can setup logrotate scripts with this role as well.
 
 **httpd** - Compile and configure Apache httpd from source with OpenSSL (2.4.33)
 
-**datadog** - Install and configure DataDog agent with multiple integrations.
-
 **mongodb** - Install and configure MongoDB (3.4.7) with authentication
 
 **letsencrypt** - Install Certbot and obtain certificates from Let's Encrypt
