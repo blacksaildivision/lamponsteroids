@@ -3,8 +3,6 @@
 #
 - name: Check if MySQL is installed in required version
   shell: mysqld --version | awk '{print $3}'
-  args:
-    warn: no
   ignore_errors: yes
   changed_when: false
   register: mysql_version_test

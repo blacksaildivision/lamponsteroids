@@ -4,20 +4,20 @@
   rpm_key:
     key: https://repo.mysql.com/RPM-GPG-KEY-mysql-2022
     state: present
-  tags: [mysql]
+  tags: [ mysql ]
 
 - name: Download RPM package
-  shell: curl -O -L https://dev.mysql.com/get/mysql80-community-release-el9-1.noarch.rpm
+  shell: curl -O -L https://dev.mysql.com/get/mysql80-community-release-el9-4.noarch.rpm
   args:
     chdir: /usr/src
-    creates: /usr/src/mysql80-community-release-el9-1.noarch.rpm
-  tags: [mysql]
+    creates: /usr/src/mysql80-community-release-el9-4.noarch.rpm
+  tags: [ mysql ]
 
 - name: Install MySQL RPM
   yum:
-    name: /usr/src/mysql80-community-release-el9-1.noarch.rpm
+    name: /usr/src/mysql80-community-release-el9-4.noarch.rpm
     state: present
-  tags: [mysql]
+  tags: [ mysql ]
 
 
 
@@ -28,4 +28,4 @@
     name: "mysql-community-server-{{ mysql_version }}"
     state: latest
     disablerepo: appstream
-  tags: [mysql]
+  tags: [ mysql ]
