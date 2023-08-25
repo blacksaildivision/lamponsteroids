@@ -1,5 +1,5 @@
 # Version of PHP to install
-php_version: "8.2.2"
+php_version: "8.2.9"
 
 # Location for PHP installation
 php_install_path: /usr/local/php
@@ -28,6 +28,7 @@ php_configure_options:
  - --enable-gd
  - --with-webp
  - --with-jpeg
+ - --with-avif
  - --enable-intl
  - --enable-mbstring
  - --with-mysqli
