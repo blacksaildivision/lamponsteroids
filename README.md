@@ -80,7 +80,7 @@ You can setup logrotate scripts with this role as well.
 
 **httpd** - Compile and configure Apache httpd from source with OpenSSL (2.4.33)
 
-**mongodb** - Install and configure MongoDB (3.4.7) with authentication
+**mongodb** - Install and configure MongoDB (7.0.0) with authentication, TLS support, backups and users management.
 
 **letsencrypt** - Install Certbot and obtain certificates from Let's Encrypt
 

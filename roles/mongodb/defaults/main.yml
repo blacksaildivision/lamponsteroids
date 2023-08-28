@@ -1,97 +1,33 @@
-####### CHOOSE IF THIS ROLE SHOULD EXECUTE TASKS FROM GIVEN GROUPS #######
-
-# Should this role use install tasks for installing MongoDB?
-mongodb_manage_installation: yes
-
-# Should this role use configure tasks for configuring /etc/mongod.conf?
-mongodb_manage_configuration: yes
-
-# Should this role manage admins and users?
-mongodb_manage_users: yes
-
-# Should this role perform databases backups?
-mongodb_manage_backup: yes
-
-
-
-
-
-####### INSTALL TASKS CONFIGURATION #######
-
 # Version of MongoDB
-mongodb_version: "3.4.7"
+mongodb_version: "7.0.0"
 
-
-
-
-####### CONFIGURE TASKS CONFIGURATION #######
-
-# Path to MongoDB main config file
-mongodb_config_flie: /etc/mongod.conf
-
-# Should MongoDb use forking? (Values: "true" | "false" )
-mongodb_process_fork: "false"
-
-# MongoDb PID directory
-mongodb_pid_directory: /var/lib/mongo
-
-# Should user authorization be turned on or off? (Values: enabled | disabled )
-mongodb_authorization: enabled
-
-
-
-####### USERS TASKS CONFIGURATION #######
+# MongoDB Configuration file
+mongodb_config_file: /etc/mongod.conf
 
 # MongoDB admin user password
-mongodb_admin_password: "S/6o5Aea5o.JwrLloAWrxdrBUDvV31VItl2Wd"
+mongodb_admin_password: "P9rbsTavEY2hjuUuALijKWiNnqEkdbVM"
 
-# List of databases with associated users
-mongodb_databases:
- - {
-    user: example,
-    password: O14inEDG948dEEg2zcREZB,
-    database: example,
-    roles: "readWrite,dbAdmin"
- }
-
-# Enable Datadog integration
-mongodb_datadog_integration: yes
-
-# Password for datadog user
-mongodb_datadog_user_password: "g3PzK8mJpWvBUz81GrDGANHO"
-
-
-
-
-
-####### BACKUP TASKS CONFIGURATION #######
-
-# Name of the user that will perform backups
-mongodb_backup_user: backup
-
-# Password for backup user
+# MongoDB backup user password
 mongodb_backup_user_password: "r8xO;ki55zSoNeZSl7tTv67sYTJ"
 
-# List of database to backup
-# Here is full example with all options:
-#
-# mongodb_backup_databases:
-#  - {
-#    database: example, # database name to backup
-#    backup_directory: /var/www/example.com/db, # directory for storing backups
-#    backup_directory_owner: developer, # directory owner
-#    backup_directory_group: developer, # directory group
-#    rotate: 30, # number of files to rotate
-#    backup_frequency: daily, # how often should backups be performed (daily, weekly, etc)
-#    s3_bucket: mongodb-backup # name of the s3 bucket that backup should be pushed through. it requires having awscli up and running
-# }
-mongodb_backup_databases:
- - {
-    database: example,
-    backup_directory: /var/db,
-    backup_directory_owner: root,
-    backup_directory_group: root,
-    rotate: 30,
-    backup_frequency: daily
- }
+# MongoDB bind address for connection and TLS setup
+mongodb_host: mongo.local
 
+# If set to true, mongodb_host value will be added to /etc/hosts file for 127.0.0.1
+mongodb_is_local: true
+
+# List of databases with users
+mongodb_databases:
+  example:
+    user: example
+    password: "O14inEDG948dEEg2zcREZB"
+    roles:
+      - readWrite
+      - dbAdmin
+    backup: yes
+
+# Data for the self-signed certificate for TLS configuration.
+mongodb_tls_csr:
+  cn: "{{ mongodb_host }}"
+  o: Default organization
+  ou: Default organizational unit
