@@ -2,7 +2,7 @@
 #
 - name: Install required tools for MySQL Tuner
   dnf:
-    name: [perl-Data-Dumper, git]
+    name: [perl-Data-Dumper, git, perl-diagnostics]
     state: latest
   tags: [mysql]
 
