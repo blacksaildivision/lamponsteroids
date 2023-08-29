@@ -5,8 +5,6 @@
 #
 - name: Check if Redis is installed in required version
   shell: "{{ redis_install_path }}/bin/redis-cli --version | awk '{print $2}'"
-  args:
-    warn: no
   ignore_errors: yes
   changed_when: false
   register: redis_version_test
