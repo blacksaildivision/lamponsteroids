@@ -4,7 +4,7 @@
 #  2. Git is installed but not in desired version
 #
 - name: Check if Git is installed in required version
-  shell: "{{ git_install_path }}/bin/gits --version | awk '{print $3}'"
+  shell: "{{ git_install_path }}/bin/git --version | awk '{print $3}'"
   ignore_errors: yes
   changed_when: false
   register: git_version_test
