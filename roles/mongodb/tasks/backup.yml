@@ -1,15 +1,31 @@
+# Get list of databases with backup enabled
+#
+- set_fact:
+    mongodb_backup_databases: "{{ mongodb_backup_databases|default([]) + [item] }}"
+  with_dict: "{{ mongodb_databases }}"
+  when: "item.value.backup | default(false) == true"
+  no_log: true
+  tags: [ mongodb ]
+
+
+
 # Create user for backups
 #
 - name: Create dedicated user for backups
   mongodb_user:
     database: admin
-    login_user: admin
+    login_host: "{{ mongodb_host }}"
     login_password: "{{ mongodb_admin_password }}"
-    name: "{{ mongodb_backup_user }}"
+    login_user: admin
+    name: backup
     password: "{{ mongodb_backup_user_password }}"
-    roles: backup
+    roles:
+      - backup
     update_password: on_create
-  tags: [mongodb, backup]
+    ssl: true
+    ssl_ca_certs: /var/lib/mongo/tls/server-ca.crt
+  when: "mongodb_backup_databases is defined"
+  tags: [ mongodb ]
 
 
 
@@ -17,13 +33,15 @@
 #
 - name: Make sure that backup directory exists
   file:
-    path: "{{ item.backup_directory }}"
+    path: "{{ item.value.backup_directory }}"
     state: directory
     mode: "2775"
-    owner: "{{ item.backup_directory_owner }}"
-    group: "{{ item.backup_directory_group }}"
+    owner: "{{ item.value.backup_directory_owner | default('root') }}"
+    group: "{{ item.value.backup_directory_group | default('root') }}"
   with_items: "{{ mongodb_backup_databases }}"
-  tags: [mongodb, backup]
+  when: "mongodb_backup_databases is defined"
+  no_log: true
+  tags: [ mongodb ]
 
 
 
@@ -32,12 +50,14 @@
 - name: Setup backup scripts
   template:
     src: backup-script.sh.j2
-    dest: "{{ item.backup_directory }}/{{ item.database }}-mongodb-backup.sh"
-    owner: "{{ item.backup_directory_owner }}"
-    group: "{{ item.backup_directory_group }}"
+    dest: "{{ item.value.backup_directory }}/{{ item.key }}-backup.sh"
+    owner: "{{ item.value.backup_directory_owner | default('root') }}"
+    group: "{{ item.value.backup_directory_group | default('root') }}"
     mode: 0700
   with_items: "{{ mongodb_backup_databases }}"
-  tags: [mongodb, backup]
+  when: "mongodb_backup_databases is defined"
+  no_log: true
+  tags: [ mongodb ]
 
 
 
@@ -45,8 +65,10 @@
 #
 - name: Setup crontab for periodical backups
   cron:
-    name: "{{ item.database }} mongodb backup"
-    special_time: "{{ item.backup_frequency }}"
-    job: "bash {{ item.backup_directory }}/{{ item.database }}-mongodb-backup.sh >> {{ item.backup_directory }}/{{ item.database }}-backup.log 2>&1"
+    name: "{{ item.key }} mongodb backup"
+    special_time: "{{ item.value.backup_frequency | default('daily') }}"
+    job: "bash {{ item.value.backup_directory }}/{{ item.key }}-backup.sh >> {{ item.value.backup_directory }}/{{ item.key }}-backup.log 2>&1"
   with_items: "{{ mongodb_backup_databases }}"
-  tags: [mongodb, backup]
+  when: "mongodb_backup_databases is defined"
+  no_log: true
+  tags: [ mongodb ]

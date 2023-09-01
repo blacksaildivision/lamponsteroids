@@ -4,20 +4,20 @@
   rpm_key:
     key: https://repo.mysql.com/RPM-GPG-KEY-mysql-2022
     state: present
-  tags: [mysql]
+  tags: [ mysql ]
 
 - name: Download RPM package
-  shell: curl -O -L https://dev.mysql.com/get/mysql80-community-release-el9-1.noarch.rpm
+  shell: curl -O -L https://dev.mysql.com/get/mysql80-community-release-el9-4.noarch.rpm
   args:
     chdir: /usr/src
-    creates: /usr/src/mysql80-community-release-el9-1.noarch.rpm
-  tags: [mysql]
+    creates: /usr/src/mysql80-community-release-el9-4.noarch.rpm
+  tags: [ mysql ]
 
 - name: Install MySQL RPM
   yum:
-    name: /usr/src/mysql80-community-release-el9-1.noarch.rpm
+    name: /usr/src/mysql80-community-release-el9-4.noarch.rpm
     state: present
-  tags: [mysql]
+  tags: [ mysql ]
 
 
 
@@ -28,4 +28,20 @@
     name: "mysql-community-server-{{ mysql_version }}"
     state: latest
     disablerepo: appstream
-  tags: [mysql]
+  notify: restart mysqld
+  tags: [ mysql ]
+
+- name: Get the list of upgradeable packages from MySQL
+  dnf:
+    list: upgrades
+    disablerepo: appstream
+  register: mysql_upgrade_list
+  tags: [ mysql ]
+
+- name: Update remaining MySQL packages to the latest versions
+  dnf:
+    name: "{{ mysql_upgrade_list.results | selectattr('name', 'match', '^mysql-community-') | map(attribute='name') | unique | list }}"
+    state: latest
+    update_only: yes
+    disablerepo: appstream
+  tags: [ mysql ]

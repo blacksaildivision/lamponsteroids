@@ -10,7 +10,7 @@ ExecStop=/usr/local/redis/bin/redis-cli --tls --cert {{ redis_install_path }}/tl
 Type=notify
 User=redis
 Group=redis
-TimeoutStartSec=5
+TimeoutStartSec=30
 TimeoutStopSec=5
 
 [Install]

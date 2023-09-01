@@ -1,53 +1,85 @@
-# Configure forking
+# Create directories for MongoDB
 #
-- name: Configure forking
-  lineinfile:
-    dest: "{{ mongodb_config_flie }}"
-    line: "  fork: {{ mongodb_process_fork }}"
-    state: present
-    regexp: '^[ \t]+fork'
-    insertafter: "processManagement:"
-  notify: restart mongod
-  tags: [mongodb, configure]
+- name: Create directories for MongoDB
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: mongod
+    group: mongod
+    mode: 0755
+  with_items:
+    - /var/lib/mongo
+    - /var/log/mongodb
+    - /var/run/mongodb
+  tags: [ mongodb ]
 
 
 
-# Set correct directory for PID file
-# Make sure that PID file location is write-able.
-# On CentOS7 sometimes it happens that after reboot directory that should contain PID is missing.
+# Update /etc/hosts file for local databases
 #
-- name: Configure PID file directory
+- name: Setup /etc/hosts file
   lineinfile:
-    dest: "{{ mongodb_config_flie }}"
-    line: "  pidFilePath: {{ mongodb_pid_directory }}/mongod.pid"
+    path: /etc/hosts
+    line: "127.0.0.1 {{ mongodb_host }}"
     state: present
-    regexp: '^[ \t]+pidFilePath'
-  notify: restart mongod
-  tags: [mongodb, configure]
+  when: "mongodb_is_local == true"
+  tags: [ mongodb ]
 
 
 
-# Make sure that security section is not commented out
+# Turn on authorization
 #
 - name: Enable security section
   lineinfile:
-    dest: "{{ mongodb_config_flie }}"
+    path: "{{ mongodb_config_file }}"
     line: "security:"
     state: present
     regexp: '^#?security'
   notify: restart mongod
-  tags: [mongodb, configure]
+  tags: [ mongodb ]
 
-
-
-# Configure authentication
-#
-- name: Configure PID file directory
+- name: Enable authorization
   lineinfile:
-    dest: "{{ mongodb_config_flie }}"
-    line: "  authorization: {{ mongodb_authorization }}"
+    dest: "{{ mongodb_config_file }}"
+    line: "  authorization: enabled"
     state: present
     regexp: '^[ \t]+authorization'
     insertafter: "security:"
   notify: restart mongod
-  tags: [mongodb, configure]
+  tags: [ mongodb ]
+
+
+
+# Configure network section
+#
+- name: Enable network interfaces section
+  lineinfile:
+    path: "{{ mongodb_config_file }}"
+    line: "net:"
+    state: present
+    regexp: '^#?net'
+  notify: restart mongod
+  tags: [ mongodb ]
+
+- name: Set server IP address
+  lineinfile:
+    dest: "{{ mongodb_config_file }}"
+    line: "  bindIp: {{ mongodb_host }}"
+    state: present
+    regexp: '^[ \t]+bindIp'
+    insertafter: "net:"
+  notify: restart mongod
+  tags: [ mongodb ]
+
+- name: Add TLS configuration section
+  blockinfile:
+    block: |
+      net:
+        tls:
+          mode: requireTLS
+          certificateKeyFile: /var/lib/mongo/tls/mongo.pem
+          disabledProtocols: TLS1_0,TLS1_1
+    marker: '# {mark} Ansible managed block for TLS configuration'
+    path: "{{ mongodb_config_file }}"
+  notify: restart mongod
+  tags: [ mongodb ]

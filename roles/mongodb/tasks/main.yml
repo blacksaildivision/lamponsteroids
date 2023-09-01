@@ -1,78 +1,26 @@
-# Make sure that all requirements for this role are installed
-# libselinux-python is required for templates
-# epel-release provides pip command
-# pip provides pymongo
-# pymongo will help creating users and roles with MongoDB (it's required package for Ansible module mongodb_user
+# Install MongoDB
 #
-- name: Install required tools for Ansible
-  yum:
-    name: "{{ item }}"
-    state: latest
-  with_items:
-    - libselinux-python
-    - epel-release
-  tags: [mongodb]
-
-- name: Install pip command
-  yum:
-    name: python2-pip
-    state: latest
-  tags: [mongodb]
-
-- name: Install PyMongo
-  pip:
-    name: pymongo
-    state: latest
-  tags: [mongodb]
-
-
-
-# Check if MongoDB is installed or not and if it should be updated or not
-#
-- name: Check if MongoDB is installed
-  command: mongod --version warn=no
-  register: mongodb_is_installed_test
+- name: Check MongoDB version
+  shell: mongod --version | head -n1 | awk '{print substr($3, 2)}'
+  register: mongodb_version_test
   ignore_errors: yes
   changed_when: false
-  tags: [mongodb]
+  tags: [ mongodb ]
 
-- set_fact:
-    mongodb_is_installed: true
-  when: mongodb_is_installed_test.rc != 2
-  tags: [mongodb]
-
-- set_fact:
-    mongodb_is_installed: false
-    mongodb_install_new_version: true
-  when: mongodb_is_installed_test.rc == 2
-  tags: [mongodb]
-
-- set_fact:
-    mongodb_install_new_version: true
-  when: ( mongodb_is_installed == true ) and ( mongodb_is_installed_test.stdout_lines[0] | replace('db version v','') != mongodb_version )
-  tags: [mongodb]
-
-- set_fact:
-    mongodb_install_new_version: false
-  when: ( mongodb_is_installed == true ) and ( mongodb_is_installed_test.stdout_lines[0] | replace('db version v','') == mongodb_version )
-  tags: [mongodb]
+- include_tasks: install.yml
+  when: "mongodb_version_test.stdout != mongodb_version"
+  tags: [ mongodb ]
 
 
 
-# Install/Update MongoDB to desired version
-# These tasks will be executed when
-#  1. MongoDB is not installed
-#  2. MongoDB is installed but not in desired version
+# Configure MongoDB, manage users, databases and backups
 #
-- include: install.yml
-  when: "mongodb_install_new_version == true and mongodb_manage_installation == true"
-
-
-
-# Configure MongoDB
-#
-- include: configure.yml
-  when: "mongodb_manage_configuration == true"
+- import_tasks: pymongo.yml
+- import_tasks: tls.yml
+- import_tasks: configure.yml
+- import_tasks: admin.yml
+- import_tasks: users.yml
+- import_tasks: backup.yml
 
 
 
@@ -83,18 +31,4 @@
     name: mongod
     state: started
     enabled: yes
-  tags: [mongodb, healthcheck]
-
-
-
-# Setup admin password and users
-#
-- include: users.yml
-  when: "mongodb_manage_users == true"
-
-
-
-# Setup backup script
-#
-- include: backup.yml
-  when: "mongodb_manage_backup == true"
+  tags: [ mongodb ]

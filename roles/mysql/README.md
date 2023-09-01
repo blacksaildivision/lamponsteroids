@@ -26,7 +26,7 @@ Here is the list of configurable variables for this role:
   - `user` user that should have access to given database.
   - `password` password of the user.
   - `host` host of the user.
-  - `requireX509` whether the user should be created with REQUIRE X509 permission.
+  - `tls_requires` requirements for secure transport. The default is `{}`.
   - `backup` when backup is set to yes, additional user with access to selected database will be created.
   - `backup_directory` directory where to store compressed backup files.
   - `backup_directory_owner` owner of the backup directory. `root` is the default.

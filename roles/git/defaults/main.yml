@@ -1,5 +1,5 @@
 # Version of git that should be installed
-git_version: "2.39.1"
+git_version: "2.42.0"
 
 # Location where Git should be installed
 git_install_path: /usr/local/git

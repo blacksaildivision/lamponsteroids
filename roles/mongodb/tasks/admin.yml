@@ -1,0 +1,72 @@
+# Sets admin password
+#
+- name: Ensure that MongoDB is running
+  service:
+    name: mongod
+    state: started
+  tags: [ mongodb ]
+
+- name: Check if current admin password works
+  community.mongodb.mongodb_user:
+    database: admin
+    login_host: "{{ mongodb_host }}"
+    login_user: admin
+    login_password: "{{ mongodb_admin_password }}"
+    name: admin
+    password: "{{ mongodb_admin_password }}a"
+    roles: "userAdminAnyDatabase,readWriteAnyDatabase,root"
+    ssl: yes
+    ssl_ca_certs: /var/lib/mongo/tls/server-ca.crt
+    update_password: on_create
+  ignore_errors: yes
+  changed_when: false
+  no_log: true
+  register: mongodb_admin_current_password_test
+  tags: [ mongodb ]
+
+- name: Changing admin password - turn off authorization
+  lineinfile:
+    dest: "{{ mongodb_config_file }}"
+    line: "  authorization: disabled"
+    state: present
+    regexp: '^[ \t]+authorization'
+    insertafter: "security:"
+  when: "mongodb_admin_current_password_test.failed"
+  tags: [ mongodb ]
+
+- name: Changing admin password - restarting mongod to apply changes in config file
+  service:
+    name: mongod
+    state: restarted
+  when: "mongodb_admin_current_password_test.failed"
+  tags: [ mongodb ]
+
+- name: Changing admin password - setting new admin password
+  mongodb_user:
+    database: admin
+    login_host: "{{ mongodb_host }}"
+    name: admin
+    password: "{{ mongodb_admin_password }}"
+    roles: "userAdminAnyDatabase,readWriteAnyDatabase,root"
+    ssl: true
+    ssl_ca_certs: /var/lib/mongo/tls/server-ca.crt
+  when: "mongodb_admin_current_password_test.failed"
+  no_log: true
+  tags: [ mongodb ]
+
+- name: Changing admin password - revert changes in configuration
+  lineinfile:
+    dest: "{{ mongodb_config_file }}"
+    line: "  authorization: enabled"
+    state: present
+    regexp: '^[ \t]+authorization'
+    insertafter: "security:"
+  when: "mongodb_admin_current_password_test.failed"
+  tags: [ mongodb ]
+
+- name: Changing admin password - restart mongod to apply changes in config file
+  service:
+    name: mongod
+    state: restarted
+  when: "mongodb_admin_current_password_test.failed"
+  tags: [ mongodb ]

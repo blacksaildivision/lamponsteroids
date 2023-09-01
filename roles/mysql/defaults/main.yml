@@ -1,5 +1,5 @@
 # Version of MySQL that should be installed
-mysql_version: "8.0.32"
+mysql_version: "8.0.34"
 
 # MySQL root password
 mysql_root_password: "rKp#rX3EP?Y2JGug*q,s>F,)@Hbuf9KCH#Z8odF44!)vH7MmrwJ4"
@@ -24,7 +24,7 @@ mysql_default_configuration:
   require_secure_transport: "1"
   bind-address: "0.0.0.0"
   innodb_buffer_pool_size: "128M"
-  innodb_log_file_size: "48M"
+  innodb_redo_log_capacity: "32M"
 
 # Custom user settings to be applied to {{ mysql_config_file }} file. Please refer to README.md in this role how to use it
 mysql_user_configuration: []
@@ -41,7 +41,7 @@ mysql_databases:
     host: "127.0.0.1"
     backup: yes
     backup_directory: /var/mysql-backup
-    requireX509: yes
+    tls_requires: { }
 
 # Name of the user for backups
 mysql_backup_user: backup

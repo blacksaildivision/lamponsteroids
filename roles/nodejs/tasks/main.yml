@@ -5,8 +5,6 @@
 #
 - name: Check if Node.js is installed in required version
   shell: "node --version 2>&1 | cut -c2-"
-  args:
-    warn: no
   ignore_errors: yes
   changed_when: false
   register: nodejs_version_test

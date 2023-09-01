@@ -1,9 +1,0 @@
-init_config:
-
-instances:
-{% for pool in datadog_php_fpm_pools %}
-  - status_url: {{ pool }}/status
-    ping_url: {{ pool }}/ping
-    ping_reply: pong
-
-{% endfor %}

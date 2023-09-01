@@ -1,7 +1,0 @@
-# Restart datadog-agent service
-# This handler is executed on changes in Datadog agent config file
-#
-- name: restart datadog-agent
-  service:
-    name: datadog-agent
-    state: restarted

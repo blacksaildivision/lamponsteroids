@@ -1,7 +1,0 @@
-init_config:
-
-instances:
-{% for nginx_status_url in datadog_nginx_status_urls %}
-  - nginx_status_url: {{ nginx_status_url }}
-
-{% endfor %}

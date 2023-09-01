@@ -4,6 +4,7 @@
     mysql_backup_databases: "{{ mysql_backup_databases|default([]) + [item] }}"
   with_dict: "{{ mysql_databases }}"
   when: "item.value.backup | default(false) == true"
+  no_log: true
   tags: [mysql]
 
 
@@ -16,7 +17,7 @@
     password: "{{ mysql_backup_user_password }}"
     host: "{{ mysql_root_host }}"
     state: present
-    priv: "{{ mysql_backup_databases | map(attribute='key') |  map('regex_replace', '(.*)', '\\1.*:SELECT') | list | join('/') }}"
+    priv: "{{ mysql_backup_databases | map(attribute='key') |  map('regex_replace', '^(.*)$', '\\1.*:SELECT') | list | join('/') + '/*.*:FLUSH_TABLES' }}"
     login_host: "{{ mysql_root_host }}"
   no_log: true
   when: "mysql_backup_databases is defined"
@@ -35,6 +36,7 @@
     group: "{{ item.value.backup_directory_group | default('root') }}"
   with_items: "{{ mysql_backup_databases }}"
   when: "mysql_backup_databases is defined"
+  no_log: true
   tags: [mysql]
 
 
@@ -50,6 +52,7 @@
     mode: 0700
   with_items: "{{ mysql_backup_databases }}"
   when: "mysql_backup_databases is defined"
+  no_log: true
   tags: [mysql]
 
 
@@ -63,4 +66,5 @@
     job: "bash {{ item.value.backup_directory }}/{{ item.key }}-backup.sh >> {{ item.value.backup_directory }}/{{ item.key }}-backup.log 2>&1"
   with_items: "{{ mysql_backup_databases }}"
   when: "mysql_backup_databases is defined"
+  no_log: true
   tags: [mysql]

@@ -5,8 +5,9 @@
     name: "{{ item.key }}"
     state: present
     login_host: "{{ mysql_root_host }}"
+  no_log: true
   with_dict: "{{ mysql_databases }}"
-  tags: [mysql]
+  tags: [ mysql ]
 
 - name: Create users and assign them to databases
   mysql_user:
@@ -15,25 +16,7 @@
     host: "{{ item.value.host }}"
     priv: "{{ item.key }}.*:ALL"
     login_host: "{{ mysql_root_host }}"
+    tls_requires: "{{ item.value.tls_requires | default({}) }}"
   with_dict: "{{ mysql_databases }}"
   no_log: yes
-  tags: [mysql]
-
-
-
-# Enable require x509 for given users
-#
-- set_fact:
-    mysql_users_with_x509: "{{ mysql_users_with_x509|default([]) + [item] }}"
-  with_dict: "{{ mysql_databases }}"
-  when: "item.value.requireX509 | default(false) == true"
-  no_log: yes
-  tags: [mysql]
-
-- name: Require x509 connection for selected users
-  shell: "/usr/bin/mysql --execute 'ALTER USER \"{{ item.value.user }}\"@\"{{ item.value.host }}\" REQUIRE X509; FLUSH PRIVILEGES;'"
-  with_items: "{{ mysql_users_with_x509 }}"
-  changed_when: false
-  when: "mysql_users_with_x509 is defined"
-  no_log: yes
-  tags: [mysql]
+  tags: [ mysql ]

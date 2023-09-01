@@ -4,7 +4,6 @@
   shell: "curl -sS https://getcomposer.org/installer | {{ php_install_path }}/bin/php -- --install-dir=/usr/local/bin --filename=composer installer"
   args:
     creates: /usr/local/bin/composer
-    warn: no
   tags: [php]
 
 

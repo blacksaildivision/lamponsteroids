@@ -5,13 +5,11 @@
 #
 - name: Check if Git is installed in required version
   shell: "{{ git_install_path }}/bin/git --version | awk '{print $3}'"
-  args:
-    warn: no
   ignore_errors: yes
   changed_when: false
   register: git_version_test
-  tags: [git]
+  tags: [ git ]
 
 - include_tasks: install.yml
   when: "git_version_test.stdout != git_version"
-  tags: [git]
+  tags: [ git ]

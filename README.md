@@ -5,10 +5,17 @@ LAMP on Steroids
 the `RockyLinux 9` system, but it should also work on `CentOS Stream 9` and other RHEL-based systems.
 The primary purpose is to set up a working and secure web server for PHP/Node.js applications.
 
+Prerequisites
+-------------
+
+You must have the Ansible installed in your system. If you don't have it, please follow this
+guide - [Installing Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html).
+
+It is best to use the latest version of Ansible. We tested the roles in this repository on Ansible **8.3.0** (core
+version **2.15.3**). If you are running an older version, we recommend updating to the newer version of Ansible.
+
 How to use?
 -----------
-
-Make sure that you have Ansible installed. The minimal version required for the included roles and playbooks is `2.9`.
 
 First create your Inventory file. You can work entirely in this repository. Name your Inventory file `hosts` (this file is in .gitignore) and setup all required connections there.
 
@@ -52,34 +59,27 @@ Included roles
 
 **openssl** - Compile [OpenSSL](https://github.com/openssl/openssl/tags) from source (3.0.1)
 
-**git** - Compile and install [Git](https://github.com/git/git/tags) from source (2.39.1) 
+**git** - Compile and install [Git](https://github.com/git/git/tags) from source (2.42.0) 
 
-**nginx** - Compile, install and configure [nginx](https://nginx.org/en/download.html) from source (1.23.3)
+**nginx** - Compile, install and configure [nginx](https://nginx.org/en/download.html) from source (1.25.2)
 
-**php** - Compile, install and configure [PHP](https://github.com/php/php-src/tags) and tools (8.2.2)
+**php** - Compile, install and configure [PHP](https://github.com/php/php-src/tags) and tools (8.2.9)
 
 **firewalld** - Setup firewalld as base firewall
 
-**mysql** - Install and configure [MySQL](https://dev.mysql.com/downloads/mysql/) community server (8.0.32). Create databases and users. Install MySQLTuner and set up backups.
+**mysql** - Install and configure [MySQL](https://dev.mysql.com/downloads/mysql/) community server (8.0.34). Create databases and users. Install MySQLTuner and set up backups.
 
-**awscli** - Install and configure [AWS CLI](https://github.com/aws/aws-cli/tags) command line tool (2.9.21)
+**awscli** - Install and configure [AWS CLI](https://github.com/aws/aws-cli/tags) command line tool (2.13.12)
 
-**redis** - Install and configure [Redis](https://redis.io/download) with TLS support (7.0.8)
+**redis** - Install and configure [Redis](https://redis.io/download) with TLS support (7.2.0)
 
-**nodejs** - Install [NodeJs](https://nodejs.org/en/) and NPM (19.6.0)
+**nodejs** - Install [NodeJs](https://nodejs.org/en/) and NPM (20.5.1)
 
 **centos** - Takes care of system settings. Set up firewall based on iptables. Disable Transparent Huge Pages.
 You can setup logrotate scripts with this role as well.
 
 **httpd** - Compile and configure Apache httpd from source with OpenSSL (2.4.33)
 
-**datadog** - Install and configure DataDog agent with multiple integrations.
-
-**mongodb** - Install and configure MongoDB (3.4.7) with authentication
+**mongodb** - Install and configure MongoDB (7.0.0) with authentication, TLS support, backups and users management.
 
 **letsencrypt** - Install Certbot and obtain certificates from Let's Encrypt
-
-Changelog
----------
-
-You can find changelog on our [GitHub Wiki page](https://github.com/blacksaildivision/lamponsteroids/wiki/Changelog).

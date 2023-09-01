@@ -1,5 +1,5 @@
 # Redis version to be installed
-redis_version: "7.0.8"
+redis_version: "7.2.0"
 
 # Location where redis should be installed
 redis_install_path: /usr/local/redis

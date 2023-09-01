@@ -1,22 +1,41 @@
-# MongoDB comes with it's own repository
-# Here we add it to yum repository
+# Install MongoDB community server
 #
-- name: Make sure that MongoDB repository is available
+- name: Configure the package management system
   template:
     src: mongodb-org.repo.j2
-    dest: /etc/yum.repos.d/mongodb-org-3.2.repo
+    dest: "/etc/yum.repos.d/mongodb-org-{{ mongodb_version.split('.')[0] }}.{{ mongodb_version.split('.')[1] }}.repo"
     owner: root
     group: root
     mode: 0644
-  tags: [mongodb, install]
+  tags: [ mongodb ]
 
+- name: Ensure clean shutdown
+  service:
+    name: mongod
+    state: stopped
+  tags: [ mongodb ]
 
-
-# Install MongoDB packages:
-# mongodb-org, mongodb-org-server, mongodb-org-shell, mongodb-org-mongos, mongodb-org-tools
-#
-- name: Install MongoDB packages
-  yum:
-    name: "mongodb-org-{{ mongodb_version }}"
+- name: Install the MongoDB packages
+  dnf:
+    name:
+      - "mongodb-org-{{ mongodb_version }}"
+      - "mongodb-org-database-{{ mongodb_version }}"
+      - "mongodb-org-server-{{ mongodb_version }}"
+      - "mongodb-org-mongos-{{ mongodb_version }}"
+      - "mongodb-org-tools-{{ mongodb_version }}"
     state: latest
-  tags: [mongodb, install]
+  notify: restart mongod
+  tags: [ mongodb ]
+
+- name: Get the list of upgradeable packages from MongoDB
+  dnf:
+    list: upgrades
+  register: mongodb_upgrade_list
+  tags: [ mongodb ]
+
+- name: Update remaining MongoDB packages to the latest versions
+  dnf:
+    name: "{{ mongodb_upgrade_list.results | selectattr('name', 'match', '^mongodb-') | map(attribute='name') | unique | list }}"
+    state: latest
+    update_only: yes
+  tags: [ mongodb ]

@@ -8,7 +8,7 @@
 
 - name: Install required packages for compiling PHP
   dnf:
-    name: [autoconf, gcc, gcc-c++, bison, re2c, libxml2-devel, openssl-devel, bzip2-devel, libcurl-devel, libpng-devel, libwebp-devel, libjpeg-turbo-devel, libicu-devel, oniguruma-devel, freetype-devel, libzip-devel]
+    name: [autoconf, gcc, gcc-c++, bison, re2c, libxml2-devel, openssl-devel, bzip2-devel, libcurl-devel, libpng-devel, libwebp-devel, libjpeg-turbo-devel, libicu-devel, oniguruma-devel, freetype-devel, libzip-devel, libavif-devel, tar]
     state: latest
     enablerepo: crb
     update_cache: true
@@ -58,6 +58,7 @@
   command: make install
   args:
     chdir: "{{ php_sources_path }}/php-src-php-{{ php_version }}"
+  notify: restart php-fpm
   tags: [php]
 
 

@@ -1,8 +1,14 @@
 # Install required software for compiling Redis from source
 #
+- name: Install epel-release package
+  dnf:
+    name: epel-release
+    state: latest
+  tags: [redis]
+
 - name: Install required tools for compiling Redis
   dnf:
-    name: [gcc, make, systemd-devel, tar]
+    name: [gcc, make, systemd-devel, tar, openssl-devel, lua]
     state: latest
   tags: [redis]
 
@@ -67,6 +73,7 @@
     - redis-check-rdb
     - redis-cli
     - redis-server
+  notify: restart redis
   tags: [redis]
 
 - name: Copy redis.conf file from sources to installation path

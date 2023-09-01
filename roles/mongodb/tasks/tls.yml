@@ -1,0 +1,120 @@
+# Generate self signed certificate
+#
+- name: Make sure that OpenSSL is installed
+  dnf:
+    name: openssl
+    state: latest
+  tags: [ mongodb ]
+
+- name: Create directory for MongoDB certs
+  file:
+    path: /var/lib/mongo/tls
+    state: directory
+    owner: mongod
+    group: mongod
+    mode: 0755
+  tags: [ mongodb ]
+
+- name: Check if self-signed certificate exist
+  stat:
+    path: /var/lib/mongo/tls/mongo.pem
+  register: mongodb_self_signed_cert
+  tags: [ mongodb ]
+
+- name: Generate CA private key
+  community.crypto.openssl_privatekey:
+    group: mongod
+    owner: mongod
+    mode: 0600
+    path: /var/lib/mongo/tls/server-ca.key
+    size: 2048
+  when: "not mongodb_self_signed_cert.stat.exists"
+  tags: [ mongodb ]
+
+- name: Create CSR for self-signed certificate
+  community.crypto.openssl_csr_pipe:
+    privatekey_path: /var/lib/mongo/tls/server-ca.key
+    common_name: "{{ mongodb_tls_csr.cn }}"
+    organization_name: "{{ mongodb_tls_csr.o }}"
+    organizational_unit_name: "{{ mongodb_tls_csr.ou }}"
+    use_common_name_for_san: false
+    basic_constraints: CA:TRUE
+    basic_constraints_critical: yes
+  register: mongodb_csr
+  changed_when: false
+  when: "not mongodb_self_signed_cert.stat.exists"
+  tags: [ mongodb ]
+
+- name: Generate CA certificate
+  community.crypto.x509_certificate:
+    group: mongod
+    owner: mongod
+    mode: 0600
+    path: /var/lib/mongo/tls/server-ca.crt
+    privatekey_path: /var/lib/mongo/tls/server-ca.key
+    provider: selfsigned
+    csr_content: "{{ mongodb_csr.csr }}"
+  when: "not mongodb_self_signed_cert.stat.exists"
+  tags: [ mongodb ]
+
+- name: Generate MongoDB private key
+  community.crypto.openssl_privatekey:
+    group: mongod
+    owner: mongod
+    mode: 0600
+    path: /var/lib/mongo/tls/mongo.key
+    size: 2048
+  when: "not mongodb_self_signed_cert.stat.exists"
+  tags: [ mongodb ]
+
+- name: Generate CSR for MongoDB
+  community.crypto.openssl_csr:
+    group: mongod
+    owner: mongod
+    mode: 0600
+    privatekey_path: /var/lib/mongo/tls/mongo.key
+    path: /var/lib/mongo/tls/mongo.csr
+    common_name: "{{ mongodb_tls_csr.cn }}"
+    organization_name: "{{ mongodb_tls_csr.o }}"
+  when: "not mongodb_self_signed_cert.stat.exists"
+  tags: [ mongodb ]
+
+- name: Sign MongoDB certificate with CA
+  community.crypto.x509_certificate:
+    path: /var/lib/mongo/tls/mongo.crt
+    csr_path: /var/lib/mongo/tls/mongo.csr
+    ownca_path: /var/lib/mongo/tls/server-ca.crt
+    ownca_privatekey_path: /var/lib/mongo/tls/server-ca.key
+    ownca_not_after: +1826d
+    group: mongod
+    owner: mongod
+    mode: 0600
+    provider: ownca
+  when: "not mongodb_self_signed_cert.stat.exists"
+  tags: [ mongodb ]
+
+- name: Read the mongo.crt file contents
+  ansible.builtin.slurp:
+    src: /var/lib/mongo/tls/mongo.crt
+  register: mongodb_mongo_crt
+  when: "not mongodb_self_signed_cert.stat.exists"
+  tags: [ mongodb ]
+
+- name: Read the mongo.key file contents
+  ansible.builtin.slurp:
+    src: /var/lib/mongo/tls/mongo.key
+  register: mongodb_mongo_key
+  when: "not mongodb_self_signed_cert.stat.exists"
+  tags: [ mongodb ]
+
+- name: Create concatenated PEM file
+  ansible.builtin.copy:
+    dest: /var/lib/mongo/tls/mongo.pem
+    content: "{{ mongodb_mongo_crt.content  | b64decode + '\n' + mongodb_mongo_key.content | b64decode }}"
+    group: mongod
+    owner: mongod
+    mode: 0600
+  when: "not mongodb_self_signed_cert.stat.exists"
+  register: mongodb_new_cert
+  notify: restart mongod
+  tags: [ mongodb ]
