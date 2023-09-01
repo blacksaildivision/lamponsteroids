@@ -73,6 +73,7 @@
     - redis-check-rdb
     - redis-cli
     - redis-server
+  notify: restart redis
   tags: [redis]
 
 - name: Copy redis.conf file from sources to installation path

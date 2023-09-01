@@ -19,6 +19,7 @@
     ssl_ca_certs: /var/lib/mongo/tls/server-ca.crt
     update_password: on_create
   ignore_errors: yes
+  changed_when: false
   no_log: true
   register: mongodb_admin_current_password_test
   tags: [ mongodb ]

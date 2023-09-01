@@ -24,6 +24,7 @@
       - "mongodb-org-mongos-{{ mongodb_version }}"
       - "mongodb-org-tools-{{ mongodb_version }}"
     state: latest
+  notify: restart mongod
   tags: [ mongodb ]
 
 - name: Get the list of upgradeable packages from MongoDB

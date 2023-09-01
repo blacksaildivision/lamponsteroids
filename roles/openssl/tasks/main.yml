@@ -5,8 +5,6 @@
 #
 - name: Check if OpenSSL is installed
   shell: "{{ openssl_install_path }}/bin/openssl version | awk '{print $2}'"
-  args:
-    warn: no
   ignore_errors: yes
   changed_when: false
   register: openssl_version_test

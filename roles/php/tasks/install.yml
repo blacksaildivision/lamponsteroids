@@ -58,6 +58,7 @@
   command: make install
   args:
     chdir: "{{ php_sources_path }}/php-src-php-{{ php_version }}"
+  notify: restart php-fpm
   tags: [php]
 
 

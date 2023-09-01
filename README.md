@@ -83,8 +83,3 @@ You can setup logrotate scripts with this role as well.
 **mongodb** - Install and configure MongoDB (7.0.0) with authentication, TLS support, backups and users management.
 
 **letsencrypt** - Install Certbot and obtain certificates from Let's Encrypt
-
-Changelog
----------
-
-You can find changelog on our [GitHub Wiki page](https://github.com/blacksaildivision/lamponsteroids/wiki/Changelog).

@@ -94,6 +94,7 @@
   command: make install
   args:
     chdir: "{{ nginx_sources_path }}/nginx-{{ nginx_version }}"
+  notify: restart nginx
   tags: [nginx]
 
 

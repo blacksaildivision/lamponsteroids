@@ -28,6 +28,7 @@
     name: "mysql-community-server-{{ mysql_version }}"
     state: latest
     disablerepo: appstream
+  notify: restart mysqld
   tags: [ mysql ]
 
 - name: Get the list of upgradeable packages from MySQL
