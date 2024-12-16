@@ -10,9 +10,21 @@
 
 # Setup crontab to update composer automatically
 #
+- name: Get information about installed packages
+  ansible.builtin.package_facts:
+    manager: auto
+  tags: [php]
+
 - name: Setup crontab for composer updates
-  cron:
+  ansible.builtin.cron:
     name: composer update
     special_time: weekly
     job: "{{ php_install_path }}/bin/php /usr/local/bin/composer self-update --2"
+  when: "'cronie' in ansible_facts.packages"
+  tags: [php]
+
+- name: Ensure that the latest version is installed
+  ansible.builtin.shell: "{{ php_install_path }}/bin/php /usr/local/bin/composer self-update"
+  register: php_composer_update
+  changed_when: php_composer_update.stdout != ''
   tags: [php]

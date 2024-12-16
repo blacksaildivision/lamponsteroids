@@ -21,8 +21,9 @@ Here is the list of configurable variables for this role:
  - `php_configure_options` list of arguments for `./configure` command.
  
  - `php_ini_config_option_php_section` list of options that should be set in main section of php.ini [PHP].
- 
- - `php_ini_config_option_opcache_section` list of options that should be set in opcache section of php.ini [opcache].
+
+- `php_ini_config_option_opcache_section` list of options that should be set in opcache section of php.ini [opcache]. It
+  extends the `_php_ini_config_option_opcache_section_defaults` variable.
  
  - `php_date_timezone` timezone for PHP. By default it's `UTC`.
  
