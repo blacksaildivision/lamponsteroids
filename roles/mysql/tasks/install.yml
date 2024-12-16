@@ -1,23 +1,29 @@
 # Install MySQL RPM from remote repository
 #
 - name: Import RPM key
-  rpm_key:
-    key: https://repo.mysql.com/RPM-GPG-KEY-mysql-2022
+  ansible.builtin.rpm_key:
+    key: https://repo.mysql.com/RPM-GPG-KEY-mysql-2023
     state: present
-  tags: [ mysql ]
+  tags: [mysql]
 
 - name: Download RPM package
-  shell: curl -O -L https://dev.mysql.com/get/mysql80-community-release-el9-4.noarch.rpm
+  ansible.builtin.shell: curl -O -L https://dev.mysql.com/get/mysql84-community-release-el9-1.noarch.rpm
   args:
     chdir: /usr/src
-    creates: /usr/src/mysql80-community-release-el9-4.noarch.rpm
-  tags: [ mysql ]
+    creates: /usr/src/mysql84-community-release-el9-1.noarch.rpm
+  tags: [mysql]
+
+- name: Verify downloaded RPM package
+  ansible.builtin.shell: rpm --checksig /usr/src/mysql84-community-release-el9-1.noarch.rpm
+  register: mysql_rpm_signature
+  failed_when: "'SIGNATURES NOT OK' in mysql_rpm_signature.stdout"
+  tags: [mysql]
 
 - name: Install MySQL RPM
-  yum:
-    name: /usr/src/mysql80-community-release-el9-4.noarch.rpm
+  ansible.builtin.dnf:
+    name: /usr/src/mysql84-community-release-el9-1.noarch.rpm
     state: present
-  tags: [ mysql ]
+  tags: [mysql]
 
 
 
