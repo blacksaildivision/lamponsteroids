@@ -1,5 +1,5 @@
 # Redis version to be installed
-redis_version: "7.2.0"
+redis_version: "7.4.0"
 
 # Location where redis should be installed
 redis_install_path: /usr/local/redis
@@ -37,6 +37,7 @@ redis_default_configuration:
   tls-key-file: "{{ redis_install_path }}/tls/redis.key"
   tls-ca-cert-file: "{{ redis_install_path }}/tls/ca.crt"
   tls-dh-params-file: "{{ redis_install_path }}/tls/redis.dh"
+  tls-protocols: "TLSv1.3"
 
 # Custom user settings to be applied to /usr/local/redis/redis.conf file. Please refer to README.md in this role
 redis_user_configuration: []

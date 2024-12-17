@@ -5,3 +5,7 @@
   service:
     name: mongod
     state: restarted
+
+- name: Reload systemctl daemon
+  ansible.builtin.systemd_service:
+    daemon_reload: true

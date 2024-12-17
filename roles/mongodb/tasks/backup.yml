@@ -12,7 +12,7 @@
 # Create user for backups
 #
 - name: Create dedicated user for backups
-  mongodb_user:
+  community.mongodb.mongodb_user:
     database: admin
     login_host: "{{ mongodb_host }}"
     login_password: "{{ mongodb_admin_password }}"
@@ -24,8 +24,9 @@
     update_password: on_create
     ssl: true
     ssl_ca_certs: /var/lib/mongo/tls/server-ca.crt
+    ssl_certfile: /var/lib/mongo/tls/mongo.pem
   when: "mongodb_backup_databases is defined"
-  tags: [ mongodb ]
+  tags: [mongodb]
 
 
 

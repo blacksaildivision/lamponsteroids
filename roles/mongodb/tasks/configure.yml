@@ -27,6 +27,27 @@
 
 
 
+# Enable auto-restart for mongod in case of failure
+#
+- name: Ensure override directory exists for mongod service
+  ansible.builtin.file:
+    path: /etc/systemd/system/mongod.service.d
+    state: directory
+    mode: 0755
+  tags: [mongodb]
+
+- name: Add restart block to mongod service
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/mongod.service.d/override.conf
+    content: |
+      [Service]
+      Restart=on-failure
+      RestartSec=10
+    mode: 0644
+  notify: Reload systemctl daemon
+  tags: [mongodb]
+
+
 # Turn on authorization
 #
 - name: Enable security section
@@ -78,7 +99,8 @@
         tls:
           mode: requireTLS
           certificateKeyFile: /var/lib/mongo/tls/mongo.pem
-          disabledProtocols: TLS1_0,TLS1_1
+          CAFile: /var/lib/mongo/tls/server-ca.crt
+          disabledProtocols: TLS1_0,TLS1_1,TLS1_2
     marker: '# {mark} Ansible managed block for TLS configuration'
     path: "{{ mongodb_config_file }}"
   notify: restart mongod
