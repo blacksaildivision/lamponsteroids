@@ -25,6 +25,7 @@ Here is the list of configurable variables for this role:
 - `mysql_databases` dictionary of databases that should be present in the system. Key is the database name. Here is the list of available options:
   - `user` user that should have access to given database.
   - `password` password of the user.
+  - `salt` salt for `caching_sha2_password` plugin for backup user. Must be 20 characters long,
   - `host` host of the user.
   - `tls_requires` requirements for secure transport. The default is `{}`.
   - `backup` when backup is set to yes, additional user with access to selected database will be created.
@@ -37,3 +38,5 @@ Here is the list of configurable variables for this role:
  - `mysql_backup_user` name of the user for backups. Defaults to `backup`.
  
  - `mysql_backup_user_password` password for backup user.
+
+- `mysql_backup_user_salt` salt for `caching_sha2_password` plugin for backup user. Must be 20 characters long,

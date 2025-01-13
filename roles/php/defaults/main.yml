@@ -1,5 +1,5 @@
 # Version of PHP to install
-php_version: "8.4.1"
+php_version: "8.3.14"
 
 # Location for PHP installation
 php_install_path: /usr/local/php

@@ -10,13 +10,15 @@
   tags: [ mysql ]
 
 - name: Create users and assign them to databases
-  mysql_user:
+  community.mysql.mysql_user:
     name: "{{ item.value.user }}"
-    password: "{{ item.value.password }}"
+    plugin: caching_sha2_password
+    plugin_auth_string: "{{ item.value.password }}"
+    salt: "{{ item.value.salt }}"
     host: "{{ item.value.host }}"
     priv: "{{ item.key }}.*:ALL"
     login_host: "{{ mysql_root_host }}"
     tls_requires: "{{ item.value.tls_requires | default({}) }}"
   with_dict: "{{ mysql_databases }}"
   no_log: yes
-  tags: [ mysql ]
+  tags: [mysql]
