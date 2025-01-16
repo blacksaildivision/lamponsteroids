@@ -1,6 +1,48 @@
 CHANGELOG
 =========
 
+3.2.0
+-----
+
+- (BREAKING) php.ini will always be replaced with the php.ini-production during installation.
+- (BREAKING) Change how the `[opcache]` section is configured and allow overrides. This also fixes a bug with setting `opcache` settings.
+- (BREAKING) Each user in mysql role must have the `salt` parameter.
+- (BREAKING) If you have backup enabled in mysql role, you must define `mysql_backup_user_salt` variable. 
+- Use FQCNs in dnf role.
+- Use handlers instead of tasks for displaying list of upgraded packages in dnf role.
+- Update wording and fix typos in dnf role.
+- Fix Ansible warning on consecutive calls when private key already exists in users role.
+- Fix issue with removing user and groups in users role.
+- Update Git to 2.47.1.
+- Update nginx to 1.27.3. 
+- Update nginx deps libraries - PCRE2 updated to 10.44, OpenSSL updated to 3.4.0, zlib updated to 1.3.1.
+- Fix the brotli dependency installation in nginx role. 
+- Update PHP to 8.4.2.
+- Update composer to the latest version on systems without crontab. 
+- Update MySQL to 8.4.3.
+- Stop using `mysql_native_password` for root password in mysql role.
+- Verify signature of downloaded MySQL RPM.
+- Update Python Ansible MySQL plugin from 3.8 to 3.12.
+- Update Redis to 7.4.0.
+- Increase redis service start timeout.
+- Disable TLS1.2 in redis role.
+- Update Node.js to 22.12.0.
+- Update MongoDB to 8.0.4.
+- Execute clean shutdown only when mongod is running in mongodb role.
+- Install Python 3.12 on remote to support pymongo and newer version of Ansible in mongodb role.
+- Enable auto-restart for mongod in case of failure in mongodb role.
+- Add mandatory CA file entry to configuration in mongodb role.
+- Disable TLS1.2 in mongodb role.
+- Enable backwards-incompatible features after install equal to the installed version in mongodb role.
+- Use the certfile in all tasks when connecting to the database in mongodb role.
+- Update AWS CLI to 2.22.33.
+- Add salt to the mysql users configuration. 
+- Update nginx default host configuration to fix http2 warning.
+- Remove deprecated centos role.
+- Turn on logging of denied packets in firewalld role.
+- Enable HTTP/3 in nginx example.
+- Add Ansible lint file.
+
 3.1.0
 -----
 

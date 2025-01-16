@@ -18,7 +18,7 @@ backupFilePath="$backupDirectory/$backupFileName"
 echo "Backup of MongoDB \"$databaseName\" database started at $(date +'%d/%m/%Y %T')"
 
 echo "Backing up database..."
-mongodump --host="$host" --db="$databaseName" --username="$backupUser" --password="$backupUserPassword" --authenticationDatabase="admin" --archive="$backupFilePath" --ssl --sslCAFile="/var/lib/mongo/tls/server-ca.crt" --tlsCertificateKeyFile "/var/lib/mongo/tls/mongo.pem"
+mongodump --host="$host" --db="$databaseName" --username="$backupUser" --password="$backupUserPassword" --authenticationDatabase="admin" --archive="$backupFilePath" --ssl --sslCAFile="/var/lib/mongo/tls/server-ca.crt" --sslPEMKeyFile "/var/lib/mongo/tls/mongo.pem"
 
 if [ "$compressBackup" = true ] ; then
     echo "Compressing MongoDB backup file..."
