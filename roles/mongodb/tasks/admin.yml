@@ -16,6 +16,7 @@
     password: "{{ mongodb_admin_password }}a"
     roles: "userAdminAnyDatabase,readWriteAnyDatabase,root"
     ssl: yes
+    ssl_certfile: /var/lib/mongo/tls/mongo.pem
     ssl_ca_certs: /var/lib/mongo/tls/server-ca.crt
     update_password: on_create
   ignore_errors: yes
@@ -50,6 +51,7 @@
     roles: "userAdminAnyDatabase,readWriteAnyDatabase,root"
     ssl: true
     ssl_ca_certs: /var/lib/mongo/tls/server-ca.crt
+    ssl_certfile: /var/lib/mongo/tls/mongo.pem
   when: "mongodb_admin_current_password_test.failed"
   no_log: true
   tags: [ mongodb ]

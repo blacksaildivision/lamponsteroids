@@ -1,0 +1,11 @@
+- name: Enable backwards-incompatible features
+  community.mongodb.mongodb_shell:
+    eval: "db.adminCommand( { setFeatureCompatibilityVersion: '{{ mongodb_version.split('.')[0] }}.{{ mongodb_version.split('.')[1] }}', confirm: true } )"
+    login_host: "{{ mongodb_host }}"
+    login_password: "{{ mongodb_admin_password }}"
+    login_user: admin
+    additional_args:
+      tls: ""
+      tlsCertificateKeyFile: /var/lib/mongo/tls/mongo.pem
+      tlsCAFile: /var/lib/mongo/tls/server-ca.crt
+  tags: [mongodb]

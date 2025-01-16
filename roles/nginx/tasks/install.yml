@@ -2,7 +2,7 @@
 #
 - name: Install required packages for compiling nginx
   dnf:
-    name: [gcc, gcc-c++, git, perl-FindBin, perl-IPC-Cmd]
+    name: [gcc, gcc-c++, git, perl-FindBin, perl-IPC-Cmd, cmake]
     state: latest
   tags: [nginx]
 
@@ -67,10 +67,43 @@
     creates: "{{ nginx_sources_path }}/zlib-{{ nginx_zlib_version }}"
   tags: [nginx]
 
+
+
+# Prepare brotli library for compilation
+#
 - name: Clone Brotli repository
   git:
     repo: https://github.com/google/ngx_brotli.git
     dest: "{{ nginx_sources_path }}/ngx_brotli"
+  tags: [nginx]
+
+- name: Create out directory for brotli
+  ansible.builtin.file:
+    path: "{{ nginx_sources_path }}/ngx_brotli/deps/brotli/out"
+    state: directory
+    owner: "{{ nginx_build_user }}"
+    group: "{{ nginx_build_group }}"
+    mode: 0755
+  tags: [nginx]
+
+- name: Configure the build system for brotli
+  ansible.builtin.shell:
+    cmd: >
+      cmake
+      -DCMAKE_BUILD_TYPE=Release
+      -DBUILD_SHARED_LIBS=OFF
+      -DCMAKE_C_FLAGS="-Ofast -m64 -march=native -mtune=native -flto -funroll-loops -ffunction-sections -fdata-sections -Wl,--gc-sections"
+      -DCMAKE_CXX_FLAGS="-Ofast -m64 -march=native -mtune=native -flto -funroll-loops -ffunction-sections -fdata-sections -Wl,--gc-sections"
+      -DCMAKE_INSTALL_PREFIX=./installed
+      ..
+  args:
+    chdir: "{{ nginx_sources_path }}/ngx_brotli/deps/brotli/out"
+  tags: [nginx]
+
+- name: Build brotli
+  ansible.builtin.shell: cmake --build . --config Release --target brotlienc
+  args:
+    chdir: "{{ nginx_sources_path }}/ngx_brotli/deps/brotli/out"
   tags: [nginx]
 
 

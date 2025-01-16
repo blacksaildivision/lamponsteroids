@@ -19,6 +19,7 @@
 - import_tasks: tls.yml
 - import_tasks: configure.yml
 - import_tasks: admin.yml
+- import_tasks: admin-commands.yml
 - import_tasks: users.yml
 - import_tasks: backup.yml
 

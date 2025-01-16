@@ -1,6 +1,10 @@
 # This is example file managed by Ansible
 server {
-    listen 443 ssl http2;
+    listen 443 ssl;
+    listen 443 quic reuseport;
+    http2 on;
+    http3 on;
+
     server_name example.com dev.example.com;
     root /var/www/example.com/htdocs;
 
@@ -8,6 +12,8 @@ server {
     ssl_certificate /etc/letsencrypt/live/example.com/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
     include ssl.conf; # This file contains modern configuration for SSL settings
+    quic_retry on;
+    add_header Alt-Svc 'h3=":443"; ma=86400';
 
     # Logging
     error_log /var/www/example.com/logs/nginx-error.log notice;
@@ -15,14 +21,14 @@ server {
 
     # Your basic website configuration should be placed here
     location / {
-    		try_files $uri $uri;
+        try_files $uri $uri;
     }
 
     # Handle PHP files
     location ~ \.php$ {
         fastcgi_pass 127.0.0.1:9005;
         # fastcgi_pass unix:/usr/local/php/run/php-fpm.sock;
-    		include php-fpm.conf;
+    	include php-fpm.conf;
     }
 
     # Include general rules like access hidden files etc.

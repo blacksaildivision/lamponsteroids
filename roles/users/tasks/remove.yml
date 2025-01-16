@@ -1,0 +1,17 @@
+# Remove users and groups from the system
+#
+- name: Remove users from system
+  ansible.builtin.user:
+    name: "{{ item }}"
+    state: absent
+    remove: yes
+    force: yes
+  with_items: "{{ users_to_remove }}"
+  tags: [users]
+
+- name: Remove groups from system
+  ansible.builtin.group:
+    name: "{{ item }}"
+    state: absent
+  with_items: "{{ users_groups_to_remove }}"
+  tags: [users]

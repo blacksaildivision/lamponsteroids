@@ -1,8 +1,8 @@
-# List of packages to be removed from the server
-dnf_packages_to_remove: []
-
-# List of additional packages that should be installed or upgraded to latest version
+# List of additional packages that should be installed or upgraded to the latest version.
 dnf_packages_to_install: []
 
-# List of packages that should be excluded from upgrade
+# List of packages that DNF should exclude from the upgrade.
 dnf_exclude_packages_to_upgrade: "mongodb*,mysql*,nodejs*"
+
+# List of packages that you want to remove from the server.
+dnf_packages_to_remove: []

@@ -1,7 +1,8 @@
-[nodesource]
-name=Node.js Packages for Enterprise Linux 9 - $basearch
-baseurl=https://rpm.nodesource.com/pub_20.x/el/9/$basearch
+[nodesource-nodejs]
+name=Node.js Packages for Linux RPM based distros - $basearch
+baseurl=https://rpm.nodesource.com/pub_22.x/nodistro/nodejs/$basearch
 priority=9
 enabled=1
 gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/NODESOURCE-GPG-SIGNING-KEY-EL
+gpgkey=https://rpm.nodesource.com/gpgkey/ns-operations-public.key
+module_hotfixes=1

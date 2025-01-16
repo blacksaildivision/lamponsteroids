@@ -12,9 +12,11 @@
 # Create database backup user and grand him permissions to database for backup
 #
 - name: Create user for backups
-  mysql_user:
+  community.mysql.mysql_user:
     name: "{{ mysql_backup_user }}"
-    password: "{{ mysql_backup_user_password }}"
+    plugin: caching_sha2_password
+    plugin_auth_string: "{{ mysql_backup_user_password }}"
+    salt: "{{ mysql_backup_user_salt }}"
     host: "{{ mysql_root_host }}"
     state: present
     priv: "{{ mysql_backup_databases | map(attribute='key') |  map('regex_replace', '^(.*)$', '\\1.*:SELECT') | list | join('/') + '/*.*:FLUSH_TABLES' }}"

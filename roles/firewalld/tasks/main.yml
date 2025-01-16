@@ -200,3 +200,15 @@
   loop: "{{ firewalld_internal_zone_enabled_sources | difference(firewalld_internal_zone_sources) }}"
   notify: reload firewalld
   tags: [firewalld]
+
+
+# Server should log packets rejected by the firewall
+# This section enables the logging of denied packets.
+#
+- name: Turn on logging of denied packets
+  ansible.builtin.command: /usr/bin/firewall-cmd --set-log-denied=all
+  register: firewalld_log_denied_result
+  changed_when:
+    - firewalld_log_denied_result.stdout == "success"
+    - "'ALREADY_SET' not in firewalld_log_denied_result.stderr"
+  tags: [firewalld]

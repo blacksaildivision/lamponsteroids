@@ -11,11 +11,18 @@ Prerequisites
 You must have the Ansible installed in your system. If you don't have it, please follow this
 guide - [Installing Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html).
 
-It is best to use the latest version of Ansible. We tested the roles in this repository on Ansible **8.3.0** (core
-version **2.15.3**). If you are running an older version, we recommend updating to the newer version of Ansible.
+It is best to use the latest version of Ansible. We tested the roles in this repository on Ansible **9.13.0** (core
+version **2.16.14**, Python version **3.12.15**). If you are running an older version, we recommend updating to the
+newer version of Ansible.
 
 How to use?
 -----------
+
+Clone the repository:
+
+```shell
+git clone git@github.com:blacksaildivision/lamponsteroids.git
+```
 
 First create your Inventory file. You can work entirely in this repository. Name your Inventory file `hosts` (this file is in .gitignore) and setup all required connections there.
 
@@ -57,29 +64,26 @@ Included roles
 
 **ntp** - Take care of system timezone and NTP server. It uses Chrony for using NTP.
 
-**openssl** - Compile [OpenSSL](https://github.com/openssl/openssl/tags) from source (3.0.1)
+**openssl** - Compile [OpenSSL](https://github.com/openssl/openssl/tags) from source (3.0.1).
 
-**git** - Compile and install [Git](https://github.com/git/git/tags) from source (2.42.0) 
+**git** - Compile and install [Git](https://github.com/git/git/tags) from source (2.47.1).
 
-**nginx** - Compile, install and configure [nginx](https://nginx.org/en/download.html) from source (1.25.2)
+**nginx** - Compile, install and configure [nginx](https://nginx.org/en/download.html) from source (1.27.3).
 
-**php** - Compile, install and configure [PHP](https://github.com/php/php-src/tags) and tools (8.2.9)
+**php** - Compile, install and configure [PHP](https://github.com/php/php-src/tags) and tools (8.4.2).
 
-**firewalld** - Setup firewalld as base firewall
+**firewalld** - Setup firewalld as base firewall.
 
-**mysql** - Install and configure [MySQL](https://dev.mysql.com/downloads/mysql/) community server (8.0.34). Create databases and users. Install MySQLTuner and set up backups.
+**mysql** - Install and configure [MySQL](https://dev.mysql.com/downloads/mysql/) community server (8.4.3). Create databases and users. Install MySQLTuner and set up backups.
 
-**awscli** - Install and configure [AWS CLI](https://github.com/aws/aws-cli/tags) command line tool (2.13.12)
+**awscli** - Install and configure [AWS CLI](https://github.com/aws/aws-cli/tags) command line tool (2.22.33).
 
-**redis** - Install and configure [Redis](https://redis.io/download) with TLS support (7.2.0)
+**redis** - Install and configure [Redis](https://redis.io/download) with TLS support (7.4.0).
 
-**nodejs** - Install [NodeJs](https://nodejs.org/en/) and NPM (20.5.1)
+**nodejs** - Install [NodeJs](https://nodejs.org/en/) and NPM (22.12.0).
 
-**centos** - Takes care of system settings. Set up firewall based on iptables. Disable Transparent Huge Pages.
-You can setup logrotate scripts with this role as well.
+**httpd** - Compile and configure Apache httpd from source with OpenSSL (2.4.33).
 
-**httpd** - Compile and configure Apache httpd from source with OpenSSL (2.4.33)
+**mongodb** - Install and configure MongoDB (8.0.4) with authentication, TLS support, backups and users management.
 
-**mongodb** - Install and configure MongoDB (7.0.0) with authentication, TLS support, backups and users management.
-
-**letsencrypt** - Install Certbot and obtain certificates from Let's Encrypt
+**letsencrypt** - Install Certbot and obtain certificates from Let's Encrypt.

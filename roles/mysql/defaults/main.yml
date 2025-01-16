@@ -1,5 +1,5 @@
 # Version of MySQL that should be installed
-mysql_version: "8.0.34"
+mysql_version: "8.4.3"
 
 # MySQL root password
 mysql_root_password: "rKp#rX3EP?Y2JGug*q,s>F,)@Hbuf9KCH#Z8odF44!)vH7MmrwJ4"
@@ -38,6 +38,7 @@ mysql_databases:
   example:
     user: example
     password: "+;GPS,uP6%MXYTFo2k8bpo57v"
+    salt: "391f69e66ceb2fd2052a"
     host: "127.0.0.1"
     backup: yes
     backup_directory: /var/mysql-backup
@@ -48,3 +49,6 @@ mysql_backup_user: backup
 
 # Password for mysql backup user
 mysql_backup_user_password: "J2AW9oRZT?wO@C^S1!Qxsq03d8r"
+
+# Salt for caching_sha2_password plugin for mysql backup user. Must be 20 characters long,
+mysql_backup_user_salt: "16674eb3812f163498b4"

@@ -1,4 +1,17 @@
-- name: restart dnf-automatic
-  service:
+- name: Restart dnf-automatic
+  ansible.builtin.service:
     name: dnf-automatic-download.timer
     state: restarted
+
+- name: Get remaining upgrades
+  ansible.builtin.dnf:
+    list: upgrades
+  register: dnf_packages_available_upgrade_list
+
+- name: Show upgraded packages
+  ansible.builtin.debug:
+    msg: "{{ dnf_packages_before_upgrade.results |
+             map(attribute='name') |
+             list |
+             symmetric_difference(dnf_packages_available_upgrade_list.results | map(attribute='name') | list) |
+             join(', ') }}"

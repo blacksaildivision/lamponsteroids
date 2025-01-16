@@ -14,8 +14,8 @@
 # Import RPM key
 #
 - name: Import NodeSource RPM key
-  rpm_key:
-    key: https://rpm.nodesource.com/pub/el/NODESOURCE-GPG-SIGNING-KEY-EL
+  ansible.builtin.rpm_key:
+    key: https://rpm.nodesource.com/gpgkey/ns-operations-public.key
     state: present
   tags: [nodejs]
 

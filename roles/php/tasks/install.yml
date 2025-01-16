@@ -71,7 +71,6 @@
     src: "{{ php_sources_path }}/php-src-php-{{ php_version }}/php.ini-production"
     dest: "{{ php_install_path }}/lib/php.ini"
     remote_src: yes
-    force: no
     owner: root
     group: root
     mode: 0644

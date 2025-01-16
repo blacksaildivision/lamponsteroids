@@ -9,11 +9,16 @@
     mode: 0644
   tags: [ mongodb ]
 
-- name: Ensure clean shutdown
-  service:
+- name: Get list of running services
+  ansible.builtin.service_facts:
+  tags: [mongodb]
+
+- name: Ensure clean shutdown if mongod is running
+  ansible.builtin.service:
     name: mongod
     state: stopped
-  tags: [ mongodb ]
+  when: "ansible_facts.services['mongod.service'].status != 'not-found'"
+  tags: [mongodb]
 
 - name: Install the MongoDB packages
   dnf:
